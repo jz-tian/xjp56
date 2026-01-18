@@ -578,6 +578,26 @@ const seedPosts = [
 // ✅ 使用相对路径，避免 ngrok/手机端访问时写死 localhost
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
+// ✅ 前端渲染媒体资源时：/uploads/... 需要在生产环境拼上后端域名；本地开发同域时保持相对路径
+function resolveMediaUrl(v) {
+  if (!v) return v;
+  if (typeof v !== "string") return v;
+  // 已经是完整链接就不动
+  if (/^https?:\/\//i.test(v)) return v;
+  // 仅处理后端静态资源
+  if (v.startsWith("/uploads/")) {
+    return API_BASE ? `${API_BASE}${v}` : v;
+  }
+  return v;
+}
+
+// ✅ 用于 Blog 富文本：把 <img src="/uploads/..."> 转为指向后端域名
+function resolveHtmlMedia(html) {
+  if (!html || typeof html !== "string") return html;
+  if (!API_BASE) return html;
+  return html.replace(/(src|href)=("|')\/uploads\//g, `$1=$2${API_BASE}/uploads/`);
+}
+
 // ✅ 把任何绝对 uploads URL 归一成相对路径（/uploads/...），确保可跨终端访问
 function toRelativeUploadsUrl(v) {
   if (!v) return v;
@@ -1078,7 +1098,7 @@ function ImageUploader({ label, value, onChange, hint }) {
         <div className="relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70">
           {value ? (
             <img
-              src={value}
+              src={resolveMediaUrl(value)}
               alt="preview"
               className="h-[140px] w-[140px] object-contain bg-zinc-100"
             />
@@ -1133,7 +1153,7 @@ function AudioUploader({ label, value, onChange, hint }) {
           {" "}
           （音频将上传到服务器）
         </div>
-        {value ? <audio className="w-full" controls src={value} /> : null}
+        {value ? <audio className="w-full" controls src={resolveMediaUrl(value)} /> : null}
       </div>
     </div>
   );
@@ -1277,7 +1297,7 @@ function MembersPage({ data, setData, admin }) {
               <div className="relative">
                 <button className="block w-full" onClick={() => setSelected(m)}>
                   <img
-                    src={m.avatar}
+                    src={resolveMediaUrl(m.avatar)}
                     alt={m.name}
                     className={"aspect-[3/4] w-full object-contain bg-zinc-100 transition duration-300 group-hover:scale-[1.02] " + (!m.isActive ? "grayscale" : "") }
                   />
@@ -1338,7 +1358,7 @@ function MembersPage({ data, setData, admin }) {
                 {/* 需求：移除照片与“总选举顺位”之间的大块空白，让布局更紧凑（不改其他结构） */}
                 <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white aspect-[3/4]">
                   <img
-                    src={selected.avatar}
+                    src={resolveMediaUrl(selected.avatar)}
                     alt={selected.name}
                     className={"h-full w-full object-contain bg-zinc-100 " + (!selected.isActive ? "grayscale" : "") }
                   />
@@ -1977,36 +1997,6 @@ function SinglesPage({ data, setData, admin }) {
       const labelPrefix = `${ordinal(singleIndex + 1)} Single · ${editing.title || "(untitled)"}`;
       const sidKey = editing.id;
 
-      // ✅ 关键修复：成员的 selectionHistory 必须以 single.id 作为 key。
-      // 之前用 "${ordinal} Single · Title" 作为 key，会在编辑旧单曲（改标题/发行日/顺序）时
-      // 产生一条新的记录，从而出现“同一单曲多行”。
-      // 这里在保存时：
-      // 1) 先删除 selectionHistory 里所有能解析到当前 sidKey 的旧 key（包含 legacy 的标题型 key）
-      // 2) 再只写入 history[sidKey]，做到 update 而不是新增条目。
-      const _norm = (s) => String(s || "").replace(/\s+/g, " ").trim();
-      const _extractTitleFromLegacyKey = (k) => {
-        const parts = String(k || "")
-          .split("·")
-          .map((x) => x.trim())
-          .filter(Boolean);
-        if (parts.length >= 2) return parts.slice(1).join(" · ");
-        return String(k || "");
-      };
-      const _resolveSingleIdFromKey = (k) => {
-        if (!k) return null;
-        // 1) 已经是 id
-        const byId = nextSingles.find((s) => s?.id === k);
-        if (byId) return byId.id;
-        // 2) 通过标题匹配（兼容旧 key）
-        const t = _norm(_extractTitleFromLegacyKey(k));
-        const exact = nextSingles.find((s) => _norm(s?.title) === t);
-        if (exact) return exact.id;
-        const included = nextSingles.find(
-          (s) => t.includes(_norm(s?.title)) || _norm(s?.title).includes(t)
-        );
-        return included ? included.id : null;
-      };
-
       // 计算 slotIndex -> 第几排（最后一个 rows 是第1排）
       const rows = editing?.asideLineup?.rows || [];
       const meta = [];
@@ -2034,21 +2024,8 @@ function SinglesPage({ data, setData, admin }) {
       const nextMembers = prev.members.map((m) => {
         const history = { ...(m.selectionHistory || {}) };
 
-        // 清理：移除所有指向当前单曲的旧 key（避免同一单曲多行）
-        for (const k of Object.keys(history)) {
-          const resolved = _resolveSingleIdFromKey(k);
-          if (resolved && resolved === sidKey && k !== sidKey) {
-            delete history[k];
-          }
-        }
-        // 兼容：如果之前误写入 labelPrefix，也一并清除
-        if (labelPrefix && labelPrefix !== sidKey && history[labelPrefix] != null) {
-          delete history[labelPrefix];
-        }
-
         if (!appeared.has(m.id)) {
-          // 未入选：用 single.id 更新
-          history[sidKey] = "落选";
+          history[labelPrefix] = "A面选拔（未入）";
           return { ...m, selectionHistory: history };
         }
 
@@ -2056,13 +2033,14 @@ function SinglesPage({ data, setData, admin }) {
         const slotIndex = slots.findIndex((x) => x === m.id);
         const rowNumber = slotToRow(slotIndex) || "?";
 
-        // role：对所有位置生效（与 withRecomputedSelections 的规则一致）
         let roleText = "";
-        const r = roles?.[slotIndex];
-        if (r === "center") roleText = "center";
-        else if (r === "guardian" || r === "护法") roleText = "护法";
+        if (rowNumber === 1) {
+          const r = roles[slotIndex];
+          if (r === "center") roleText = " center";
+          else if (r === "guardian") roleText = " 护法";
+        }
 
-        history[sidKey] = `A面选拔（第${rowNumber}排${roleText ? " " + roleText : ""}）`;
+        history[labelPrefix] = `A面选拔（第${rowNumber}排${roleText}）`;
         return { ...m, selectionHistory: history };
       });
 
@@ -2113,7 +2091,7 @@ function SinglesPage({ data, setData, admin }) {
               <div className="grid md:grid-cols-[160px_1fr]">
                 <button className="block w-full" onClick={() => setSelectedId(s.id)}>
                   <img
-                    src={s.cover}
+                    src={resolveMediaUrl(s.cover)}
                     alt={s.title}
                     className="h-[160px] w-full object-cover md:w-[160px]"
                   />
@@ -2466,7 +2444,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
             title="点击放大封面"
           >
             <img
-              src={single.cover}
+              src={resolveMediaUrl(single.cover)}
               alt={single.title}
               className="aspect-square w-full object-contain bg-white"
             />
@@ -2531,7 +2509,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                   <div className="mt-2 rounded-2xl border border-zinc-200/70 bg-white/70 p-3">
                     <audio
                       ref={audioRef}
-                      src={asideTrack.audio}
+                      src={resolveMediaUrl(asideTrack.audio)}
                       controls
                       className="w-full"
                     />
@@ -2602,7 +2580,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                           <div className="grid h-full w-full" style={{ gridTemplateRows: `${imgH}px auto` }}>
                             <div className="overflow-hidden rounded-xl bg-white">
                               <img
-                                src={m.avatar}
+                                src={resolveMediaUrl(m.avatar)}
                                 alt={m.name}
                                 className={"h-full w-full object-contain bg-white " + (!m.isActive ? "grayscale" : "")}
                               />
@@ -2672,7 +2650,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
             </DialogDescription>
           </DialogHeader>
           <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white">
-            <img src={single.cover} alt={single.title} className="w-full" />
+            <img src={resolveMediaUrl(single.cover)} alt={single.title} className="w-full" />
           </div>
         </ScrollDialogContent>
       </Dialog>
@@ -2855,7 +2833,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
                       {m ? (
                         <>
                           <img
-                            src={m.avatar}
+                            src={resolveMediaUrl(m.avatar)}
                             alt={m.name}
                             className={
                               "h-full w-full object-contain bg-zinc-100 " +
@@ -2949,7 +2927,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
               >
                 <div className="aspect-[3/4] w-full bg-zinc-100 rounded-xl overflow-hidden">
                   <img
-                    src={m.avatar}
+                    src={resolveMediaUrl(m.avatar)}
                     alt={m.name}
                     className={"h-full w-full object-contain " + (!m.isActive ? "grayscale" : "")}
                   />
@@ -3059,7 +3037,7 @@ function BlogPage({ data, setData, admin }) {
               <div className="grid md:grid-cols-[160px_1fr]">
                 <button className="block" onClick={() => setSelectedId(p.id)}>
                   <img
-                    src={p.cover}
+                    src={resolveMediaUrl(p.cover)}
                     alt={p.title}
                     className="h-[140px] w-full object-cover md:h-[160px] md:w-[160px]"
                   />
@@ -3108,14 +3086,14 @@ function BlogPage({ data, setData, admin }) {
               <CardContent className="grid gap-4">
                 <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white">
                   <img
-                    src={selected.cover}
+                    src={resolveMediaUrl(selected.cover)}
                     alt={selected.title}
                     className="w-full object-cover"
                   />
                 </div>
                 <div
                   className="prose prose-invert max-w-none prose-p:text-zinc-800 prose-li:text-zinc-800 prose-strong:text-zinc-900"
-                  dangerouslySetInnerHTML={{ __html: selected.content }}
+                  dangerouslySetInnerHTML={{ __html: resolveHtmlMedia(selected.content) }}
                 />
               </CardContent>
             </Card>
