@@ -207,6 +207,23 @@ const roleBadge = (role) => {
   return null;
 };
 
+// ---------- Graduation helpers ----------
+const isoDate = (v) => (v ? String(v).slice(0, 10) : "");
+
+function getLastSingleBeforeGrad({ graduationDate }, singles) {
+  const gd = isoDate(graduationDate);
+  if (!gd) return { lastSingleId: null, lastRelease: "" };
+  let best = null;
+  for (const s of Array.isArray(singles) ? singles : []) {
+    const r = isoDate(s?.release);
+    if (!r) continue;
+    if (r <= gd) {
+      if (!best || r > best.release) best = { id: s.id, release: r };
+    }
+  }
+  return { lastSingleId: best?.id ?? null, lastRelease: best?.release ?? "" };
+}
+
 function formatElectionRank(raw) {
   return getElectionBadge(raw).text;
 }
@@ -694,9 +711,20 @@ function withRecomputedSelections(data) {
     const prev = m?.selectionHistory && typeof m.selectionHistory === "object" ? m.selectionHistory : {};
     const next = { ...prev };
 
+    // Graduated members: only keep history up to the last single released on/before graduationDate.
+    const gradInfo = m?.isActive === false ? getLastSingleBeforeGrad(m, singles) : { lastSingleId: null, lastRelease: "" };
+    const gradLimit = gradInfo?.lastRelease || "";
+
     for (const s of singles) {
       const sid = s?.id;
       if (!sid) continue;
+
+      // After graduation: do not generate/keep any history for later singles.
+      const sRelease = isoDate(s?.release);
+      if (gradLimit && sRelease && sRelease > gradLimit) {
+        if (sid in next) delete next[sid];
+        continue;
+      }
 
       const manual = (prev?.[sid] ?? "").toString().trim();
       // Allow manual override: if user typed "加入前" in member edit, keep it.
@@ -1197,6 +1225,7 @@ function MembersPage({ data, setData, admin }) {
         generation: "",
         avatar: "",
         isActive: true,
+        graduationDate: "",
         // 总选举顺位：[{ edition: "第一届", rank: "一位" }, ...]
         electionRanks: [],
         profile: {
@@ -1217,6 +1246,15 @@ function MembersPage({ data, setData, admin }) {
   };
 
   const saveMember = () => {
+    // When switching to graduated, require a graduation date.
+    if (editing && editing.isActive === false) {
+      const gd = isoDate(editing.graduationDate);
+      if (!gd) {
+        // eslint-disable-next-line no-alert
+        alert("请先填写毕业日期（YYYY-MM-DD）");
+        return;
+      }
+    }
     setData((prev) => {
       const exists = prev.members.some((x) => x.id === editing.id);
       const nextMembers = exists
@@ -1402,6 +1440,9 @@ function MembersPage({ data, setData, admin }) {
                   <DialogTitle className="text-2xl">{selected.name}</DialogTitle>
                   <DialogDescription className="text-zinc-600">
                     {selected.origin} · {selected.generation}
+                    {!selected.isActive && selected.graduationDate ? (
+                      <span className="ml-2">· 毕业：{isoDate(selected.graduationDate)}</span>
+                    ) : null}
                   </DialogDescription>
                 </DialogHeader>
 
@@ -1429,6 +1470,10 @@ function MembersPage({ data, setData, admin }) {
                   <CardContent className="grid gap-2 text-sm">
                   {(() => {
                     const raw = selected?.selectionHistory || {};
+                    const gradLast = (!selected?.isActive && selected?.graduationDate)
+                      ? getLastSingleBeforeGrad(selected, data?.singles || [])
+                      : { lastSingleId: null, lastRelease: "" };
+                    const lastSingleIdBeforeGrad = gradLast.lastSingleId;
                     const entries = Object.entries(raw).map(([k, v]) => {
                       if (v && typeof v === "object") {
                         return {
@@ -1491,6 +1536,11 @@ function MembersPage({ data, setData, admin }) {
                             </div>
 
                             <div className="flex flex-wrap items-center gap-2 text-xs">
+                              {!selected?.isActive && lastSingleIdBeforeGrad && k === lastSingleIdBeforeGrad ? (
+                                <span className="inline-flex items-center rounded-full border border-fuchsia-200 bg-fuchsia-50 px-2 py-0.5 text-fuchsia-800">
+                                  毕业前最后一单
+                                </span>
+                              ) : null}
                               {pickType ? (
                                 <span className={"inline-flex items-center rounded-full border px-2 py-0.5 " + typeTagClass}>
                                   {pickType}
@@ -1586,12 +1636,28 @@ function MembersPage({ data, setData, admin }) {
                       type="checkbox"
                       checked={!!editing.isActive}
                       onChange={(e) =>
-                        setEditing((p) => ({ ...p, isActive: e.target.checked }))
+                        setEditing((p) => ({
+                          ...p,
+                          isActive: e.target.checked,
+                          graduationDate: e.target.checked ? "" : (p.graduationDate || ""),
+                        }))
                       }
                     />
                     <div className="text-sm text-zinc-700">在籍</div>
                   </div>
                 </div>
+
+                {!editing.isActive ? (
+                  <div className="grid gap-2">
+                    <div className="text-sm font-medium">毕业日期</div>
+                    <Input
+                      value={editing.graduationDate || ""}
+                      onChange={(e) => setEditing((p) => ({ ...p, graduationDate: e.target.value }))}
+                      placeholder="YYYY-MM-DD"
+                    />
+                    <div className="text-xs text-zinc-600">把成员从在籍改为毕业时必须填写。</div>
+                  </div>
+                ) : null}
               </div>
 
               <ImageUploader
@@ -2753,6 +2819,18 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
   const slots = useMemo(() => normalizeSlots(lineup.slots), [lineup.slots, selectionCount]);
   const used = useMemo(() => new Set(slots.filter(Boolean)), [slots]);
 
+  // Graduated members should not appear in the picker for singles released after their graduation.
+  const singleRelease = isoDate(singleDraft?.release);
+  const pickerMembers = useMemo(() => {
+    if (!singleRelease) return members;
+    return (members || []).filter((m) => {
+      const gd = isoDate(m?.graduationDate);
+      if (!gd) return true;
+      if (m?.isActive) return true;
+      return singleRelease <= gd;
+    });
+  }, [members, singleRelease]);
+
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerSlotIndex, setPickerSlotIndex] = useState(null);
   const [pickerRole, setPickerRole] = useState(null); // null | "center" | "guardian"
@@ -2914,7 +2992,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
           </div>
 
           <div className="grid max-h-[70vh] grid-cols-2 gap-3 overflow-auto p-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {members.map((m) => (
+            {pickerMembers.map((m) => (
               <button
                 key={m.id}
                 type="button"

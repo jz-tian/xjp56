@@ -48,6 +48,7 @@
       "generation": "4期",
       "avatar": "/uploads/1768593970644.jpg",
       "isActive": false,
+      "graduationDate": "2026-01-15",
       "profile": {
         "height": "164cm",
         "birthday": "2005-07-07",
@@ -65,8 +66,7 @@
         "s_bpiozglx": "加入前",
         "s_hwxadq52": "加入前",
         "s_dmv6qfio": "加入前",
-        "s_0k9y573f": "加入前",
-        "s_awspexel": "落选"
+        "s_0k9y573f": "加入前"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -208,6 +208,7 @@
       "generation": "2期",
       "avatar": "/uploads/1768593706317.jpg",
       "isActive": false,
+      "graduationDate": "2026-01-15",
       "profile": {
         "height": "167cm",
         "birthday": "2003-03-08",
@@ -225,8 +226,7 @@
         "s_bpiozglx": "落选",
         "s_hwxadq52": "落选",
         "s_dmv6qfio": "落选",
-        "s_0k9y573f": "落选",
-        "s_awspexel": "落选"
+        "s_0k9y573f": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
