@@ -1,0 +1,1690 @@
+{
+  "members": [
+    {
+      "id": "m_umbw1ji3",
+      "name": "伊织 花",
+      "romaji": "HANA IORI",
+      "origin": "香川 • 高松",
+      "generation": "4期",
+      "avatar": "/uploads/1768594029041.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "153cm",
+        "birthday": "2005-02-05",
+        "blood": "AB",
+        "hobby": "收集坏掉的耳机",
+        "skill": "延迟反应制造笑点",
+        "catchphrase": "我不着急，舞台会等我。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "A面选拔（第3排）"
+      },
+      "selectionCount": 1,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        }
+      ]
+    },
+    {
+      "id": "m_pr2yyz25",
+      "name": "本玉 春水",
+      "romaji": "SHUNSUI HONTAMA",
+      "origin": "中国 上海 • 浦东",
+      "generation": "4期",
+      "avatar": "/uploads/1768593970644.jpg",
+      "isActive": false,
+      "profile": {
+        "height": "164cm",
+        "birthday": "2005-07-07",
+        "blood": "B",
+        "hobby": "整理歌词碎片",
+        "skill": "眼神压制",
+        "catchphrase": "这不是失误，是设计。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        }
+      ]
+    },
+    {
+      "id": "m_rjli97s6",
+      "name": "小林 凛凛花",
+      "romaji": "RIRIKA KOBAYASHI",
+      "origin": "滋贺 • 大津",
+      "generation": "3期",
+      "avatar": "/uploads/1768593904736.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "152cm",
+        "birthday": "2005-03-22",
+        "blood": "A",
+        "hobby": "看完一半就关书",
+        "skill": "意外高音",
+        "catchphrase": "不是沉默，是加载中。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "A面选拔（第3排）",
+        "s_hwxadq52": "A面选拔（第1排 护法）",
+        "s_dmv6qfio": "A面选拔（第1排）",
+        "s_0k9y573f": "A面选拔（第3排）",
+        "s_awspexel": "A面选拔（第2排 护法）"
+      },
+      "selectionCount": 5,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "十位"
+        }
+      ]
+    },
+    {
+      "id": "m_batr9qfj",
+      "name": "泷泽 奈奈",
+      "romaji": "NANA TAKIZAWA",
+      "origin": "北海道 • 旭川",
+      "generation": "3期",
+      "avatar": "/uploads/1768593846264.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "166cm",
+        "birthday": "2007-07-07",
+        "blood": "A",
+        "hobby": "深夜洗杯子",
+        "skill": "段落推进",
+        "catchphrase": "这一秒是故意的。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "A面选拔（第3排）",
+        "s_dmv6qfio": "A面选拔（第2排）",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 2,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "十八位"
+        }
+      ]
+    },
+    {
+      "id": "m_mdv7k6ml",
+      "name": "黑米 薰",
+      "romaji": "KAORU KUROMAI",
+      "origin": "东京 • 墨田",
+      "generation": "3期",
+      "avatar": "/uploads/1768593779710.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "159cm",
+        "birthday": "2008-11-11",
+        "blood": "AB",
+        "hobby": "收集车票",
+        "skill": "低音呢喃",
+        "catchphrase": "今天的我，也在正常范围之外。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "落选",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "十七位"
+        }
+      ]
+    },
+    {
+      "id": "m_t8u0ysq7",
+      "name": "田野 玛利亚",
+      "romaji": "MARIA TANO",
+      "origin": "意大利 • 罗马拉齐奥",
+      "generation": "2期",
+      "avatar": "/uploads/1768593706317.jpg",
+      "isActive": false,
+      "profile": {
+        "height": "167cm",
+        "birthday": "2003-03-08",
+        "blood": "A",
+        "hobby": "给植物起名字",
+        "skill": "静态存在感",
+        "catchphrase": "如果迷路了，那就是我的路线。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "A面选拔（第3排）",
+        "s_bnwbmbn8": "落选",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "落选",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 1,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "二十二位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "二十六位"
+        }
+      ]
+    },
+    {
+      "id": "m_blncyp2k",
+      "name": "山上 梦",
+      "romaji": "YUME YAMAGAMI",
+      "origin": "福岛 • 郡山",
+      "generation": "2期",
+      "avatar": "/uploads/1768593641741.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "151cm",
+        "birthday": "2006-08-22",
+        "blood": "A",
+        "hobby": "城市边缘散步",
+        "skill": "舞台定点爆发",
+        "catchphrase": "我站在这里，就已经发生了。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "落选",
+        "s_bnwbmbn8": "A面选拔（第3排）",
+        "s_bpiozglx": "A面选拔（第3排）",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "A面选拔（第2排）",
+        "s_0k9y573f": "A面选拔（第3排）",
+        "s_awspexel": "A面选拔（第3排）"
+      },
+      "selectionCount": 5,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "十二位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "八位"
+        }
+      ]
+    },
+    {
+      "id": "m_l4k686go",
+      "name": "秦 美美树",
+      "romaji": "MIMIKI HATA",
+      "origin": "奈良 • 奈良市",
+      "generation": "2期",
+      "avatar": "/uploads/1768593570026.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "155cm",
+        "birthday": "2003-08-14",
+        "blood": "A",
+        "hobby": "拍模糊照片",
+        "skill": "镜头瞬间锁定",
+        "catchphrase": "别眨眼，或者眨。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "落选",
+        "s_bnwbmbn8": "落选",
+        "s_bpiozglx": "A面选拔（第3排）",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "落选",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 1,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "十六位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "二十一位"
+        }
+      ]
+    },
+    {
+      "id": "m_ltlzffea",
+      "name": "今日 优",
+      "romaji": "YU KONICHI",
+      "origin": "加拿大 • 多伦多",
+      "generation": "2期",
+      "avatar": "/uploads/1768593513971.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "170cm",
+        "birthday": "2007-02-21",
+        "blood": "O",
+        "hobby": "在地图上乱画",
+        "skill": "MC转向",
+        "catchphrase": "别担心，我会突然出现。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "落选",
+        "s_bnwbmbn8": "A面选拔（第3排）",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "A面选拔（第2排）",
+        "s_0k9y573f": "A面选拔（第3排）",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 3,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "十一位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "十一位"
+        }
+      ]
+    },
+    {
+      "id": "m_gbojk371",
+      "name": "宫岛 阿弥",
+      "romaji": "AMI MIYAJIMA",
+      "origin": "冲绳 • 那霸",
+      "generation": "2期",
+      "avatar": "/uploads/1768593433559.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "168cm",
+        "birthday": "2003-08-14",
+        "blood": "B",
+        "hobby": "看说明书当小说",
+        "skill": "混乱中稳定",
+        "catchphrase": "我在，但不一定显眼。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "A面选拔（第1排 center）",
+        "s_bnwbmbn8": "A面选拔（第3排）",
+        "s_bpiozglx": "A面选拔（第3排）",
+        "s_hwxadq52": "A面选拔（第1排 护法）",
+        "s_dmv6qfio": "A面选拔（第1排）",
+        "s_0k9y573f": "A面选拔（第2排）",
+        "s_awspexel": "A面选拔（第3排）"
+      },
+      "selectionCount": 7,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "六位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "四位"
+        }
+      ]
+    },
+    {
+      "id": "m_jh2ureo3",
+      "name": "饭锅 利佳",
+      "romaji": "RIKA HANENABE",
+      "origin": "岐阜 • 岐阜市",
+      "generation": "2期",
+      "avatar": "/uploads/1768593359142.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "165cm",
+        "birthday": "2003-12-05",
+        "blood": "A",
+        "hobby": "假装会乐器",
+        "skill": "停顿制造感",
+        "catchphrase": "我负责把气氛弄歪。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "A面选拔（第3排）",
+        "s_bnwbmbn8": "落选",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "落选",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 1,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "十九位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "二十位"
+        }
+      ]
+    },
+    {
+      "id": "m_4wmfwcbj",
+      "name": "大岛 奈那南",
+      "romaji": "NANAN OSHIMA",
+      "origin": "鹿儿岛 • 鹿儿岛市",
+      "generation": "2期",
+      "avatar": "/uploads/1768593267529.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "157cm",
+        "birthday": "2005-02-02",
+        "blood": "AB",
+        "hobby": "整理不存在的清单",
+        "skill": "碎拍处理",
+        "catchphrase": "我慢，但不会错过。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "落选",
+        "s_bnwbmbn8": "落选",
+        "s_bpiozglx": "A面选拔（第2排）",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "落选",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 1,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "十八位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "二十四位"
+        }
+      ]
+    },
+    {
+      "id": "m_c16gtwds",
+      "name": "佐佐木 麻美",
+      "romaji": "MAMI SASAKI",
+      "origin": "茨城 • 水户",
+      "generation": "1期",
+      "avatar": "/uploads/1768591786006.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "162cm",
+        "birthday": "2008-10-10",
+        "blood": "AB",
+        "hobby": "听雨声发呆",
+        "skill": "舞步记忆",
+        "catchphrase": "舞台对我来说有点小。"
+      },
+      "selectionHistory": {
+        "s1": "A面选拔（第3排）",
+        "s2": "落选",
+        "s_oq7izq79": "落选",
+        "s_7kxfyxh0": "落选",
+        "s_bnwbmbn8": "落选",
+        "s_bpiozglx": "A面选拔（第3排）",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "落选",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 1,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "二十四位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "十四位"
+        }
+      ]
+    },
+    {
+      "id": "m_bm7qiehk",
+      "name": "佐伯 美晴",
+      "romaji": "MIHARU SAEKI",
+      "origin": "广岛 • 广岛市",
+      "generation": "1期",
+      "avatar": "/uploads/1768591628116.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "150cm",
+        "birthday": "2006-02-25",
+        "blood": "A",
+        "hobby": "记录雨伞",
+        "skill": "慢动作表演",
+        "catchphrase": "请把注意力借我三分钟。"
+      },
+      "selectionHistory": {
+        "s1": "落选",
+        "s2": "落选",
+        "s_oq7izq79": "A面选拔（第2排）",
+        "s_7kxfyxh0": "落选",
+        "s_bnwbmbn8": "落选",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "落选",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 1,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "二十位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "十六位"
+        }
+      ]
+    },
+    {
+      "id": "m_7j6tcyhr",
+      "name": "竹内 星月",
+      "romaji": "SEITSUKI TAKEUCHI",
+      "origin": "韩国首尔 • 江南",
+      "generation": "1期",
+      "avatar": "/uploads/1768591547894.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "169cm",
+        "birthday": "2007-02-08",
+        "blood": "B",
+        "hobby": "给闹钟设哲学备注",
+        "skill": "无意识控场",
+        "catchphrase": "安静的时候，请听我。"
+      },
+      "selectionHistory": {
+        "s1": "A面选拔（第3排）",
+        "s2": "A面选拔（第1排 护法）",
+        "s_oq7izq79": "A面选拔（第2排）",
+        "s_7kxfyxh0": "A面选拔（第2排）",
+        "s_bnwbmbn8": "A面选拔（第3排）",
+        "s_bpiozglx": "A面选拔（第2排 护法）",
+        "s_hwxadq52": "A面选拔（第1排 center）",
+        "s_dmv6qfio": "A面选拔（第3排）",
+        "s_0k9y573f": "A面选拔（第3排）",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 4,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "十位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "十二位"
+        }
+      ]
+    },
+    {
+      "id": "m_m8fltj0e",
+      "name": "松村 珠理奈",
+      "romaji": "JURINA MATSUMURA",
+      "origin": "静冈 • 静冈市",
+      "generation": "1期",
+      "avatar": "/uploads/1768591398834.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "163cm",
+        "birthday": "2004-03-14",
+        "blood": "B",
+        "hobby": "记录陌生人的鞋子",
+        "skill": "安静ending",
+        "catchphrase": "灯不需要解释亮的理由。"
+      },
+      "selectionHistory": {
+        "s1": "落选",
+        "s2": "落选",
+        "s_oq7izq79": "落选",
+        "s_7kxfyxh0": "落选",
+        "s_bnwbmbn8": "落选",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "A面选拔（第3排）",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "A面选拔（第3排）"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "十三位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "十三位"
+        }
+      ]
+    },
+    {
+      "id": "m_ff4lppj9",
+      "name": "长谷川 玲奈",
+      "romaji": "REINA HASEGAWA",
+      "origin": "埼玉 • 川口",
+      "generation": "1期",
+      "avatar": "/uploads/1768591329871.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "154cm",
+        "birthday": "2008-06-08",
+        "blood": "AB",
+        "hobby": "模拟采访自己",
+        "skill": "情绪收尾",
+        "catchphrase": "我不是背景。"
+      },
+      "selectionHistory": {
+        "s1": "落选",
+        "s2": "落选",
+        "s_oq7izq79": "落选",
+        "s_7kxfyxh0": "落选",
+        "s_bnwbmbn8": "落选",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "A面选拔（第3排）",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "十七位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "二十二位"
+        }
+      ]
+    },
+    {
+      "id": "m_ys0s465i",
+      "name": "小泉 洋子",
+      "romaji": "YOKO KOIZUMI",
+      "origin": "新潟 • 新潟市",
+      "generation": "1期",
+      "avatar": "/uploads/1768591268620.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "156cm",
+        "birthday": "2005-03-19",
+        "blood": "AB",
+        "hobby": "制作失败甜点",
+        "skill": "情绪切换",
+        "catchphrase": "我不抢镜，镜头会找我。"
+      },
+      "selectionHistory": {
+        "s1": "落选",
+        "s2": "落选",
+        "s_oq7izq79": "A面选拔（第2排）",
+        "s_7kxfyxh0": "落选",
+        "s_bnwbmbn8": "落选",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "落选",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 1,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "二十一位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "二十七位"
+        }
+      ]
+    },
+    {
+      "id": "m_symj32y6",
+      "name": "桥本 美咲",
+      "romaji": "MISAKI HASHIMOTO",
+      "origin": "兵库 • 神户滩",
+      "generation": "1期",
+      "avatar": "/uploads/1768591185634.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "158cm",
+        "birthday": "2004-12-13",
+        "blood": "AB",
+        "hobby": "记住没用的知识",
+        "skill": "气息控制",
+        "catchphrase": "不完美才有回放价值。"
+      },
+      "selectionHistory": {
+        "s1": "A面选拔（第2排）",
+        "s2": "A面选拔（第2排）",
+        "s_oq7izq79": "A面选拔（第3排）",
+        "s_7kxfyxh0": "A面选拔（第3排）",
+        "s_bnwbmbn8": "A面选拔（第3排）",
+        "s_bpiozglx": "A面选拔（第1排 center）",
+        "s_hwxadq52": "A面选拔（第3排）",
+        "s_dmv6qfio": "A面选拔（第3排）",
+        "s_0k9y573f": "A面选拔（第3排）",
+        "s_awspexel": "落选"
+      },
+      "selectionCount": 4,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "八位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "九位"
+        }
+      ]
+    },
+    {
+      "id": "m_akari",
+      "name": "三浦 丽莎",
+      "origin": "美国加利福尼亚洛杉矶",
+      "generation": "1期",
+      "avatar": "/uploads/1768582020112.jpg",
+      "profile": {
+        "height": "160cm",
+        "birthday": "2004-03-12",
+        "blood": "A",
+        "hobby": "摄影 / 甜点",
+        "skill": "舞蹈",
+        "catchphrase": "把光带到舞台上。"
+      },
+      "selectionHistory": {
+        "s1": "A面选拔（第2排）",
+        "s2": "A面选拔（第3排）",
+        "s_oq7izq79": "A面选拔（第2排）",
+        "s_7kxfyxh0": "A面选拔（第2排 护法）",
+        "s_bnwbmbn8": "A面选拔（第3排）",
+        "s_bpiozglx": "A面选拔（第2排 护法）",
+        "s_hwxadq52": "A面选拔（第1排 center）",
+        "s_dmv6qfio": "A面选拔（第1排 护法）",
+        "s_0k9y573f": "A面选拔（第3排）",
+        "s_awspexel": "A面选拔（第3排）"
+      },
+      "isActive": true,
+      "selectionCount": 4,
+      "romaji": "RISA MIURA",
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "七位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "六位"
+        }
+      ]
+    },
+    {
+      "id": "m_yuna",
+      "name": "白鸟 南娜",
+      "origin": "大阪 · 吹田",
+      "generation": "1期",
+      "avatar": "/uploads/1768587500475.jpg",
+      "profile": {
+        "height": "158cm",
+        "birthday": "2005-10-02",
+        "blood": "O",
+        "hobby": "钢琴 / 旅行",
+        "skill": "高音",
+        "catchphrase": "微笑是最强的魔法。"
+      },
+      "selectionHistory": {
+        "s1": "A面选拔（第3排）",
+        "s2": "A面选拔（第1排 护法）",
+        "s_oq7izq79": "A面选拔（第3排）",
+        "s_7kxfyxh0": "A面选拔（第3排）",
+        "s_bnwbmbn8": "A面选拔（第2排 护法）",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "A面选拔（第2排）",
+        "s_dmv6qfio": "A面选拔（第2排）",
+        "s_0k9y573f": "A面选拔（第2排 护法）",
+        "s_awspexel": "A面选拔（第1排 center）"
+      },
+      "isActive": true,
+      "selectionCount": 4,
+      "romaji": "NANA SHIRATORI",
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "三位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "三位"
+        }
+      ]
+    },
+    {
+      "id": "m_rin",
+      "name": "中村 樱",
+      "origin": "名古屋 · 千种",
+      "generation": "1期",
+      "avatar": "/uploads/1768589918918.jpg",
+      "profile": {
+        "height": "163cm",
+        "birthday": "2003-07-19",
+        "blood": "B",
+        "hobby": "漫画 / 猫咖",
+        "skill": "表情管理",
+        "catchphrase": "今天也要帅气可爱。"
+      },
+      "selectionHistory": {
+        "s1": "A面选拔（第2排）",
+        "s2": "A面选拔（第2排）",
+        "s_oq7izq79": "A面选拔（第1排 center）",
+        "s_7kxfyxh0": "A面选拔（第2排 护法）",
+        "s_bnwbmbn8": "A面选拔（第2排 护法）",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "A面选拔（第2排）",
+        "s_dmv6qfio": "A面选拔（第1排 护法）",
+        "s_0k9y573f": "A面选拔（第1排 center）",
+        "s_awspexel": "A面选拔（第2排）"
+      },
+      "isActive": true,
+      "selectionCount": 4,
+      "romaji": "SAKURA NAKAMURA",
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "二位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "一位"
+        }
+      ]
+    },
+    {
+      "id": "m_saki",
+      "name": "坂口 阳菜",
+      "origin": "福冈 · 博多",
+      "generation": "1期",
+      "avatar": "/uploads/1768589990054.jpg",
+      "profile": {
+        "height": "156cm",
+        "birthday": "2006-01-28",
+        "blood": "AB",
+        "hobby": "料理 / 露营",
+        "skill": "MC",
+        "catchphrase": "把温柔变成节拍。"
+      },
+      "selectionHistory": {
+        "s1": "A面选拔（第1排 center）",
+        "s2": "A面选拔（第1排 center）",
+        "s_oq7izq79": "A面选拔（第1排 center）",
+        "s_7kxfyxh0": "A面选拔（第2排）",
+        "s_bnwbmbn8": "A面选拔（第1排 center）",
+        "s_bpiozglx": "A面选拔（第3排）",
+        "s_hwxadq52": "A面选拔（第2排）",
+        "s_dmv6qfio": "A面选拔（第1排 center）",
+        "s_0k9y573f": "A面选拔（第2排 护法）",
+        "s_awspexel": "A面选拔（第2排）"
+      },
+      "isActive": true,
+      "selectionCount": 4,
+      "romaji": "HINA SAKAGUCHI",
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "一位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "二位"
+        }
+      ]
+    },
+    {
+      "id": "m_mika",
+      "name": "橘 明日香",
+      "origin": "札幌 · 中央",
+      "generation": "1期",
+      "avatar": "/uploads/1768590044858.jpg",
+      "profile": {
+        "height": "165cm",
+        "birthday": "2004-11-11",
+        "blood": "A",
+        "hobby": "滑雪 / 美妆",
+        "skill": "镜头感",
+        "catchphrase": "冷空气也挡不住热舞台。"
+      },
+      "selectionHistory": {
+        "s1": "A面选拔（第2排）",
+        "s2": "A面选拔（第3排）",
+        "s_oq7izq79": "A面选拔（第3排）",
+        "s_7kxfyxh0": "A面选拔（第3排）",
+        "s_bnwbmbn8": "A面选拔（第3排）",
+        "s_bpiozglx": "A面选拔（第3排）",
+        "s_hwxadq52": "A面选拔（第3排）",
+        "s_dmv6qfio": "A面选拔（第3排）",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "isActive": true,
+      "selectionCount": 4,
+      "romaji": "ASUKA TACHIBANA",
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "九位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "十五位"
+        }
+      ]
+    },
+    {
+      "id": "m_mayu",
+      "name": "渡边 心彩",
+      "origin": "京都 · 伏见",
+      "generation": "1期",
+      "avatar": "/uploads/1768590106988.jpg",
+      "profile": {
+        "height": "159cm",
+        "birthday": "2005-05-09",
+        "blood": "O",
+        "hobby": "和服 / 茶道",
+        "skill": "柔软度",
+        "catchphrase": "一步一景，一笑一生。"
+      },
+      "selectionHistory": {
+        "s1": "A面选拔（第2排）",
+        "s2": "A面选拔（第2排）",
+        "s_oq7izq79": "A面选拔（第3排）",
+        "s_7kxfyxh0": "A面选拔（第3排）",
+        "s_bnwbmbn8": "A面选拔（第2排）",
+        "s_bpiozglx": "A面选拔（第2排）",
+        "s_hwxadq52": "A面选拔（第3排）",
+        "s_dmv6qfio": "A面选拔（第2排）",
+        "s_0k9y573f": "A面选拔（第3排）",
+        "s_awspexel": "A面选拔（第3排）"
+      },
+      "isActive": true,
+      "selectionCount": 4,
+      "romaji": "KOKONA WATANABE",
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "四位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "七位"
+        }
+      ]
+    },
+    {
+      "id": "m_nana",
+      "name": "吉田 空",
+      "origin": "横滨 · 港北",
+      "generation": "1期",
+      "avatar": "/uploads/1768590228988.jpg",
+      "profile": {
+        "height": "162cm",
+        "birthday": "2006-08-21",
+        "blood": "B",
+        "hobby": "街拍 / 手账",
+        "skill": "Rap",
+        "catchphrase": "节拍里也有浪漫。"
+      },
+      "selectionHistory": {
+        "s1": "落选",
+        "s2": "落选",
+        "s_oq7izq79": "A面选拔（第3排）",
+        "s_7kxfyxh0": "落选",
+        "s_bnwbmbn8": "落选",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "落选",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "isActive": true,
+      "selectionCount": 1,
+      "romaji": "SORA YOSHIDA",
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "十五位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "二十五位"
+        }
+      ]
+    },
+    {
+      "id": "m_hina",
+      "name": "加藤 友良乃",
+      "origin": "广岛 · 中区",
+      "generation": "1期",
+      "avatar": "/uploads/1768590846634.jpg",
+      "profile": {
+        "height": "154cm",
+        "birthday": "2007-02-14",
+        "blood": "A",
+        "hobby": "绘画 / 甜品店巡礼",
+        "skill": "可爱担当",
+        "catchphrase": "把心跳画成星星。"
+      },
+      "selectionHistory": {
+        "s1": "A面选拔（第3排）",
+        "s2": "A面选拔（第3排）",
+        "s_oq7izq79": "A面选拔（第2排）",
+        "s_7kxfyxh0": "A面选拔（第3排）",
+        "s_bnwbmbn8": "A面选拔（第2排）",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "A面选拔（第2排）",
+        "s_dmv6qfio": "A面选拔（第3排）",
+        "s_0k9y573f": "A面选拔（第2排）",
+        "s_awspexel": "A面选拔（第2排 护法）"
+      },
+      "isActive": true,
+      "selectionCount": 4,
+      "romaji": "YURINO KATO",
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "五位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "五位"
+        }
+      ]
+    },
+    {
+      "id": "m_reina",
+      "name": "木下 麻衣",
+      "origin": "神户 · 灘",
+      "generation": "1期",
+      "avatar": "/uploads/1768591029500.jpg",
+      "profile": {
+        "height": "167cm",
+        "birthday": "2003-12-03",
+        "blood": "AB",
+        "hobby": "爵士乐 / 跑步",
+        "skill": "气场",
+        "catchphrase": "在舞台上，月光也要让路。"
+      },
+      "selectionHistory": {
+        "s1": "A面选拔（第3排）",
+        "s2": "落选",
+        "s_oq7izq79": "落选",
+        "s_7kxfyxh0": "落选",
+        "s_bnwbmbn8": "落选",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "落选",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "落选"
+      },
+      "isActive": true,
+      "selectionCount": 1,
+      "romaji": "MAI KINOSHITA",
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "十四位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "十九位"
+        }
+      ]
+    },
+    {
+      "id": "m_ayame",
+      "name": "平井 葵",
+      "origin": "仙台 · 青叶",
+      "generation": "1期",
+      "avatar": "/uploads/1768591074779.jpg",
+      "profile": {
+        "height": "161cm",
+        "birthday": "2006-09-30",
+        "blood": "O",
+        "hobby": "运动 / 电影",
+        "skill": "稳定唱功",
+        "catchphrase": "认真才是最酷的。"
+      },
+      "selectionHistory": {
+        "s1": "落选",
+        "s2": "落选",
+        "s_oq7izq79": "落选",
+        "s_7kxfyxh0": "落选",
+        "s_bnwbmbn8": "落选",
+        "s_bpiozglx": "落选",
+        "s_hwxadq52": "落选",
+        "s_dmv6qfio": "落选",
+        "s_0k9y573f": "落选",
+        "s_awspexel": "A面选拔（第3排）"
+      },
+      "isActive": true,
+      "selectionCount": 0,
+      "romaji": "AOI HIRAI",
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "二十三位"
+        },
+        {
+          "edition": "第2届",
+          "rank": "二十三位"
+        }
+      ]
+    }
+  ],
+  "singles": [
+    {
+      "id": "s1",
+      "title": "1st Single · Red Star Love",
+      "release": "2025-12-24",
+      "cover": "/uploads/1768591951511.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "Red Star Love (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1768592570765-pfc2fu.mp4"
+        },
+        {
+          "no": 2,
+          "title": "(not) Good Enough ",
+          "isAside": false,
+          "audio": ""
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 11,
+        "rows": [
+          5,
+          5,
+          1
+        ],
+        "slots": [
+          "m_c16gtwds",
+          "m_7j6tcyhr",
+          "m_hina",
+          "m_yuna",
+          "m_reina",
+          "m_akari",
+          "m_mika",
+          "m_rin",
+          "m_mayu",
+          "m_symj32y6",
+          "m_saki"
+        ],
+        "slotRoles": {
+          "10": "center"
+        }
+      },
+      "notes": "XJP56 出道单曲：霓虹与花朵的碰撞，带一点复古合成器的气味。"
+    },
+    {
+      "id": "s2",
+      "title": "2nd Single · Am I a Bad Girl?",
+      "release": "2025-12-24",
+      "cover": "/uploads/1768592946498.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "Am I a Bad Girl? (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1768592961709-9b4qgp.mp4"
+        },
+        {
+          "no": 2,
+          "title": "in vain",
+          "isAside": false,
+          "audio": ""
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 9,
+        "rows": [
+          3,
+          3,
+          3
+        ],
+        "slots": [
+          "m_akari",
+          "m_hina",
+          "m_mika",
+          "m_mayu",
+          "m_symj32y6",
+          "m_rin",
+          "m_7j6tcyhr",
+          "m_saki",
+          "m_yuna"
+        ],
+        "slotRoles": {
+          "6": "guardian",
+          "7": "center",
+          "8": "guardian"
+        }
+      },
+      "notes": "第二张单曲更偏大气合唱与层次堆叠；站位采用三排均衡阵型。"
+    },
+    {
+      "id": "s_oq7izq79",
+      "title": "3rd Single ·  Robot Girlfriend?!",
+      "release": "2025-12-25",
+      "cover": "/uploads/1768659440334.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "Robot Girlfriend?! (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1768659458915-svdxqx.mp4"
+        },
+        {
+          "no": 2,
+          "title": "SAY MY NAME",
+          "isAside": false,
+          "audio": ""
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 12,
+        "rows": [
+          5,
+          5,
+          2
+        ],
+        "slots": [
+          "m_symj32y6",
+          "m_nana",
+          "m_mika",
+          "m_yuna",
+          "m_mayu",
+          "m_ys0s465i",
+          "m_7j6tcyhr",
+          "m_bm7qiehk",
+          "m_akari",
+          "m_hina",
+          "m_rin",
+          "m_saki"
+        ],
+        "slotRoles": {
+          "10": "center",
+          "11": "center"
+        }
+      },
+      "notes": "XJP56第三首单曲，封面硬核但是却是雷鬼歌曲？！"
+    },
+    {
+      "id": "s_7kxfyxh0",
+      "title": "4th Single · NO PRESSURE",
+      "release": "2025-12-25",
+      "cover": "/uploads/1768661039833.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "NO PRESSURE (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1768661051131-jlhcfc.mp4"
+        },
+        {
+          "no": 2,
+          "title": "Last Angel",
+          "isAside": false,
+          "audio": ""
+        },
+        {
+          "no": 3,
+          "title": "GIMME AMI",
+          "isAside": false,
+          "audio": ""
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 12,
+        "rows": [
+          7,
+          4,
+          1
+        ],
+        "slots": [
+          "m_yuna",
+          "m_hina",
+          "m_symj32y6",
+          "m_t8u0ysq7",
+          "m_mika",
+          "m_mayu",
+          "m_jh2ureo3",
+          "m_7j6tcyhr",
+          "m_akari",
+          "m_rin",
+          "m_saki",
+          "m_gbojk371"
+        ],
+        "slotRoles": {
+          "8": "guardian",
+          "9": "guardian",
+          "11": "center"
+        }
+      },
+      "notes": "第一首投票单曲，超级新人宫岛阿弥直接单c还获得solo曲，太厉害了吧"
+    },
+    {
+      "id": "s_bnwbmbn8",
+      "title": "5th Single · BiTE mY UnDERweAR",
+      "release": "2025-12-29",
+      "cover": "/uploads/1768675924288.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "BiTE mY UnDERweAR (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1768675945997-ncs654.mp4"
+        },
+        {
+          "no": 2,
+          "title": "RUBY",
+          "isAside": false,
+          "audio": ""
+        },
+        {
+          "no": 3,
+          "title": "",
+          "isAside": false,
+          "audio": ""
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 12,
+        "rows": [
+          7,
+          4,
+          1
+        ],
+        "slots": [
+          "m_ltlzffea",
+          "m_mika",
+          "m_akari",
+          "m_gbojk371",
+          "m_symj32y6",
+          "m_7j6tcyhr",
+          "m_blncyp2k",
+          "m_mayu",
+          "m_rin",
+          "m_yuna",
+          "m_hina",
+          "m_saki"
+        ],
+        "slotRoles": {
+          "8": "guardian",
+          "9": "guardian",
+          "11": "center"
+        }
+      },
+      "notes": "第一首总选单曲，坂口阳菜毫无悬念登顶，充满诱惑的歌曲！"
+    },
+    {
+      "id": "s_bpiozglx",
+      "title": "6th Single · The Meaning of Unforgetable Things",
+      "release": "2026-01-09",
+      "cover": "/uploads/1768680425241.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "The Meaning of Unforgetable Things (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1768680482167-hvaasd.mp4"
+        },
+        {
+          "no": 2,
+          "title": "Can You? 1期生（三浦丽莎 center）",
+          "isAside": false,
+          "audio": ""
+        },
+        {
+          "no": 3,
+          "title": "Wonder Wonder Wonder 2期生（宫岛阿弥 center）",
+          "isAside": false,
+          "audio": ""
+        },
+        {
+          "no": 4,
+          "title": "Next to Me 3期生（小林凛凛花 center）",
+          "isAside": false,
+          "audio": ""
+        },
+        {
+          "no": 5,
+          "title": "Star with Moon（竹内星月 with 宫月）",
+          "isAside": false,
+          "audio": ""
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 12,
+        "rows": [
+          7,
+          4,
+          1
+        ],
+        "slots": [
+          "m_rjli97s6",
+          "m_gbojk371",
+          "m_blncyp2k",
+          "m_l4k686go",
+          "m_c16gtwds",
+          "m_saki",
+          "m_mika",
+          "m_4wmfwcbj",
+          "m_7j6tcyhr",
+          "m_akari",
+          "m_mayu",
+          "m_symj32y6"
+        ],
+        "slotRoles": {
+          "8": "guardian",
+          "9": "guardian",
+          "11": "center"
+        }
+      },
+      "notes": "第一首猜拳单曲，桥本美咲第一次当c，谁都有机会！"
+    },
+    {
+      "id": "s_hwxadq52",
+      "title": "7th Single · BE US",
+      "release": "2026-01-09",
+      "cover": "/uploads/1768731811149.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "BE US (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1768731822845-gkehb9.mp4"
+        },
+        {
+          "no": 2,
+          "title": "HOT TEARS（松村珠理奈center）",
+          "isAside": false,
+          "audio": ""
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 12,
+        "rows": [
+          4,
+          4,
+          4
+        ],
+        "slots": [
+          "m_mika",
+          "m_symj32y6",
+          "m_mayu",
+          "m_batr9qfj",
+          "m_yuna",
+          "m_saki",
+          "m_rin",
+          "m_hina",
+          "m_gbojk371",
+          "m_akari",
+          "m_7j6tcyhr",
+          "m_rjli97s6"
+        ],
+        "slotRoles": {
+          "8": "guardian",
+          "9": "center",
+          "10": "center",
+          "11": "guardian"
+        }
+      },
+      "notes": "新一轮春季单曲，元center三浦丽莎回c了，最偶像的单曲！"
+    },
+    {
+      "id": "s_dmv6qfio",
+      "title": "8th Single · fantasy!",
+      "release": "2026-01-10",
+      "cover": "/uploads/1768736891070.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "fantasy! (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1768736922305-xp3r0a.mp4"
+        },
+        {
+          "no": 2,
+          "title": "ME:I（坂口阳菜 solo）",
+          "isAside": false,
+          "audio": ""
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 16,
+        "rows": [
+          6,
+          5,
+          5
+        ],
+        "slots": [
+          "m_mika",
+          "m_hina",
+          "m_ff4lppj9",
+          "m_m8fltj0e",
+          "m_7j6tcyhr",
+          "m_symj32y6",
+          "m_yuna",
+          "m_blncyp2k",
+          "m_batr9qfj",
+          "m_ltlzffea",
+          "m_mayu",
+          "m_gbojk371",
+          "m_rin",
+          "m_saki",
+          "m_akari",
+          "m_rjli97s6"
+        ],
+        "slotRoles": {
+          "12": "guardian",
+          "13": "center",
+          "14": "guardian"
+        }
+      },
+      "notes": "第二次总选的投票单曲，坂口阳菜回c目指二连霸！fantasy 哦哦哦哦"
+    },
+    {
+      "id": "s_0k9y573f",
+      "title": "9th Single · Big Mistake?!",
+      "release": "2026-01-13",
+      "cover": "/uploads/1768737140002.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "Big Mistake?! (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1768737174222-3p7v11.mp4"
+        },
+        {
+          "no": 2,
+          "title": "Love Again（松村珠理奈）",
+          "isAside": false,
+          "audio": ""
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 12,
+        "rows": [
+          7,
+          4,
+          1
+        ],
+        "slots": [
+          "m_7j6tcyhr",
+          "m_rjli97s6",
+          "m_blncyp2k",
+          "m_akari",
+          "m_mayu",
+          "m_symj32y6",
+          "m_ltlzffea",
+          "m_hina",
+          "m_yuna",
+          "m_saki",
+          "m_gbojk371",
+          "m_rin"
+        ],
+        "slotRoles": {
+          "8": "guardian",
+          "9": "guardian",
+          "11": "center"
+        }
+      },
+      "notes": "第二次总选单曲，中村樱居然第一！大玩怀孕的概念，xjp太敢了吧！"
+    },
+    {
+      "id": "s_awspexel",
+      "title": "10th Single · BLACK MOON",
+      "release": "2026-01-16",
+      "cover": "/uploads/1768737363979.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "BLACK MOON (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1768737385466-jevvoi.mp4"
+        },
+        {
+          "no": 2,
+          "title": "Mrs. Candy（今日优center）",
+          "isAside": false,
+          "audio": ""
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 12,
+        "rows": [
+          7,
+          4,
+          1
+        ],
+        "slots": [
+          "m_ayame",
+          "m_blncyp2k",
+          "m_umbw1ji3",
+          "m_m8fltj0e",
+          "m_gbojk371",
+          "m_akari",
+          "m_mayu",
+          "m_rin",
+          "m_rjli97s6",
+          "m_hina",
+          "m_saki",
+          "m_yuna"
+        ],
+        "slotRoles": {
+          "8": "guardian",
+          "9": "guardian",
+          "11": "center"
+        }
+      },
+      "notes": "常规单曲，白鸟南娜第一次成为center，坂口阳菜是不是完蛋了"
+    }
+  ],
+  "posts": [
+    {
+      "id": "p1",
+      "title": "XJP56 首次公开演出：Neon Bloom Live",
+      "date": "2026-01-05",
+      "cover": "https://placehold.co/1600x900/png?text=Live&font=montserrat",
+      "content": "<p>我们在冬日的灯光里完成了第一次公开演出。感谢每一位到场的你。</p><ul><li>新编曲首次披露</li><li>成员MC环节</li><li>现场限定周边</li></ul><p>下一站见！</p>"
+    },
+    {
+      "id": "p2",
+      "title": "2nd Single《Aurora Steps》封面&曲目公开",
+      "date": "2026-01-09",
+      "cover": "https://placehold.co/1600x900/png?text=Aurora&font=montserrat",
+      "content": "<p>《Aurora Steps》以<strong>极光</strong>为主题：层层推进的节奏、明亮的和声与冷色系的舞台感。</p><p>曲目收录：Track1~3 全部公开，A面曲舞台即将上线。</p>"
+    }
+  ]
+}
