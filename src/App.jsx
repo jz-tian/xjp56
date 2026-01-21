@@ -231,11 +231,21 @@ const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
 
 function generationBadgeClass(gen = "") {
-  if (String(gen).startsWith("1")) return "bg-pink-100 text-pink-900";
-  if (String(gen).startsWith("2")) return "bg-green-100 text-green-900";
-  if (String(gen).startsWith("3")) return "bg-blue-100 text-blue-900";
-  if (String(gen).startsWith("4")) return "bg-yellow-100 text-yellow-900";
+  // return Tailwind-like class strings for default generations; for 3期/5期 we return empty so styles handle colors.
+  const g = String(gen || "");
+  if (g.startsWith("1")) return "bg-pink-100 text-pink-900";
+  if (g.startsWith("2")) return "bg-green-100 text-green-900";
+  if (g.startsWith("3")) return ""; // styled via generationBadgeStyle
+  if (g.startsWith("4")) return "bg-yellow-100 text-yellow-900";
+  if (g.startsWith("5")) return ""; // styled via generationBadgeStyle
   return "bg-black/5 text-zinc-900";
+}
+
+function generationBadgeStyle(gen = "") {
+  const g = String(gen || "");
+  if (g.startsWith("3")) return { backgroundColor: "#DDE8FF", color: "#154ECF", padding: '0.125rem 0.75rem', borderRadius: '9999px', fontWeight: 600 };
+  if (g.startsWith("5")) return { backgroundColor: "#C9F3FF", color: "#00303A", padding: '0.125rem 0.75rem', borderRadius: '9999px', fontWeight: 600 };
+  return undefined;
 }
 
 function readFileAsDataURL(file) {
@@ -708,26 +718,33 @@ function withRecomputedSelections(data) {
   const members = Array.isArray(data?.members) ? data.members : [];
 
   const nextMembers = members.map((m) => {
-    const prev = m?.selectionHistory && typeof m.selectionHistory === "object" ? m.selectionHistory : {};
-    const next = { ...prev };
+    const prev =
+      m?.selectionHistory && typeof m.selectionHistory === "object"
+        ? m.selectionHistory
+        : {};
 
-    // Graduated members: only keep history up to the last single released on/before graduationDate.
-    const gradInfo = m?.isActive === false ? getLastSingleBeforeGrad(m, singles) : { lastSingleId: null, lastRelease: "" };
+    // 毕业成员：只保留毕业前（含毕业单曲）的记录
+    const gradInfo =
+      m?.isActive === false
+        ? getLastSingleBeforeGrad(m, singles)
+        : { lastSingleId: null, lastRelease: "" };
     const gradLimit = gradInfo?.lastRelease || "";
+
+    // ✅ 关键：不再把 prev 整体拷贝进来，而是从当期 singles 重新生成
+    const next = {};
 
     for (const s of singles) {
       const sid = s?.id;
       if (!sid) continue;
 
-      // After graduation: do not generate/keep any history for later singles.
       const sRelease = isoDate(s?.release);
+      // 毕业之后发行的单曲：不生成任何记录
       if (gradLimit && sRelease && sRelease > gradLimit) {
-        if (sid in next) delete next[sid];
         continue;
       }
 
       const manual = (prev?.[sid] ?? "").toString().trim();
-      // Allow manual override: if user typed "加入前" in member edit, keep it.
+      // 允许在成员编辑里“手动标记为加入前”，此时不受站位影响
       if (manual.includes("加入前")) {
         next[sid] = "加入前";
         continue;
@@ -736,10 +753,14 @@ function withRecomputedSelections(data) {
       const lineup = s?.asideLineup || {};
       const slots = Array.isArray(lineup.slots) ? lineup.slots : [];
       const rowSizes = Array.isArray(lineup.rows) ? lineup.rows : [];
-      const slotRoles = lineup.slotRoles && typeof lineup.slotRoles === "object" ? lineup.slotRoles : {};
+      const slotRoles =
+        lineup.slotRoles && typeof lineup.slotRoles === "object"
+          ? lineup.slotRoles
+          : {};
 
       const slotIndex = slots.findIndex((x) => x === m.id);
       if (slotIndex === -1) {
+        // 没出现在站位里：统一视为“落选”
         next[sid] = "落选";
         continue;
       }
@@ -749,7 +770,12 @@ function withRecomputedSelections(data) {
       const rowFromFront = rowCount - rowFromBack + 1;
 
       const roleRaw = slotRoles?.[slotIndex] ?? null;
-      const role = roleRaw === "center" ? "center" : (roleRaw === "guardian" || roleRaw === "护法") ? "护法" : "";
+      const role =
+        roleRaw === "center"
+          ? "center"
+          : roleRaw === "guardian" || roleRaw === "护法"
+          ? "护法"
+          : "";
 
       next[sid] = `A面选拔（第${rowFromFront}排${role ? " " + role : ""}）`;
     }
@@ -759,7 +785,6 @@ function withRecomputedSelections(data) {
 
   return { ...data, members: nextMembers };
 }
-
 // 兼容旧数据：早期 selectionHistory 可能以“标题/描述”作为 key。
 // 这里把能识别出来的条目迁移成以 single.id 为 key（避免改标题后展示为空 & 避免重复）。
 function migrateSelectionHistoryKeys(members, singles) {
@@ -1128,7 +1153,7 @@ function ImageUploader({ label, value, onChange, hint }) {
             <img
               src={resolveMediaUrl(value)}
               alt="preview"
-              className="h-[140px] w-[140px] object-contain bg-zinc-100"
+              className="h-[140px] w-[140px] object-cover bg-zinc-100"
             />
           ) : (
             <div className="grid h-[140px] w-[140px] place-items-center text-zinc-600">
@@ -1246,7 +1271,7 @@ function MembersPage({ data, setData, admin }) {
   };
 
   const saveMember = () => {
-    // When switching to graduated, require a graduation date.
+    // 切换到毕业（isActive === false）时，必须填写毕业日期与毕业曲（可以写“无”）
     if (editing && editing.isActive === false) {
       const gd = isoDate(editing.graduationDate);
       if (!gd) {
@@ -1254,16 +1279,29 @@ function MembersPage({ data, setData, admin }) {
         alert("请先填写毕业日期（YYYY-MM-DD）");
         return;
       }
+      const gTitle = (editing.graduationSongTitle || "").toString().trim();
+      if (!gTitle) {
+        // eslint-disable-next-line no-alert
+        alert("请填写毕业曲的 title（填写“无”表示没有毕业曲且在成员界面不显示）");
+        return;
+      }
     }
     setData((prev) => {
       const exists = prev.members.some((x) => x.id === editing.id);
       const nextMembers = exists
-        ? prev.members.map((x) => (x.id === editing.id ? editing : x))
+        ? prev.members.map((x) =>
+            x.id === editing.id ? editing : x
+          )
         : [...prev.members, editing];
-      return { ...prev, members: nextMembers };
+
+      return withRecomputedSelections({
+        ...prev,
+        members: nextMembers,
+      });
     });
     setEditorOpen(false);
   };
+
 
   const deleteMember = (id) => {
     setData((prev) => {
@@ -1273,10 +1311,17 @@ function MembersPage({ data, setData, admin }) {
         ...s,
         asideLineup: {
           ...s.asideLineup,
-          slots: s.asideLineup.slots.map((mid) => (mid === id ? null : mid)),
+          slots: s.asideLineup.slots.map((mid) =>
+            mid === id ? null : mid
+          ),
         },
       }));
-      return { ...prev, members: nextMembers, singles: nextSingles };
+
+      return withRecomputedSelections({
+        ...prev,
+        members: nextMembers,
+        singles: nextSingles,
+      });
     });
   };
 
@@ -1337,12 +1382,12 @@ function MembersPage({ data, setData, admin }) {
                   <img
                     src={resolveMediaUrl(m.avatar)}
                     alt={m.name}
-                    className={"aspect-[3/4] w-full object-contain bg-zinc-100 transition duration-300 group-hover:scale-[1.02] " + (!m.isActive ? "grayscale" : "") }
+                    className={"aspect-[3/4] w-full object-cover bg-zinc-100 transition duration-300 group-hover:scale-[1.02] " + (!m.isActive ? "grayscale" : "") }
                   />
                 </button>
                 <div className="absolute left-2 top-2 flex gap-2">
                   <Badge
-                    className={generationBadgeClass(m.generation)}
+                    className={generationBadgeClass(m.generation)} style={generationBadgeStyle(m.generation)}
                     variant="secondary"
                   >
                     {m.generation}
@@ -1398,7 +1443,7 @@ function MembersPage({ data, setData, admin }) {
                   <img
                     src={resolveMediaUrl(selected.avatar)}
                     alt={selected.name}
-                    className={"h-full w-full object-contain bg-zinc-100 " + (!selected.isActive ? "grayscale" : "") }
+                    className={"h-full w-full object-cover bg-zinc-100 " + (!selected.isActive ? "grayscale" : "") }
                   />
                 </div>
 
@@ -1437,11 +1482,20 @@ function MembersPage({ data, setData, admin }) {
               </div>
               <div className="grid gap-4">
                 <DialogHeader>
-                  <DialogTitle className="text-2xl">{selected.name}</DialogTitle>
+                  <DialogTitle className="text-2xl">
+                    <div className="flex items-baseline gap-3">
+                      <div>{selected.name}</div>
+                      {selected.romaji ? <div className="text-sm text-zinc-600">{selected.romaji}</div> : null}
+                    </div>
+                  </DialogTitle>
                   <DialogDescription className="text-zinc-600">
                     {selected.origin} · {selected.generation}
                     {!selected.isActive && selected.graduationDate ? (
                       <span className="ml-2">· 毕业：{isoDate(selected.graduationDate)}</span>
+                    ) : null}
+                    {/* 毕业曲：有且不为 "无" 时显示 */}
+                    {!selected.isActive && (selected.graduationSongTitle || "").trim() && (selected.graduationSongTitle || "").trim() !== "无" ? (
+                      <span className="ml-2">· 毕业曲：{selected.graduationSongTitle}</span>
                     ) : null}
                   </DialogDescription>
                 </DialogHeader>
@@ -1463,7 +1517,22 @@ function MembersPage({ data, setData, admin }) {
                   </CardContent>
                 </Card>
 
-                <Card className="border-zinc-200/70 bg-white/70">
+                
+
+                {selected.generation && String(selected.generation).startsWith("5") && Array.isArray(selected.admireSenior) && selected.admireSenior.length ? (
+                  <Card className="border-zinc-200/70 bg-white/70">
+                    <CardHeader>
+                      <CardTitle className="text-base">憧憬的前辈</CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid gap-1 text-sm">
+                      {selected.admireSenior.map((id) => {
+                        const mm = (data.members || []).find((x) => x.id === id);
+                        return mm ? <div key={id}>{mm.name}</div> : null;
+                      })}
+                    </CardContent>
+                  </Card>
+                ) : null}
+<Card className="border-zinc-200/70 bg-white/70">
                   <CardHeader>
                     <CardTitle className="text-base">历代单曲选拔状况</CardTitle>
                   </CardHeader>
@@ -1654,6 +1723,12 @@ function MembersPage({ data, setData, admin }) {
                       value={editing.graduationDate || ""}
                       onChange={(e) => setEditing((p) => ({ ...p, graduationDate: e.target.value }))}
                       placeholder="YYYY-MM-DD"
+                    />
+                    <div className="text-sm font-medium">毕业曲（填“无”表示不显示）</div>
+                    <Input
+                      value={editing.graduationSongTitle || ""}
+                      onChange={(e) => setEditing((p) => ({ ...p, graduationSongTitle: e.target.value }))}
+                      placeholder="例如：Farewell Song / 无"
                     />
                     <div className="text-xs text-zinc-600">把成员从在籍改为毕业时必须填写。</div>
                   </div>
@@ -2028,99 +2103,29 @@ function SinglesPage({ data, setData, admin }) {
   };
 
   const saveSingle = () => {
-    const ordinal = (n) => {
-      const s = ["th", "st", "nd", "rd"];
-      const v = n % 100;
-      return n + (s[(v - 20) % 10] || s[v] || s[0]);
-    };
-
     setData((prev) => {
       const exists = prev.singles.some((x) => x.id === editing.id);
       const nextSingles = exists
-        ? prev.singles.map((x) => (x.id === editing.id ? editing : x))
+        ? prev.singles.map((x) =>
+            x.id === editing.id ? editing : x
+          )
         : [...prev.singles, editing];
 
-      // 生成 "1st Single · Title" 标签（按 release 升序：旧 -> 新）
-      const parsed = (v) => {
-        if (!v) return null;
-        const t = Date.parse(v);
-        return Number.isFinite(t) ? t : null;
-      };
-      const withIndex = nextSingles.map((s, i) => ({ s, i }));
-      const hasAnyDate = withIndex.some(({ s }) => parsed(s.release) !== null);
-      const ordered = hasAnyDate
-        ? [...withIndex].sort((a, b) => {
-            const ta = parsed(a.s.release);
-            const tb = parsed(b.s.release);
-            if (ta === null && tb === null) return a.i - b.i;
-            if (ta === null) return 1;
-            if (tb === null) return -1;
-            return ta - tb;
-          })
-        : withIndex;
-
-      const singleIndex = ordered.findIndex(({ s }) => s.id === editing.id);
-      const labelPrefix = `${ordinal(singleIndex + 1)} Single · ${editing.title || "(untitled)"}`;
-      const sidKey = editing.id;
-
-      // 计算 slotIndex -> 第几排（最后一个 rows 是第1排）
-      const rows = editing?.asideLineup?.rows || [];
-      const meta = [];
-      let idx = 0;
-      for (let rowIdx = 0; rowIdx < rows.length; rowIdx++) {
-        const n = rows[rowIdx];
-        const start = idx;
-        const end = idx + n;
-        idx = end;
-        const rowNumber = rows.length - rowIdx;
-        meta.push({ start, end, rowNumber });
-      }
-      const slotToRow = (slotIndex) => {
-        for (const r of meta) {
-          if (slotIndex >= r.start && slotIndex < r.end) return r.rowNumber;
-        }
-        return null;
-      };
-
-      const slots = editing?.asideLineup?.slots || [];
-      const roles = editing?.asideLineup?.slotRoles || {};
-
-      const appeared = new Set(slots.filter(Boolean));
-
-      const nextMembers = prev.members.map((m) => {
-        const history = { ...(m.selectionHistory || {}) };
-
-        if (!appeared.has(m.id)) {
-          history[labelPrefix] = "A面选拔（未入）";
-          return { ...m, selectionHistory: history };
-        }
-
-        // member is selected: find first occurrence slot index
-        const slotIndex = slots.findIndex((x) => x === m.id);
-        const rowNumber = slotToRow(slotIndex) || "?";
-
-        let roleText = "";
-        if (rowNumber === 1) {
-          const r = roles[slotIndex];
-          if (r === "center") roleText = " center";
-          else if (r === "guardian") roleText = " 护法";
-        }
-
-        history[labelPrefix] = `A面选拔（第${rowNumber}排${roleText}）`;
-        return { ...m, selectionHistory: history };
-      });
-
-      return { ...prev, singles: nextSingles, members: nextMembers };
+      const nextData = { ...prev, singles: nextSingles };
+      return withRecomputedSelections(nextData);
     });
 
     setEditorOpen(false);
   };
 
+
   const deleteSingle = (id) => {
-    setData((prev) => ({
-      ...prev,
-      singles: prev.singles.filter((s) => s.id !== id),
-    }));
+    setData((prev) =>
+      withRecomputedSelections({
+        ...prev,
+        singles: prev.singles.filter((s) => s.id !== id),
+      })
+    );
     if (selectedId === id) setSelectedId(null);
   };
 
@@ -2359,10 +2364,9 @@ function SinglesPage({ data, setData, admin }) {
                         ) : null}
                       </div>
 
-                      {idx === 0 ? (
-                        <div className="md:col-span-3">
+                      <div className="md:col-span-3">
                           <AudioUploader
-                            label="A面音源（可选）"
+                            label={`${idx === 0 ? 'A面音源（可选）' : `Track ${t.no} 音源（可选）`}`}
                             value={t.audio || ""}
                             onChange={(audio) => {
                               setEditing((p) => {
@@ -2374,7 +2378,6 @@ function SinglesPage({ data, setData, admin }) {
                             hint="支持 mp3 / m4a / wav 等"
                           />
                         </div>
-                      ) : null}
                     </div>
                   ))}
                 </CardContent>
@@ -2660,7 +2663,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                                       "inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-semibold " +
                                       generationBadgeClass(genText)
                                     }
-                                    style={{ fontSize: badgeFont }}
+                                    style={{ fontSize: badgeFont, ...generationBadgeStyle(genText) }}
                                   >
                                     {genText}
                                   </span>
@@ -2914,7 +2917,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
                             src={resolveMediaUrl(m.avatar)}
                             alt={m.name}
                             className={
-                              "h-full w-full object-contain bg-zinc-100 " +
+                              "h-full w-full object-cover bg-zinc-100 " +
                               (!m.isActive ? "grayscale" : "")
                             }
                           />
@@ -3007,7 +3010,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
                   <img
                     src={resolveMediaUrl(m.avatar)}
                     alt={m.name}
-                    className={"h-full w-full object-contain " + (!m.isActive ? "grayscale" : "")}
+                    className={"h-full w-full object-cover " + (!m.isActive ? "grayscale" : "")}
                   />
                 </div>
                 <div className="px-2 py-2">

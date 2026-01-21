@@ -1,6 +1,331 @@
 {
   "members": [
     {
+      "id": "m_5gen_1_3632",
+      "name": "大原 和",
+      "romaji": "KAZU OHARA",
+      "origin": "福冈 • 福冈市",
+      "generation": "5期",
+      "avatar": "/uploads/1768985594388.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "164cm",
+        "birthday": "2007-10-13",
+        "blood": "AB",
+        "hobby": "在便利店比较同款饭团的米粒数量、给路边的猫起名字并写设定集",
+        "skill": "能在完全跑调的情况下把整首歌唱得很有气势",
+        "catchphrase": "世界不需要完美，只需要我登场。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "落选"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_hina"
+      ],
+      "graduationSongTitle": ""
+    },
+    {
+      "id": "m_5gen_2_7259",
+      "name": "平尾 真帆",
+      "romaji": "MAHO HIRAO",
+      "origin": "爱知 • 名古屋",
+      "generation": "5期",
+      "avatar": "/uploads/1768985607834.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "155cm",
+        "birthday": "2010-11-25",
+        "blood": "A",
+        "hobby": "半夜拆解电子闹钟研究为什么它总是比我起得早",
+        "skill": "即兴把任何日常对话改编成舞台MC",
+        "catchphrase": "不管发生什么，先给我三秒摆pose。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "落选"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_jh2ureo3",
+        "m_reina"
+      ],
+      "graduationSongTitle": ""
+    },
+    {
+      "id": "m_5gen_3_7488",
+      "name": "富士松 直希",
+      "romaji": "NAOKI FUJIMATSU",
+      "origin": "山形 • 山形市",
+      "generation": "5期",
+      "avatar": "/uploads/1768985619382.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "156cm",
+        "birthday": "2010-08-28",
+        "blood": "B",
+        "hobby": "记录每天遇到的奇怪路人并给他们编背景故事",
+        "skill": "在完全没有节拍器的情况下精准卡点进歌",
+        "catchphrase": "看似冷静，其实全是戏。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "落选"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_symj32y6"
+      ],
+      "graduationSongTitle": ""
+    },
+    {
+      "id": "m_5gen_4_8493",
+      "name": "来生 菜菜",
+      "romaji": "NANA KISUI",
+      "origin": "福冈 • 福冈市",
+      "generation": "5期",
+      "avatar": "/uploads/1768985628805.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "163cm",
+        "birthday": "2007-04-23",
+        "blood": "B",
+        "hobby": "给食物拍遗照、研究为什么最后一口最好吃",
+        "skill": "一句话把现场气氛从安静变成爆笑",
+        "catchphrase": "笑点低不是缺点，是天赋。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "落选"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_mayu"
+      ],
+      "graduationSongTitle": ""
+    },
+    {
+      "id": "m_5gen_5_6677",
+      "name": "前田 妃姬",
+      "romaji": "HIME MAEDA",
+      "origin": "福岛 • 郡山",
+      "generation": "5期",
+      "avatar": "/uploads/1768985638454.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "155cm",
+        "birthday": "2007-01-19",
+        "blood": "B",
+        "hobby": "把少女漫画里的台词读成恐怖片旁白",
+        "skill": "无表情状态下完成高甜营业",
+        "catchphrase": "我不眨眼，但我在放电。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "落选"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_bm7qiehk",
+        "m_c16gtwds"
+      ],
+      "graduationSongTitle": ""
+    },
+    {
+      "id": "m_5gen_6_2454",
+      "name": "辻江 尤娜",
+      "romaji": "YUNA TSUJIE",
+      "origin": "神奈川 • 横滨",
+      "generation": "5期",
+      "avatar": "/uploads/1768985649502.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "152cm",
+        "birthday": "2010-06-10",
+        "blood": "AB",
+        "hobby": "模仿不同成员的说话方式并偷偷录音复盘",
+        "skill": "一秒切换五种情绪表情",
+        "catchphrase": "刚刚那是真的我，刚刚之前也是。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "落选"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_yuna",
+        "m_t8u0ysq7"
+      ],
+      "graduationSongTitle": ""
+    },
+    {
+      "id": "m_5gen_7_2141",
+      "name": "仓野 尤利娅",
+      "romaji": "YULIA KURANO",
+      "origin": "爱知 • 名古屋",
+      "generation": "5期",
+      "avatar": "/uploads/1768985659260.jpg",
+      "isActive": true,
+      "profile": {
+        "height": "158cm",
+        "birthday": "2007-04-26",
+        "blood": "B",
+        "hobby": "把外来词翻译成只有自己懂的中文版本",
+        "skill": "在混乱现场中精准找到镜头并抢C位",
+        "catchphrase": "语言会迷路，但我不会。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "落选"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_mika"
+      ],
+      "graduationSongTitle": ""
+    },
+    {
       "id": "m_umbw1ji3",
       "name": "伊织 花",
       "romaji": "HANA IORI",
@@ -27,8 +352,8 @@
         "s_dmv6qfio": "加入前",
         "s_0k9y573f": "加入前",
         "s_awspexel": "A面选拔（第3排）",
-        "11th Single · 11th Single · J ONE": "A面选拔（第3排）",
-        "s_ycgqt5ej": "A面选拔（第3排）"
+        "s_ycgqt5ej": "A面选拔（第3排）",
+        "s_awixwkeo": "A面选拔（第3排）"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -68,8 +393,7 @@
         "s_bpiozglx": "加入前",
         "s_hwxadq52": "加入前",
         "s_dmv6qfio": "加入前",
-        "s_0k9y573f": "加入前",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）"
+        "s_0k9y573f": "加入前"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -110,8 +434,8 @@
         "s_dmv6qfio": "A面选拔（第1排）",
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "A面选拔（第2排 护法）",
-        "11th Single · 11th Single · J ONE": "A面选拔（第3排）",
-        "s_ycgqt5ej": "A面选拔（第3排）"
+        "s_ycgqt5ej": "A面选拔（第3排）",
+        "s_awixwkeo": "A面选拔（第3排）"
       },
       "selectionCount": 5,
       "electionRanks": [
@@ -152,8 +476,8 @@
         "s_dmv6qfio": "A面选拔（第2排）",
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（第4排）",
-        "s_ycgqt5ej": "A面选拔（第4排）"
+        "s_ycgqt5ej": "A面选拔（第4排）",
+        "s_awixwkeo": "落选"
       },
       "selectionCount": 2,
       "electionRanks": [
@@ -194,8 +518,8 @@
         "s_dmv6qfio": "落选",
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "落选"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -235,8 +559,7 @@
         "s_bpiozglx": "落选",
         "s_hwxadq52": "落选",
         "s_dmv6qfio": "落选",
-        "s_0k9y573f": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）"
+        "s_0k9y573f": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -277,8 +600,8 @@
         "s_dmv6qfio": "A面选拔（第2排）",
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "A面选拔（第3排）",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "落选"
       },
       "selectionCount": 5,
       "electionRanks": [
@@ -319,8 +642,8 @@
         "s_dmv6qfio": "落选",
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（第4排）",
-        "s_ycgqt5ej": "A面选拔（第4排）"
+        "s_ycgqt5ej": "A面选拔（第4排）",
+        "s_awixwkeo": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -361,8 +684,8 @@
         "s_dmv6qfio": "A面选拔（第2排）",
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "落选"
       },
       "selectionCount": 3,
       "electionRanks": [
@@ -403,8 +726,8 @@
         "s_dmv6qfio": "A面选拔（第1排）",
         "s_0k9y573f": "A面选拔（第2排）",
         "s_awspexel": "A面选拔（第3排）",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "A面选拔（第2排）"
       },
       "selectionCount": 7,
       "electionRanks": [
@@ -445,8 +768,8 @@
         "s_dmv6qfio": "落选",
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -487,8 +810,8 @@
         "s_dmv6qfio": "落选",
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -529,8 +852,8 @@
         "s_dmv6qfio": "落选",
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（第2排）",
-        "s_ycgqt5ej": "A面选拔（第2排）"
+        "s_ycgqt5ej": "A面选拔（第2排）",
+        "s_awixwkeo": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -571,8 +894,8 @@
         "s_dmv6qfio": "落选",
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（第4排）",
-        "s_ycgqt5ej": "A面选拔（第4排）"
+        "s_ycgqt5ej": "A面选拔（第4排）",
+        "s_awixwkeo": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -613,8 +936,8 @@
         "s_dmv6qfio": "A面选拔（第3排）",
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "落选"
       },
       "selectionCount": 4,
       "electionRanks": [
@@ -655,8 +978,8 @@
         "s_dmv6qfio": "A面选拔（第3排）",
         "s_0k9y573f": "落选",
         "s_awspexel": "A面选拔（第3排）",
-        "11th Single · 11th Single · J ONE": "A面选拔（第1排 center）",
-        "s_ycgqt5ej": "A面选拔（第1排 center）"
+        "s_ycgqt5ej": "A面选拔（第1排 center）",
+        "s_awixwkeo": "A面选拔（第3排）"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -697,8 +1020,8 @@
         "s_dmv6qfio": "A面选拔（第3排）",
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "落选"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -739,8 +1062,8 @@
         "s_dmv6qfio": "落选",
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -761,7 +1084,7 @@
       "origin": "兵库 • 神户滩",
       "generation": "1期",
       "avatar": "/uploads/1768591185634.jpg",
-      "isActive": true,
+      "isActive": false,
       "profile": {
         "height": "158cm",
         "birthday": "2004-12-13",
@@ -781,8 +1104,8 @@
         "s_dmv6qfio": "A面选拔（第3排）",
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "A面选拔（第2排）"
       },
       "selectionCount": 4,
       "electionRanks": [
@@ -794,7 +1117,9 @@
           "edition": "第2届",
           "rank": "九位"
         }
-      ]
+      ],
+      "graduationDate": "2026-01-22",
+      "graduationSongTitle": "Now We Hug"
     },
     {
       "id": "m_akari",
@@ -821,8 +1146,8 @@
         "s_dmv6qfio": "A面选拔（第1排 护法）",
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "A面选拔（第3排）",
-        "11th Single · 11th Single · J ONE": "A面选拔（第3排）",
-        "s_ycgqt5ej": "A面选拔（第3排）"
+        "s_ycgqt5ej": "A面选拔（第3排）",
+        "s_awixwkeo": "A面选拔（第2排）"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -863,8 +1188,8 @@
         "s_dmv6qfio": "A面选拔（第2排）",
         "s_0k9y573f": "A面选拔（第2排 护法）",
         "s_awspexel": "A面选拔（第1排 center）",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "A面选拔（第2排）"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -905,8 +1230,8 @@
         "s_dmv6qfio": "A面选拔（第1排 护法）",
         "s_0k9y573f": "A面选拔（第1排 center）",
         "s_awspexel": "A面选拔（第2排）",
-        "11th Single · 11th Single · J ONE": "A面选拔（第2排）",
-        "s_ycgqt5ej": "A面选拔（第2排）"
+        "s_ycgqt5ej": "A面选拔（第2排）",
+        "s_awixwkeo": "A面选拔（第1排 center）"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -947,8 +1272,8 @@
         "s_dmv6qfio": "A面选拔（第1排 center）",
         "s_0k9y573f": "A面选拔（第2排 护法）",
         "s_awspexel": "A面选拔（第2排）",
-        "11th Single · 11th Single · J ONE": "A面选拔（第3排）",
-        "s_ycgqt5ej": "A面选拔（第3排）"
+        "s_ycgqt5ej": "A面选拔（第3排）",
+        "s_awixwkeo": "A面选拔（第1排 center）"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -989,8 +1314,8 @@
         "s_dmv6qfio": "A面选拔（第3排）",
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "落选"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -1031,8 +1356,8 @@
         "s_dmv6qfio": "A面选拔（第2排）",
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "A面选拔（第3排）",
-        "11th Single · 11th Single · J ONE": "A面选拔（第4排）",
-        "s_ycgqt5ej": "A面选拔（第4排）"
+        "s_ycgqt5ej": "A面选拔（第4排）",
+        "s_awixwkeo": "A面选拔（第3排）"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -1073,10 +1398,10 @@
         "s_dmv6qfio": "落选",
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "A面选拔（第3排）"
       },
-      "isActive": true,
+      "isActive": false,
       "selectionCount": 1,
       "romaji": "SORA YOSHIDA",
       "electionRanks": [
@@ -1088,7 +1413,9 @@
           "edition": "第2届",
           "rank": "二十五位"
         }
-      ]
+      ],
+      "graduationDate": "2026-01-22",
+      "graduationSongTitle": "无"
     },
     {
       "id": "m_hina",
@@ -1115,8 +1442,8 @@
         "s_dmv6qfio": "A面选拔（第3排）",
         "s_0k9y573f": "A面选拔（第2排）",
         "s_awspexel": "A面选拔（第2排 护法）",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "A面选拔（第2排）"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -1157,8 +1484,8 @@
         "s_dmv6qfio": "落选",
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
-        "11th Single · 11th Single · J ONE": "A面选拔（第2排）",
-        "s_ycgqt5ej": "A面选拔（第2排）"
+        "s_ycgqt5ej": "A面选拔（第2排）",
+        "s_awixwkeo": "落选"
       },
       "isActive": true,
       "selectionCount": 1,
@@ -1199,8 +1526,8 @@
         "s_dmv6qfio": "落选",
         "s_0k9y573f": "落选",
         "s_awspexel": "A面选拔（第3排）",
-        "11th Single · 11th Single · J ONE": "A面选拔（未入）",
-        "s_ycgqt5ej": "落选"
+        "s_ycgqt5ej": "落选",
+        "s_awixwkeo": "落选"
       },
       "isActive": true,
       "selectionCount": 0,
@@ -1737,6 +2064,12 @@
           "title": "J ONE (A-side)",
           "isAside": true,
           "audio": "/uploads/audio/1768832361890-y9ld21.mp4"
+        },
+        {
+          "no": 2,
+          "title": "V.S. (坂口阳菜 x 中村樱)",
+          "isAside": false,
+          "audio": ""
         }
       ],
       "asideLineup": {
@@ -1766,6 +2099,59 @@
         }
       },
       "notes": "第二首猜拳单曲，松村珠理奈顺利成为冠军当上center！让我们恭喜她"
+    },
+    {
+      "id": "s_awixwkeo",
+      "title": "12th Single · glimmer",
+      "release": "2026-01-21",
+      "cover": "/uploads/1768986970656.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "glimmer (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1768986982044-st6ltl.mp4"
+        },
+        {
+          "no": 2,
+          "title": "Break the Rules (5期生)",
+          "isAside": false,
+          "audio": "/uploads/audio/1768987029917-h9jhku.mp4"
+        },
+        {
+          "no": 3,
+          "title": "Now We Hug (桥本美咲毕业曲)",
+          "isAside": false,
+          "audio": "/uploads/audio/1768987052707-faacca.mp4"
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 12,
+        "rows": [
+          5,
+          5,
+          2
+        ],
+        "slots": [
+          "m_nana",
+          "m_m8fltj0e",
+          "m_rjli97s6",
+          "m_mayu",
+          "m_umbw1ji3",
+          "m_gbojk371",
+          "m_akari",
+          "m_symj32y6",
+          "m_yuna",
+          "m_hina",
+          "m_rin",
+          "m_saki"
+        ],
+        "slotRoles": {
+          "10": "center",
+          "11": "center"
+        }
+      },
+      "notes": "新一年的春单，桥本美咲和吉田空毕业前最后一首单曲，好感人啊"
     }
   ],
   "posts": [
