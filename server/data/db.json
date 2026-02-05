@@ -59,7 +59,7 @@
       "origin": "爱知 • 名古屋",
       "generation": "5期",
       "avatar": "/uploads/1768985607834.jpg",
-      "isActive": true,
+      "isActive": false,
       "profile": {
         "height": "155cm",
         "birthday": "2010-11-25",
@@ -103,7 +103,8 @@
         "m_jh2ureo3",
         "m_reina"
       ],
-      "graduationSongTitle": ""
+      "graduationSongTitle": "无",
+      "graduationDate": "2026-02-01"
     },
     {
       "id": "m_5gen_3_7488",
@@ -269,7 +270,7 @@
       "origin": "神奈川 • 横滨",
       "generation": "5期",
       "avatar": "/uploads/1768985649502.jpg",
-      "isActive": true,
+      "isActive": false,
       "profile": {
         "height": "152cm",
         "birthday": "2010-06-10",
@@ -313,7 +314,8 @@
         "m_yuna",
         "m_t8u0ysq7"
       ],
-      "graduationSongTitle": ""
+      "graduationSongTitle": "无",
+      "graduationDate": "2026-02-01"
     },
     {
       "id": "m_5gen_7_2141",
@@ -558,7 +560,7 @@
       "origin": "东京 • 墨田",
       "generation": "3期",
       "avatar": "/uploads/1768593779710.jpg",
-      "isActive": true,
+      "isActive": false,
       "profile": {
         "height": "159cm",
         "birthday": "2008-11-11",
@@ -597,7 +599,9 @@
           "edition": "第3届",
           "rank": "二十四位"
         }
-      ]
+      ],
+      "graduationDate": "2026-02-01",
+      "graduationSongTitle": "无"
     },
     {
       "id": "m_t8u0ysq7",
@@ -886,7 +890,7 @@
       "origin": "鹿儿岛 • 鹿儿岛市",
       "generation": "2期",
       "avatar": "/uploads/1768593267529.jpg",
-      "isActive": true,
+      "isActive": false,
       "profile": {
         "height": "157cm",
         "birthday": "2005-02-02",
@@ -925,7 +929,9 @@
           "edition": "第3届",
           "rank": "二十六位"
         }
-      ]
+      ],
+      "graduationDate": "2026-02-01",
+      "graduationSongTitle": "无"
     },
     {
       "id": "m_c16gtwds",
@@ -1174,7 +1180,7 @@
       "origin": "新潟 • 新潟市",
       "generation": "1期",
       "avatar": "/uploads/1768591268620.jpg",
-      "isActive": true,
+      "isActive": false,
       "profile": {
         "height": "156cm",
         "birthday": "2005-03-19",
@@ -1213,7 +1219,9 @@
           "edition": "第3届",
           "rank": "二十七位"
         }
-      ]
+      ],
+      "graduationDate": "2026-02-01",
+      "graduationSongTitle": "无"
     },
     {
       "id": "m_symj32y6",
@@ -1669,7 +1677,7 @@
         "s_p3pegbk7": "落选",
         "s_updsfvcu": "落选"
       },
-      "isActive": true,
+      "isActive": false,
       "selectionCount": 1,
       "romaji": "MAI KINOSHITA",
       "electionRanks": [
@@ -1685,7 +1693,9 @@
           "edition": "第3届",
           "rank": "二十八位"
         }
-      ]
+      ],
+      "graduationDate": "2026-02-01",
+      "graduationSongTitle": "无"
     },
     {
       "id": "m_ayame",
@@ -2052,7 +2062,7 @@
       "id": "s_hwxadq52",
       "title": "7th Single · BE US",
       "release": "2026-01-09",
-      "cover": "/uploads/1768731811149.jpg",
+      "cover": "/uploads/1770287137321.jpg",
       "tracks": [
         {
           "no": 1,

@@ -1020,7 +1020,7 @@ function TopBar({ page, setPage, admin, setAdmin, onReset }) {
   );
 }
 
-function Hero({ membersCount, singlesCount, postsCount, onGo }) {
+function Hero({ activeMembersCount, totalMembersCount, singlesCount, postsCount, onGo }) {
   return (
     <div className="grid gap-6 md:grid-cols-12">
       <motion.div
@@ -1040,7 +1040,7 @@ function Hero({ membersCount, singlesCount, postsCount, onGo }) {
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid grid-cols-3 gap-3">
-              <Stat label="成员" value={membersCount} />
+              <Stat label="成员（在籍 / 历代）" value={`${activeMembersCount} / ${totalMembersCount}`} />
               <Stat label="单曲" value={singlesCount} />
               <Stat label="新闻" value={postsCount} />
             </div>
@@ -1231,14 +1231,34 @@ function MembersPage({ data, setData, admin }) {
   const [editorOpen, setEditorOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all"); // all | active | inactive
+  const [genFilter, setGenFilter] = useState("all"); // all | "1期" | "2期" ...
 
   const members = data.members;
 
+  const generations = useMemo(() => {
+    const set = new Set();
+    members.forEach((m) => {
+      const g = (m.generation ?? "").toString().trim();
+      if (g) set.add(g);
+    });
+    const arr = Array.from(set);
+    // 尽量按数字期排序：1期,2期...
+    arr.sort((a, b) => {
+      const na = parseInt(String(a).replace(/\D/g, ""), 10);
+      const nb = parseInt(String(b).replace(/\D/g, ""), 10);
+      if (Number.isFinite(na) && Number.isFinite(nb)) return na - nb;
+      return String(a).localeCompare(String(b));
+    });
+    return arr;
+  }, [members]);
+
   const filteredMembers = useMemo(() => {
-    if (statusFilter === "active") return members.filter((m) => m.isActive);
-    if (statusFilter === "inactive") return members.filter((m) => !m.isActive);
-    return members;
-  }, [members, statusFilter]);
+    let list = members;
+    if (statusFilter === "active") list = list.filter((m) => m.isActive);
+    if (statusFilter === "inactive") list = list.filter((m) => !m.isActive);
+    if (genFilter !== "all") list = list.filter((m) => (m.generation ?? "").toString().trim() === genFilter);
+    return list;
+  }, [members, statusFilter, genFilter]);
 
   const openEdit = (m) => {
     setEditing(
@@ -1363,6 +1383,27 @@ function MembersPage({ data, setData, admin }) {
         >
           毕业
         </Button>
+
+        <div className="mx-2 h-4 w-px bg-zinc-200/70" />
+        <div className="text-sm text-zinc-600 mr-1">期数：</div>
+        <Button
+          variant={genFilter === "all" ? "default" : "secondary"}
+          size="sm"
+          onClick={() => setGenFilter("all")}
+        >
+          全部期
+        </Button>
+        {generations.map((g) => (
+          <Button
+            key={g}
+            variant={genFilter === g ? "default" : "secondary"}
+            size="sm"
+            onClick={() => setGenFilter(g)}
+          >
+            {g}
+          </Button>
+        ))}
+
         <div className="ml-auto text-xs text-zinc-500">
           共 {filteredMembers.length} 人
         </div>
@@ -1406,6 +1447,8 @@ function MembersPage({ data, setData, admin }) {
                         <Button size="icon" variant="secondary" className="h-8 w-8">
                           <Settings className="h-4 w-4" />
                         </Button>
+
+
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="bg-white opacity-100">
                         <DropdownMenuItem onClick={() => openEdit(m)}>
@@ -3408,7 +3451,8 @@ export default function XJP56App() {
             transition={{ duration: 0.25 }}
           >
             <Hero
-              membersCount={data.members.length}
+              activeMembersCount={data.members.filter((m) => m.isActive).length}
+              totalMembersCount={data.members.length}
               singlesCount={data.singles.length}
               postsCount={data.posts.length}
               onGo={setPage}
