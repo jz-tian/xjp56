@@ -1436,7 +1436,7 @@ function MembersPage({ data, setData, admin }) {
       >
         <ScrollDialogContent className="max-w-4xl border-zinc-200/70 bg-white text-zinc-900">
           {selected ? (
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2 items-start">
               <div className="grid gap-3">
                 {/* 需求：移除照片与“总选举顺位”之间的大块空白，让布局更紧凑（不改其他结构） */}
                 <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white aspect-[3/4]">
@@ -2149,7 +2149,7 @@ function SinglesPage({ data, setData, admin }) {
         进而让左侧单曲卡片看起来被拉长。
         仅将两列改为 minmax(0, …) 固定分配，避免被内容挤压/拉伸。
       */}
-      <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+      <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] ">
         <div className="grid gap-4">
           {data.singles.map((s) => (
             <Card
@@ -2215,7 +2215,7 @@ function SinglesPage({ data, setData, admin }) {
           ))}
         </div>
 
-        <div className="md:sticky md:top-[96px] md:self-start">
+        <div className="md:sticky md:top-[96px] md:self-start md:max-h-[calc(100vh-96px)] md:overflow-y-auto md:min-h-0">
           <AnimatePresence mode="wait">
             {selected ? (
               <motion.div
@@ -2459,31 +2459,25 @@ function SinglesPage({ data, setData, admin }) {
 function SingleDetail({single, membersById, admin, cumulativeCounts}) {
   const [coverZoom, setCoverZoom] = useState(false);
   const audioRef = useRef(null);
+  const [currentTrack, setCurrentTrack] = useState(null); // { no, title, audio }
 
   const rows = single.asideLineup?.rows || [];
   const slots = single.asideLineup?.slots || [];
   const slotRolesForView = single.asideLineup?.slotRoles || {};
 
-  // 站位自适应：
-  // - 任一排达到 7 人：整体等比缩放，保证一排放下 7 人
-  // - 超过 7 人：不再继续缩小，改为该排横向滚动
+  // 站位展示规则（按你的需求重做）：
+  // 1) 不管每排人数是多少，头像/卡片尺寸都固定为“每排 3 人”时的大小，不做缩放；
+  // 2) 人数/排数过多时，不拉伸外层卡片，改为站位区域内部滚动查看；
+  // 3) 手机端同样保持不变形：必要时支持横向/纵向滚动。
   const maxPerRow = rows.length ? Math.max(...rows.map((n) => Number(n) || 0)) : 0;
-  const lineupScale = 0.72;// 固定为7人一排时的尺寸比例，避免人数少时头像变大
-  // 需求：无论每排人数配置如何，都保持“7 人一排时”的头像尺寸与间距；
-  // 同时避免在 7 人一排时因容器宽度不足出现横向溢出（超出卡片范围）。
-  // 因此：当每排人数 >= 7 时启用横向滚动，确保布局不变形、不外溢。
-  const enableRowScroll = maxPerRow >= 7;
-  const tileW = Math.round(124 * lineupScale);
-  // 需求：成员姓名过长时，“选拔次数（初/数字）”会被挤压裁切；仅把卡片纵向加长一点。
-  const tileH = Math.round(212 * lineupScale);
-  const imgH = Math.round(112 * lineupScale);
-  const nameFont = Math.max(10, Math.round(12 * lineupScale));
-  const badgeFont = Math.max(10, Math.round(11 * lineupScale));
-  // 需求：当每排人数较少（如 5 人）时，间距过大会显得“稀稀拉拉”。
-  // 仅在小排数时稍微收紧横向 gap，不影响其他布局。
-  const baseRowGap = 16;// 固定为7人一排时的基础间距
-  const rowGap = Math.round(baseRowGap * lineupScale);
-
+  const lineupScale = 1; // 基于“每排 5 人”时的尺寸（不随人数变化缩放）
+  const tileW = 96;
+  const tileH = 176;
+  const imgH = 92;
+  const nameFont = 12;
+  const badgeFont = 11;
+  const rowGap = 18;
+  // 人数较多时不缩放：站位区域整体启用横向滚动（避免挤压导致缩放/变形）
   // rows 的含义：越靠后的数字越前排（最后一个是第1排）
   let __idx = 0;
   const rowMetaForView = rows.map((n, rowIdx) => {
@@ -2494,8 +2488,29 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
     return { n, start, end, rowIdx, rowNumber };
   });
 
-  const asideTrack = single.tracks?.find((t) => t.isAside) || single.tracks?.[0];
-  const hasAudio = !!asideTrack?.audio;
+  const tracks = Array.isArray(single.tracks) ? single.tracks : [];
+  const asideTrack = tracks.find((t) => t.isAside) || tracks[0];
+  const hasAnyAudio = tracks.some((t) => !!t?.audio);
+  const hasAsideAudio = !!asideTrack?.audio;
+
+  // 切换单曲时，默认选中“有音源的优先轨道”（优先 A 面）
+  useEffect(() => {
+    const preferred = (hasAsideAudio ? asideTrack : null) || tracks.find((t) => !!t?.audio) || null;
+    setCurrentTrack(preferred);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [single?.id]);
+
+  // 当切换到某个音源时，自动播放
+  useEffect(() => {
+    if (!currentTrack?.audio) return;
+    const el = audioRef.current;
+    if (!el) return;
+    // 让浏览器有机会先更新 src
+    const t = setTimeout(() => {
+      try { el.load(); } catch (e) {}
+    }, 0);
+    return () => clearTimeout(t);
+  }, [currentTrack?.audio]);
 
   return (
     <Card className="border-zinc-200/70 bg-white/70">
@@ -2527,7 +2542,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                 站位排数：{single.asideLineup?.rows?.length || 0}
               </Badge>
               <Badge variant="secondary" className="bg-black/5">
-                {hasAudio ? "A面可播放" : "A面未上传音源"}
+                {hasAnyAudio ? "已上传音源" : "未上传音源"}
               </Badge>
             </div>
 
@@ -2536,7 +2551,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                 <CardTitle className="text-base">曲目收录</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-2">
-                {(Array.isArray(single.tracks) ? single.tracks : []).map((t) => (
+                {tracks.map((t) => (
                   <div
                     key={t.no}
                     className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200/70 bg-white/70 px-3 py-2"
@@ -2547,16 +2562,23 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                       <span className="font-medium">{t.title}</span>
                     </div>
 
-                    {t.isAside ? (
-                      hasAudio ? (
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="bg-black/5">
+                        {t.isAside ? "A-side" : "B-side"}
+                      </Badge>
+
+                      {t.audio ? (
                         <Button
                           variant="secondary"
                           size="sm"
                           onClick={() => {
-                            if (!audioRef.current) return;
-                            audioRef.current.play();
+                            setCurrentTrack({ no: t.no, title: t.title, audio: t.audio });
+                            // 如果当前已经选中该曲，直接触发播放
+                            if (currentTrack?.no === t.no) {
+                              audioRef.current?.play().catch(() => {});
+                            }
                           }}
-                          title="播放A面音源"
+                          title={`播放 Track ${t.no}`}
                         >
                           <Music className="mr-2 h-4 w-4" />
                           播放
@@ -2565,20 +2587,24 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                         <Badge variant="secondary" className="bg-black/5">
                           未上传音源
                         </Badge>
-                      )
-                    ) : (
-                      <Badge variant="secondary" className="bg-black/5">
-                        B-side
-                      </Badge>
-                    )}
+                      )}
+                    </div>
                   </div>
                 ))}
 
-                {hasAudio ? (
+                {currentTrack?.audio ? (
                   <div className="mt-2 rounded-2xl border border-zinc-200/70 bg-white/70 p-3">
+                    <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                      <div className="text-sm font-medium text-zinc-900">
+                        正在播放：Track {currentTrack.no} · {currentTrack.title}
+                      </div>
+                      <Badge variant="secondary" className="bg-black/5">
+                        {tracks.find((t) => t.no === currentTrack.no)?.isAside ? "A-side" : "B-side"}
+                      </Badge>
+                    </div>
                     <audio
                       ref={audioRef}
-                      src={resolveMediaUrl(asideTrack.audio)}
+                      src={resolveMediaUrl(currentTrack.audio)}
                       controls
                       className="w-full"
                     />
@@ -2606,15 +2632,12 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
-            {/* 让站位区域宽度自适应内容，避免人数较少时右侧显得过分松散 */}
-            <div className="grid gap-3">
+            {/* 站位区域：固定卡片尺寸，不随人数缩放；人数过多时使用横向滚动查看 */}
+            <div className="grid gap-3 overflow-x-auto overflow-y-visible pb-2 px-4" style={{ scrollPaddingLeft: 16, scrollPaddingRight: 16 }}>
               {rowMetaForView.map((r, rIdx) => (
                 <div
                   key={rIdx}
-                  className={
-                    "flex justify-center " +
-                    (enableRowScroll ? "overflow-x-auto" : "")
-                  }
+                  className="flex flex-nowrap justify-center w-full pb-1"
                   style={{ gap: rowGap }}
                 >
                   {slots.slice(r.start, r.end).map((mid, i) => {
@@ -2639,7 +2662,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                       <div
                         key={`${rIdx}-${i}`}
                         className={
-                          "group relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70 " +
+                          "group relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70 flex-none " +
                           frameCls
                         }
                         style={{ width: tileW, height: tileH }}
@@ -3157,7 +3180,7 @@ function BlogPage({ data, setData, admin }) {
           ))}
         </div>
 
-        <div className="md:sticky md:top-[96px] md:self-start">
+        <div className="md:sticky md:top-[96px] md:self-start md:max-h-[calc(100vh-96px)] md:overflow-y-auto md:min-h-0">
           {selected ? (
             <Card className="border-zinc-200/70 bg-white/70">
               <CardHeader>

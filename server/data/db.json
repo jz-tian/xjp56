@@ -28,7 +28,9 @@
         "s_0k9y573f": "加入前",
         "s_awspexel": "加入前",
         "s_ycgqt5ej": "加入前",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -39,6 +41,10 @@
         {
           "edition": "第2届",
           "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "十六位"
         }
       ],
       "admireSenior": [
@@ -74,7 +80,9 @@
         "s_0k9y573f": "加入前",
         "s_awspexel": "加入前",
         "s_ycgqt5ej": "加入前",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -85,6 +93,10 @@
         {
           "edition": "第2届",
           "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "三十二位"
         }
       ],
       "admireSenior": [
@@ -121,7 +133,9 @@
         "s_0k9y573f": "加入前",
         "s_awspexel": "加入前",
         "s_ycgqt5ej": "加入前",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "A面选拔（第3排）",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -132,6 +146,10 @@
         {
           "edition": "第2届",
           "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "二十一位"
         }
       ],
       "admireSenior": [
@@ -167,7 +185,9 @@
         "s_0k9y573f": "加入前",
         "s_awspexel": "加入前",
         "s_ycgqt5ej": "加入前",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "A面选拔（第2排）",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -178,6 +198,10 @@
         {
           "edition": "第2届",
           "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "二十三位"
         }
       ],
       "admireSenior": [
@@ -213,7 +237,9 @@
         "s_0k9y573f": "加入前",
         "s_awspexel": "加入前",
         "s_ycgqt5ej": "加入前",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -224,6 +250,10 @@
         {
           "edition": "第2届",
           "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "二十五位"
         }
       ],
       "admireSenior": [
@@ -260,7 +290,9 @@
         "s_0k9y573f": "加入前",
         "s_awspexel": "加入前",
         "s_ycgqt5ej": "加入前",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -271,6 +303,10 @@
         {
           "edition": "第2届",
           "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "三十一位"
         }
       ],
       "admireSenior": [
@@ -307,7 +343,9 @@
         "s_0k9y573f": "加入前",
         "s_awspexel": "加入前",
         "s_ycgqt5ej": "加入前",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "A面选拔（第2排）",
+        "s_updsfvcu": "A面选拔（第3排）"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -318,6 +356,10 @@
         {
           "edition": "第2届",
           "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "十二位"
         }
       ],
       "admireSenior": [
@@ -353,7 +395,9 @@
         "s_0k9y573f": "加入前",
         "s_awspexel": "A面选拔（第3排）",
         "s_ycgqt5ej": "A面选拔（第3排）",
-        "s_awixwkeo": "A面选拔（第3排）"
+        "s_awixwkeo": "A面选拔（第3排）",
+        "s_p3pegbk7": "A面选拔（第2排）",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -364,6 +408,10 @@
         {
           "edition": "第2届",
           "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "十四位"
         }
       ]
     },
@@ -435,7 +483,9 @@
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "A面选拔（第2排 护法）",
         "s_ycgqt5ej": "A面选拔（第3排）",
-        "s_awixwkeo": "A面选拔（第3排）"
+        "s_awixwkeo": "A面选拔（第3排）",
+        "s_p3pegbk7": "A面选拔（第2排）",
+        "s_updsfvcu": "A面选拔（第2排）"
       },
       "selectionCount": 5,
       "electionRanks": [
@@ -446,6 +496,10 @@
         {
           "edition": "第2届",
           "rank": "十位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "五位"
         }
       ]
     },
@@ -477,7 +531,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "A面选拔（第4排）",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "A面选拔（第3排）",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 2,
       "electionRanks": [
@@ -488,6 +544,10 @@
         {
           "edition": "第2届",
           "rank": "十八位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "十五位"
         }
       ]
     },
@@ -519,7 +579,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -530,6 +592,10 @@
         {
           "edition": "第2届",
           "rank": "十七位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "二十四位"
         }
       ]
     },
@@ -601,7 +667,9 @@
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "A面选拔（第3排）",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "A面选拔（第3排）",
+        "s_updsfvcu": "A面选拔（第3排）"
       },
       "selectionCount": 5,
       "electionRanks": [
@@ -612,6 +680,10 @@
         {
           "edition": "第2届",
           "rank": "八位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "九位"
         }
       ]
     },
@@ -643,7 +715,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "A面选拔（第4排）",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -654,6 +728,10 @@
         {
           "edition": "第2届",
           "rank": "二十一位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "三十位"
         }
       ]
     },
@@ -685,7 +763,9 @@
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "A面选拔（第3排）",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 3,
       "electionRanks": [
@@ -696,6 +776,10 @@
         {
           "edition": "第2届",
           "rank": "十一位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "十三位"
         }
       ]
     },
@@ -727,7 +811,9 @@
         "s_0k9y573f": "A面选拔（第2排）",
         "s_awspexel": "A面选拔（第3排）",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "A面选拔（第2排）"
+        "s_awixwkeo": "A面选拔（第2排）",
+        "s_p3pegbk7": "A面选拔（第1排 护法）",
+        "s_updsfvcu": "A面选拔（第2排 护法）"
       },
       "selectionCount": 7,
       "electionRanks": [
@@ -738,6 +824,10 @@
         {
           "edition": "第2届",
           "rank": "四位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "三位"
         }
       ]
     },
@@ -769,7 +859,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -780,6 +872,10 @@
         {
           "edition": "第2届",
           "rank": "二十位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "二十九位"
         }
       ]
     },
@@ -811,7 +907,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -822,6 +920,10 @@
         {
           "edition": "第2届",
           "rank": "二十四位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "二十六位"
         }
       ]
     },
@@ -853,7 +955,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "A面选拔（第2排）",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -864,6 +968,10 @@
         {
           "edition": "第2届",
           "rank": "十四位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "二十二位"
         }
       ]
     },
@@ -895,7 +1003,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "A面选拔（第4排）",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -906,6 +1016,10 @@
         {
           "edition": "第2届",
           "rank": "十六位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "十七位"
         }
       ]
     },
@@ -937,7 +1051,9 @@
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "A面选拔（第3排）",
+        "s_updsfvcu": "A面选拔（第3排）"
       },
       "selectionCount": 4,
       "electionRanks": [
@@ -948,6 +1064,10 @@
         {
           "edition": "第2届",
           "rank": "十二位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "十位"
         }
       ]
     },
@@ -979,7 +1099,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "A面选拔（第3排）",
         "s_ycgqt5ej": "A面选拔（第1排 center）",
-        "s_awixwkeo": "A面选拔（第3排）"
+        "s_awixwkeo": "A面选拔（第3排）",
+        "s_p3pegbk7": "A面选拔（第2排）",
+        "s_updsfvcu": "A面选拔（第3排）"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -990,6 +1112,10 @@
         {
           "edition": "第2届",
           "rank": "十三位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "十一位"
         }
       ]
     },
@@ -1021,7 +1147,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 0,
       "electionRanks": [
@@ -1032,6 +1160,10 @@
         {
           "edition": "第2届",
           "rank": "二十二位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "十九位"
         }
       ]
     },
@@ -1063,7 +1195,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "selectionCount": 1,
       "electionRanks": [
@@ -1073,6 +1207,10 @@
         },
         {
           "edition": "第2届",
+          "rank": "二十七位"
+        },
+        {
+          "edition": "第3届",
           "rank": "二十七位"
         }
       ]
@@ -1147,7 +1285,9 @@
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "A面选拔（第3排）",
         "s_ycgqt5ej": "A面选拔（第3排）",
-        "s_awixwkeo": "A面选拔（第2排）"
+        "s_awixwkeo": "A面选拔（第2排）",
+        "s_p3pegbk7": "A面选拔（第2排）",
+        "s_updsfvcu": "A面选拔（第3排）"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -1160,6 +1300,10 @@
         {
           "edition": "第2届",
           "rank": "六位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "八位"
         }
       ]
     },
@@ -1189,7 +1333,9 @@
         "s_0k9y573f": "A面选拔（第2排 护法）",
         "s_awspexel": "A面选拔（第1排 center）",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "A面选拔（第2排）"
+        "s_awixwkeo": "A面选拔（第2排）",
+        "s_p3pegbk7": "A面选拔（第2排）",
+        "s_updsfvcu": "A面选拔（第3排）"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -1202,6 +1348,10 @@
         {
           "edition": "第2届",
           "rank": "三位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "六位"
         }
       ]
     },
@@ -1231,7 +1381,9 @@
         "s_0k9y573f": "A面选拔（第1排 center）",
         "s_awspexel": "A面选拔（第2排）",
         "s_ycgqt5ej": "A面选拔（第2排）",
-        "s_awixwkeo": "A面选拔（第1排 center）"
+        "s_awixwkeo": "A面选拔（第1排 center）",
+        "s_p3pegbk7": "A面选拔（第1排 护法）",
+        "s_updsfvcu": "A面选拔（第2排 护法）"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -1244,6 +1396,10 @@
         {
           "edition": "第2届",
           "rank": "一位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "二位"
         }
       ]
     },
@@ -1273,7 +1429,9 @@
         "s_0k9y573f": "A面选拔（第2排 护法）",
         "s_awspexel": "A面选拔（第2排）",
         "s_ycgqt5ej": "A面选拔（第3排）",
-        "s_awixwkeo": "A面选拔（第1排 center）"
+        "s_awixwkeo": "A面选拔（第1排 center）",
+        "s_p3pegbk7": "A面选拔（第1排 center）",
+        "s_updsfvcu": "A面选拔（第1排 center）"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -1286,6 +1444,10 @@
         {
           "edition": "第2届",
           "rank": "二位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "一位"
         }
       ]
     },
@@ -1315,7 +1477,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "A面选拔（第3排）",
+        "s_updsfvcu": "落选"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -1328,6 +1492,10 @@
         {
           "edition": "第2届",
           "rank": "十五位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "十八位"
         }
       ]
     },
@@ -1357,7 +1525,9 @@
         "s_0k9y573f": "A面选拔（第3排）",
         "s_awspexel": "A面选拔（第3排）",
         "s_ycgqt5ej": "A面选拔（第4排）",
-        "s_awixwkeo": "A面选拔（第3排）"
+        "s_awixwkeo": "A面选拔（第3排）",
+        "s_p3pegbk7": "A面选拔（第2排）",
+        "s_updsfvcu": "A面选拔（第3排）"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -1369,6 +1539,10 @@
         },
         {
           "edition": "第2届",
+          "rank": "七位"
+        },
+        {
+          "edition": "第3届",
           "rank": "七位"
         }
       ]
@@ -1443,7 +1617,9 @@
         "s_0k9y573f": "A面选拔（第2排）",
         "s_awspexel": "A面选拔（第2排 护法）",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "A面选拔（第2排）"
+        "s_awixwkeo": "A面选拔（第2排）",
+        "s_p3pegbk7": "A面选拔（第2排）",
+        "s_updsfvcu": "A面选拔（第2排）"
       },
       "isActive": true,
       "selectionCount": 4,
@@ -1456,6 +1632,10 @@
         {
           "edition": "第2届",
           "rank": "五位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "四位"
         }
       ]
     },
@@ -1485,7 +1665,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "落选",
         "s_ycgqt5ej": "A面选拔（第2排）",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "isActive": true,
       "selectionCount": 1,
@@ -1498,6 +1680,10 @@
         {
           "edition": "第2届",
           "rank": "十九位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "二十八位"
         }
       ]
     },
@@ -1527,7 +1713,9 @@
         "s_0k9y573f": "落选",
         "s_awspexel": "A面选拔（第3排）",
         "s_ycgqt5ej": "落选",
-        "s_awixwkeo": "落选"
+        "s_awixwkeo": "落选",
+        "s_p3pegbk7": "落选",
+        "s_updsfvcu": "落选"
       },
       "isActive": true,
       "selectionCount": 0,
@@ -1540,6 +1728,10 @@
         {
           "edition": "第2届",
           "rank": "二十三位"
+        },
+        {
+          "edition": "第3届",
+          "rank": "二十位"
         }
       ]
     }
@@ -2152,6 +2344,108 @@
         }
       },
       "notes": "新一年的春单，桥本美咲和吉田空毕业前最后一首单曲，好感人啊"
+    },
+    {
+      "id": "s_p3pegbk7",
+      "title": "13th Single · Emerald",
+      "release": "2026-01-27",
+      "cover": "/uploads/1770277975034.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "Emerald (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1770278740108-toqlf5.mp4"
+        },
+        {
+          "no": 2,
+          "title": "Law Law Law",
+          "isAside": false,
+          "audio": ""
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 18,
+        "rows": [
+          6,
+          9,
+          3
+        ],
+        "slots": [
+          "m_7j6tcyhr",
+          "m_blncyp2k",
+          "m_mika",
+          "m_5gen_3_7488",
+          "m_batr9qfj",
+          "m_ltlzffea",
+          "m_akari",
+          "m_rjli97s6",
+          "m_yuna",
+          "m_5gen_4_8493",
+          "m_m8fltj0e",
+          "m_5gen_7_2141",
+          "m_hina",
+          "m_umbw1ji3",
+          "m_mayu",
+          "m_rin",
+          "m_saki",
+          "m_gbojk371"
+        ],
+        "slotRoles": {
+          "15": "guardian",
+          "16": "center",
+          "17": "guardian"
+        }
+      },
+      "notes": "第三届总选单曲的投票曲，五期生首次加入选拔！"
+    },
+    {
+      "id": "s_updsfvcu",
+      "title": "14th Single · Electric Shock",
+      "release": "2026-01-28",
+      "cover": "/uploads/1770285284225.jpg",
+      "tracks": [
+        {
+          "no": 1,
+          "title": "Electric Shock (A-side)",
+          "isAside": true,
+          "audio": "/uploads/audio/1770285299589-643rtw.mp4"
+        },
+        {
+          "no": 2,
+          "title": "Knock Knock(今日优center)",
+          "isAside": false,
+          "audio": ""
+        }
+      ],
+      "asideLineup": {
+        "selectionCount": 12,
+        "rows": [
+          7,
+          4,
+          1
+        ],
+        "slots": [
+          "m_m8fltj0e",
+          "m_blncyp2k",
+          "m_mayu",
+          "m_yuna",
+          "m_akari",
+          "m_7j6tcyhr",
+          "m_5gen_7_2141",
+          "m_hina",
+          "m_rin",
+          "m_gbojk371",
+          "m_rjli97s6",
+          "m_saki"
+        ],
+        "slotRoles": {
+          "8": "guardian",
+          "9": "guardian",
+          "11": "center"
+        }
+      },
+      "notes": "坂口阳菜第二首冠军单曲，非常动感，大家一起滋滋滋！"
     }
   ],
   "posts": [
