@@ -2060,6 +2060,23 @@ function SinglesPage({ data, setData, admin }) {
   const [selectedId, setSelectedId] = useState(null);
   const selected = data.singles.find((s) => s.id === selectedId) || null;
 
+  // ✅ 手机端：点击单曲后自动滚动到详情区域（不影响电脑版）
+  const detailAnchorRef = useRef(null);
+  useEffect(() => {
+    if (!selectedId) return;
+    if (typeof window === "undefined") return;
+    // 仅在 md 以下（<768px）生效，确保电脑版保持一模一样
+    if (window.innerWidth >= 768) return;
+
+    const raf = window.requestAnimationFrame(() => {
+      detailAnchorRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+    return () => window.cancelAnimationFrame(raf);
+  }, [selectedId]);
+
   // ✅ 单曲站位显示：截止到当前单曲“发布顺序(按 release 升序)”的累计选拔次数
   // - 第 1 张单曲：站位成员显示（初）
   // - 第 N 张单曲：显示截至该张单曲为止的累计次数（1 -> 初，2+ -> 数字）
@@ -2207,7 +2224,8 @@ function SinglesPage({ data, setData, admin }) {
                   <img
                     src={resolveMediaUrl(s.cover)}
                     alt={s.title}
-                    className="h-[160px] w-full object-cover md:w-[160px]"
+                    // 手机端：封面完整显示不裁切；电脑版保持原样
+                    className="w-full object-contain bg-zinc-100 md:h-[160px] md:w-[160px] md:object-cover"
                   />
                 </button>
                 <div className="flex items-start justify-between gap-3 p-4">
@@ -2259,6 +2277,8 @@ function SinglesPage({ data, setData, admin }) {
         </div>
 
         <div className="md:sticky md:top-[96px] md:self-start md:max-h-[calc(100vh-96px)] md:overflow-y-auto md:min-h-0">
+          {/* 手机端自动滚动锚点（md 以上不受影响） */}
+          <div ref={detailAnchorRef} />
           <AnimatePresence mode="wait">
             {selected ? (
               <motion.div
