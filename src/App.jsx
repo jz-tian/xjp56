@@ -238,6 +238,7 @@ function generationBadgeClass(gen = "") {
   if (g.startsWith("3")) return ""; // styled via generationBadgeStyle
   if (g.startsWith("4")) return "bg-yellow-100 text-yellow-900";
   if (g.startsWith("5")) return ""; // styled via generationBadgeStyle
+  if (g.startsWith("6")) return ""; // styled via generationBadgeStyle
   return "bg-black/5 text-zinc-900";
 }
 
@@ -245,6 +246,7 @@ function generationBadgeStyle(gen = "") {
   const g = String(gen || "");
   if (g.startsWith("3")) return { backgroundColor: "#DDE8FF", color: "#154ECF", padding: '0.125rem 0.75rem', borderRadius: '9999px', fontWeight: 600 };
   if (g.startsWith("5")) return { backgroundColor: "#C9F3FF", color: "#00303A", padding: '0.125rem 0.75rem', borderRadius: '9999px', fontWeight: 600 };
+  if (g.startsWith("6")) return { backgroundColor: "#E9D5FF", color: "#5B21B6", padding: '0.125rem 0.75rem', borderRadius: '9999px', fontWeight: 600 };;
   return undefined;
 }
 

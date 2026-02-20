@@ -1,6 +1,330 @@
 {
   "members": [
     {
+      "id": "m_6gen_1_4821",
+      "name": "冈崎 卡莉",
+      "romaji": "KARIN OKAZAKI",
+      "origin": "东京 • 世田谷",
+      "generation": "6期",
+      "isActive": true,
+      "profile": {
+        "height": "168cm",
+        "birthday": "2008-09-17",
+        "blood": "O",
+        "hobby": "研究都市传说并给它们写续集",
+        "skill": "低音Rap切入主歌",
+        "catchphrase": "别怕，我只是站得比较高。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "加入前",
+        "s_p3pegbk7": "加入前",
+        "s_updsfvcu": "加入前",
+        "s_vq925yfe": "加入前",
+        "s_xt9tskmx": "加入前",
+        "s_c5rwv332": "加入前"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_mika"
+      ],
+      "avatar": "/uploads/1771581945609.jpg"
+    },
+    {
+      "id": "m_6gen_2_9374",
+      "name": "小笠原 诗",
+      "romaji": "UTA OGASAWARA",
+      "origin": "京都 • 左京区",
+      "generation": "6期",
+      "isActive": true,
+      "profile": {
+        "height": "156cm",
+        "birthday": "2009-04-02",
+        "blood": "A",
+        "hobby": "给陌生人的背影写五行诗",
+        "skill": "空气感假声",
+        "catchphrase": "声音轻一点，心跳就会听见。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "加入前",
+        "s_p3pegbk7": "加入前",
+        "s_updsfvcu": "加入前",
+        "s_vq925yfe": "加入前",
+        "s_xt9tskmx": "加入前",
+        "s_c5rwv332": "加入前"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_mayu"
+      ],
+      "avatar": "/uploads/1771581955632.jpg"
+    },
+    {
+      "id": "m_6gen_3_1550",
+      "name": "森 美穗",
+      "romaji": "MIHO MORI",
+      "origin": "北海道 • 函馆",
+      "generation": "6期",
+      "isActive": true,
+      "profile": {
+        "height": "162cm",
+        "birthday": "2007-12-01",
+        "blood": "B",
+        "hobby": "凌晨看海边监控直播",
+        "skill": "稳定主唱线",
+        "catchphrase": "风大一点，歌才站得稳。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "加入前",
+        "s_p3pegbk7": "加入前",
+        "s_updsfvcu": "加入前",
+        "s_vq925yfe": "加入前",
+        "s_xt9tskmx": "加入前",
+        "s_c5rwv332": "加入前"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_saki"
+      ],
+      "avatar": "/uploads/1771581965239.jpg"
+    },
+    {
+      "id": "m_6gen_4_6829",
+      "name": "海东 茉莉奈",
+      "romaji": "MARINA KAITO",
+      "origin": "冲绳 • 浦添",
+      "generation": "6期",
+      "isActive": true,
+      "profile": {
+        "height": "170cm",
+        "birthday": "2008-06-28",
+        "blood": "AB",
+        "hobby": "冲浪失败集锦剪辑",
+        "skill": "舞台大幅度走位",
+        "catchphrase": "浪会退，但我不会。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "加入前",
+        "s_p3pegbk7": "加入前",
+        "s_updsfvcu": "加入前",
+        "s_vq925yfe": "加入前",
+        "s_xt9tskmx": "加入前",
+        "s_c5rwv332": "加入前"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_gbojk371"
+      ],
+      "avatar": "/uploads/1771581977266.jpg"
+    },
+    {
+      "id": "m_6gen_5_7713",
+      "name": "佐藤 美晴",
+      "romaji": "MIHARU SATO",
+      "origin": "长野 • 松本",
+      "generation": "6期",
+      "isActive": true,
+      "profile": {
+        "height": "151cm",
+        "birthday": "2009-01-11",
+        "blood": "A",
+        "hobby": "给云朵打分",
+        "skill": "甜系高音",
+        "catchphrase": "如果你抬头，我就在。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "加入前",
+        "s_p3pegbk7": "加入前",
+        "s_updsfvcu": "加入前",
+        "s_vq925yfe": "加入前",
+        "s_xt9tskmx": "加入前",
+        "s_c5rwv332": "加入前"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_hina"
+      ],
+      "avatar": "/uploads/1771581985835.jpg"
+    },
+    {
+      "id": "m_6gen_6_5098",
+      "name": "平川 杏梨",
+      "romaji": "ANRI HIRAKAWA",
+      "origin": "神奈川 • 川崎",
+      "generation": "6期",
+      "isActive": true,
+      "profile": {
+        "height": "165cm",
+        "birthday": "2008-03-30",
+        "blood": "B",
+        "hobby": "拆解旧CD盒研究封面设计",
+        "skill": "舞蹈卡点爆发",
+        "catchphrase": "节拍不会等人，我也不会。"
+      },
+      "selectionHistory": {
+        "s1": "加入前",
+        "s2": "加入前",
+        "s_oq7izq79": "加入前",
+        "s_7kxfyxh0": "加入前",
+        "s_bnwbmbn8": "加入前",
+        "s_bpiozglx": "加入前",
+        "s_hwxadq52": "加入前",
+        "s_dmv6qfio": "加入前",
+        "s_0k9y573f": "加入前",
+        "s_awspexel": "加入前",
+        "s_ycgqt5ej": "加入前",
+        "s_awixwkeo": "加入前",
+        "s_p3pegbk7": "加入前",
+        "s_updsfvcu": "加入前",
+        "s_vq925yfe": "加入前",
+        "s_xt9tskmx": "加入前",
+        "s_c5rwv332": "加入前"
+      },
+      "selectionCount": 0,
+      "electionRanks": [
+        {
+          "edition": "第1届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第2届",
+          "rank": "加入前"
+        },
+        {
+          "edition": "第3届",
+          "rank": "加入前"
+        }
+      ],
+      "admireSenior": [
+        "m_rin"
+      ],
+      "avatar": "/uploads/1771581997163.jpg"
+    },
+    {
       "id": "m_5gen_1_3632",
       "name": "大原 和",
       "romaji": "KAZU OHARA",
