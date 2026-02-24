@@ -1217,15 +1217,17 @@ function AudioUploader({ label, value, onChange, hint }) {
 
 // DialogContent wrapper: fixed height + inner scroll (prevents dialogs being cut off)
 function ScrollDialogContent({ className = "", children, ...props }) {
+  // Mobile-friendly: make the whole dialog scrollable so details (e.g. “最喜欢的歌曲”) are reachable on small screens.
   const base =
-    "top-[5vh] translate-y-0 w-[calc(100vw-2rem)] max-h-[90vh] overflow-hidden p-0 " +
+    "top-[5vh] translate-y-0 w-[calc(100vw-2rem)] max-h-[90vh] overflow-y-auto overflow-x-hidden p-0 " +
     "border-zinc-200/70 bg-white text-zinc-900 shadow-xl";
   return (
     <DialogContent {...props} className={`${base} ${className}`}>
-      <div className="max-h-[90vh] overflow-y-auto p-6">{children}</div>
+      <div className="p-6">{children}</div>
     </DialogContent>
   );
 }
+
 
 
 function MembersPage({ data, setData, admin }) {
