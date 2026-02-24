@@ -50,9 +50,12 @@
         }
       ],
       "admireSenior": [
-        "m_mika"
+        "m_nana",
+        "m_5gen_6_2454",
+        "m_ys0s465i"
       ],
-      "avatar": "/uploads/1771581945609.jpg"
+      "avatar": "/uploads/1771581945609.jpg",
+      "favoriteSong": "Love Again（松村珠理奈）"
     },
     {
       "id": "m_6gen_2_9374",
@@ -104,9 +107,10 @@
         }
       ],
       "admireSenior": [
-        "m_mayu"
+        "m_reina"
       ],
-      "avatar": "/uploads/1771581955632.jpg"
+      "avatar": "/uploads/1771581955632.jpg",
+      "favoriteSong": "Star with Moon（竹内星月 with 宫月）"
     },
     {
       "id": "m_6gen_3_1550",
@@ -158,9 +162,11 @@
         }
       ],
       "admireSenior": [
-        "m_saki"
+        "m_mdv7k6ml",
+        "m_5gen_5_6677"
       ],
-      "avatar": "/uploads/1771581965239.jpg"
+      "avatar": "/uploads/1771581965239.jpg",
+      "favoriteSong": "SAY MY NAME"
     },
     {
       "id": "m_6gen_4_6829",
@@ -212,9 +218,10 @@
         }
       ],
       "admireSenior": [
-        "m_gbojk371"
+        "m_umbw1ji3"
       ],
-      "avatar": "/uploads/1771581977266.jpg"
+      "avatar": "/uploads/1771581977266.jpg",
+      "favoriteSong": "Am I a Bad Girl? (A-side)"
     },
     {
       "id": "m_6gen_5_7713",
@@ -266,9 +273,12 @@
         }
       ],
       "admireSenior": [
-        "m_hina"
+        "m_5gen_3_7488",
+        "m_nana",
+        "m_umbw1ji3"
       ],
-      "avatar": "/uploads/1771581985835.jpg"
+      "avatar": "/uploads/1771581985835.jpg",
+      "favoriteSong": "ME:I（坂口阳菜 solo）"
     },
     {
       "id": "m_6gen_6_5098",
@@ -320,9 +330,12 @@
         }
       ],
       "admireSenior": [
-        "m_rin"
+        "m_ltlzffea",
+        "m_nana",
+        "m_mdv7k6ml"
       ],
-      "avatar": "/uploads/1771581997163.jpg"
+      "avatar": "/uploads/1771581997163.jpg",
+      "favoriteSong": "BiTE mY UnDERweAR (A-side)"
     },
     {
       "id": "m_5gen_1_3632",
@@ -377,7 +390,8 @@
       "admireSenior": [
         "m_hina"
       ],
-      "graduationSongTitle": ""
+      "graduationSongTitle": "",
+      "favoriteSong": "in vain"
     },
     {
       "id": "m_5gen_2_7259",
@@ -431,7 +445,8 @@
         "m_reina"
       ],
       "graduationSongTitle": "无",
-      "graduationDate": "2026-02-01"
+      "graduationDate": "2026-02-01",
+      "favoriteSong": "BiTE mY UnDERweAR (A-side)"
     },
     {
       "id": "m_5gen_3_7488",
@@ -486,7 +501,8 @@
       "admireSenior": [
         "m_symj32y6"
       ],
-      "graduationSongTitle": ""
+      "graduationSongTitle": "",
+      "favoriteSong": "Break the Rules (5期生)"
     },
     {
       "id": "m_5gen_4_8493",
@@ -541,7 +557,8 @@
       "admireSenior": [
         "m_mayu"
       ],
-      "graduationSongTitle": ""
+      "graduationSongTitle": "",
+      "favoriteSong": "Next to Me 3期生（小林凛凛花 center）"
     },
     {
       "id": "m_5gen_5_6677",
@@ -597,7 +614,8 @@
         "m_bm7qiehk",
         "m_c16gtwds"
       ],
-      "graduationSongTitle": ""
+      "graduationSongTitle": "",
+      "favoriteSong": "Now We Hug (桥本美咲毕业曲)"
     },
     {
       "id": "m_5gen_6_2454",
@@ -651,7 +669,8 @@
         "m_t8u0ysq7"
       ],
       "graduationSongTitle": "无",
-      "graduationDate": "2026-02-01"
+      "graduationDate": "2026-02-01",
+      "favoriteSong": "Star with Moon（竹内星月 with 宫月）"
     },
     {
       "id": "m_5gen_7_2141",
@@ -706,7 +725,8 @@
       "admireSenior": [
         "m_mika"
       ],
-      "graduationSongTitle": ""
+      "graduationSongTitle": "",
+      "favoriteSong": "BE US (A-side)"
     },
     {
       "id": "m_umbw1ji3",
@@ -757,7 +777,8 @@
           "edition": "第3届",
           "rank": "十四位"
         }
-      ]
+      ],
+      "favoriteSong": "Big Mistake?! (A-side)"
     },
     {
       "id": "m_pr2yyz25",
@@ -797,7 +818,8 @@
           "edition": "第2届",
           "rank": "加入前"
         }
-      ]
+      ],
+      "favoriteSong": "BiTE mY UnDERweAR (A-side)"
     },
     {
       "id": "m_rjli97s6",
@@ -848,7 +870,8 @@
           "edition": "第3届",
           "rank": "五位"
         }
-      ]
+      ],
+      "favoriteSong": "Knock Knock(今日优center)"
     },
     {
       "id": "m_batr9qfj",
@@ -899,7 +922,8 @@
           "edition": "第3届",
           "rank": "十五位"
         }
-      ]
+      ],
+      "favoriteSong": "(not) Good Enough "
     },
     {
       "id": "m_mdv7k6ml",
@@ -949,7 +973,8 @@
         }
       ],
       "graduationDate": "2026-02-01",
-      "graduationSongTitle": "无"
+      "graduationSongTitle": "无",
+      "favoriteSong": "Law Law Law"
     },
     {
       "id": "m_t8u0ysq7",
@@ -989,7 +1014,8 @@
           "edition": "第2届",
           "rank": "二十六位"
         }
-      ]
+      ],
+      "favoriteSong": "V.S. (坂口阳菜 x 中村樱)"
     },
     {
       "id": "m_blncyp2k",
@@ -1040,7 +1066,8 @@
           "edition": "第3届",
           "rank": "九位"
         }
-      ]
+      ],
+      "favoriteSong": "Emerald (A-side)"
     },
     {
       "id": "m_l4k686go",
@@ -1091,7 +1118,8 @@
           "edition": "第3届",
           "rank": "三十位"
         }
-      ]
+      ],
+      "favoriteSong": "already decided?! (A-side)"
     },
     {
       "id": "m_ltlzffea",
@@ -1142,7 +1170,8 @@
           "edition": "第3届",
           "rank": "十三位"
         }
-      ]
+      ],
+      "favoriteSong": "BE US (A-side)"
     },
     {
       "id": "m_gbojk371",
@@ -1193,7 +1222,8 @@
           "edition": "第3届",
           "rank": "三位"
         }
-      ]
+      ],
+      "favoriteSong": "GIMME AMI"
     },
     {
       "id": "m_jh2ureo3",
@@ -1244,7 +1274,8 @@
           "edition": "第3届",
           "rank": "二十九位"
         }
-      ]
+      ],
+      "favoriteSong": "Love Again（松村珠理奈）"
     },
     {
       "id": "m_4wmfwcbj",
@@ -1294,7 +1325,8 @@
         }
       ],
       "graduationDate": "2026-02-01",
-      "graduationSongTitle": "无"
+      "graduationSongTitle": "无",
+      "favoriteSong": "SAY MY NAME"
     },
     {
       "id": "m_c16gtwds",
@@ -1345,7 +1377,8 @@
           "edition": "第3届",
           "rank": "二十二位"
         }
-      ]
+      ],
+      "favoriteSong": "SAY MY NAME"
     },
     {
       "id": "m_bm7qiehk",
@@ -1396,7 +1429,8 @@
           "edition": "第3届",
           "rank": "十七位"
         }
-      ]
+      ],
+      "favoriteSong": "The Meaning of Unforgetable Things (A-side)"
     },
     {
       "id": "m_7j6tcyhr",
@@ -1447,7 +1481,8 @@
           "edition": "第3届",
           "rank": "十位"
         }
-      ]
+      ],
+      "favoriteSong": "Last Angel"
     },
     {
       "id": "m_m8fltj0e",
@@ -1498,7 +1533,8 @@
           "edition": "第3届",
           "rank": "十一位"
         }
-      ]
+      ],
+      "favoriteSong": "NO PRESSURE (A-side)"
     },
     {
       "id": "m_ff4lppj9",
@@ -1549,7 +1585,8 @@
           "edition": "第3届",
           "rank": "十九位"
         }
-      ]
+      ],
+      "favoriteSong": "already decided?! (A-side)"
     },
     {
       "id": "m_ys0s465i",
@@ -1599,7 +1636,8 @@
         }
       ],
       "graduationDate": "2026-02-01",
-      "graduationSongTitle": "无"
+      "graduationSongTitle": "无",
+      "favoriteSong": "Now We Hug (桥本美咲毕业曲)"
     },
     {
       "id": "m_symj32y6",
@@ -1643,7 +1681,8 @@
         }
       ],
       "graduationDate": "2026-01-22",
-      "graduationSongTitle": "Now We Hug"
+      "graduationSongTitle": "Now We Hug",
+      "favoriteSong": "Big Mistake?! (A-side)"
     },
     {
       "id": "m_akari",
@@ -1694,7 +1733,8 @@
           "edition": "第3届",
           "rank": "八位"
         }
-      ]
+      ],
+      "favoriteSong": "Star with Moon（竹内星月 with 宫月）"
     },
     {
       "id": "m_yuna",
@@ -1745,7 +1785,8 @@
         }
       ],
       "graduationDate": "2026-02-07",
-      "graduationSongTitle": "Fly Away"
+      "graduationSongTitle": "Fly Away",
+      "favoriteSong": "Now We Hug (桥本美咲毕业曲)"
     },
     {
       "id": "m_rin",
@@ -1798,7 +1839,8 @@
         }
       ],
       "graduationDate": "2026-02-11",
-      "graduationSongTitle": "Saku no Michi -樱道-"
+      "graduationSongTitle": "Saku no Michi -樱道-",
+      "favoriteSong": "Break the Rules (5期生)"
     },
     {
       "id": "m_saki",
@@ -1849,7 +1891,8 @@
           "edition": "第3届",
           "rank": "一位"
         }
-      ]
+      ],
+      "favoriteSong": "SAY MY NAME"
     },
     {
       "id": "m_mika",
@@ -1900,7 +1943,8 @@
           "edition": "第3届",
           "rank": "十八位"
         }
-      ]
+      ],
+      "favoriteSong": "V.S. (坂口阳菜 x 中村樱)"
     },
     {
       "id": "m_mayu",
@@ -1951,7 +1995,8 @@
           "edition": "第3届",
           "rank": "七位"
         }
-      ]
+      ],
+      "favoriteSong": "Am I a Bad Girl? (A-side)"
     },
     {
       "id": "m_nana",
@@ -1995,7 +2040,8 @@
         }
       ],
       "graduationDate": "2026-01-22",
-      "graduationSongTitle": "无"
+      "graduationSongTitle": "无",
+      "favoriteSong": "Star with Moon（竹内星月 with 宫月）"
     },
     {
       "id": "m_hina",
@@ -2046,7 +2092,8 @@
           "edition": "第3届",
           "rank": "四位"
         }
-      ]
+      ],
+      "favoriteSong": "J ONE (A-side)"
     },
     {
       "id": "m_reina",
@@ -2096,7 +2143,8 @@
         }
       ],
       "graduationDate": "2026-02-01",
-      "graduationSongTitle": "无"
+      "graduationSongTitle": "无",
+      "favoriteSong": "GIMME AMI"
     },
     {
       "id": "m_ayame",
@@ -2147,7 +2195,8 @@
           "edition": "第3届",
           "rank": "二十位"
         }
-      ]
+      ],
+      "favoriteSong": "Love Again（松村珠理奈）"
     }
   ],
   "singles": [

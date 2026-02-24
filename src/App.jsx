@@ -1564,7 +1564,7 @@ function MembersPage({ data, setData, admin }) {
 
                 
 
-                {selected.generation && String(selected.generation).startsWith("5") && Array.isArray(selected.admireSenior) && selected.admireSenior.length ? (
+                {selected.generation && (String(selected.generation).startsWith("5") || String(selected.generation).startsWith("6")) && Array.isArray(selected.admireSenior) && selected.admireSenior.length ? (
                   <Card className="border-zinc-200/70 bg-white/70">
                     <CardHeader>
                       <CardTitle className="text-base">憧憬的前辈</CardTitle>
@@ -1574,6 +1574,36 @@ function MembersPage({ data, setData, admin }) {
                         const mm = (data.members || []).find((x) => x.id === id);
                         return mm ? <div key={id}>{mm.name}</div> : null;
                       })}
+                    </CardContent>
+                  </Card>
+                ) : null}
+
+                {selected.favoriteSong ? (
+                  <Card className="border-zinc-200/70 bg-white/70">
+                    <CardHeader>
+                      <CardTitle className="text-base">最喜欢的歌曲</CardTitle>
+                      <CardDescription className="text-xs">从目前为止已发布曲目中随机选择</CardDescription>
+                    </CardHeader>
+                    <CardContent className="grid gap-2 text-sm">
+                      <div className="flex items-center gap-2">
+                        <Music className="h-4 w-4 text-zinc-500" />
+                        <div className="font-medium">{selected.favoriteSong}</div>
+                      </div>
+
+                      {(() => {
+                        const song = selected.favoriteSong;
+                        const single = (data.singles || []).find((sg) =>
+                          (sg.tracks || []).some((t) => (typeof t === "string" ? t : t?.title) === song)
+                        );
+                        if (!single) return null;
+                        const sp = splitSingleTitle(single.title);
+                        const singleName = sp.prefix ? `${sp.prefix} · ${sp.name}` : single.title;
+                        return (
+                          <div className="text-xs text-zinc-600">
+                            收录：{singleName}（{single.release}）
+                          </div>
+                        );
+                      })()}
                     </CardContent>
                   </Card>
                 ) : null}
