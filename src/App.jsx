@@ -719,6 +719,21 @@ function withRecomputedSelections(data) {
   const singles = Array.isArray(data?.singles) ? data.singles : [];
   const members = Array.isArray(data?.members) ? data.members : [];
 
+  // 纪念单判定：当单曲 release 在成员毕业日之后（或未填写 release），且成员为非现役，并被选入该单曲站位
+  const isOGPickedInSingle = (member, single) => {
+    if (!member || !single) return false;
+    if (member?.isActive) return false;
+    const slots = Array.isArray(single?.asideLineup?.slots) ? single.asideLineup.slots : [];
+    if (!slots.includes(member.id)) return false;
+    const sRelease = isoDate(single?.release);
+    const gd = isoDate(member?.graduationDate);
+    // 未填 release：只要被选入且是毕业成员，就视作纪念单参与
+    if (!sRelease) return true;
+    // 未填毕业日：只要被选入且是毕业成员，也视作纪念单参与
+    if (!gd) return true;
+    return sRelease > gd;
+  };
+
   const nextMembers = members.map((m) => {
     const prev =
       m?.selectionHistory && typeof m.selectionHistory === "object"
@@ -740,8 +755,8 @@ function withRecomputedSelections(data) {
       if (!sid) continue;
 
       const sRelease = isoDate(s?.release);
-      // 毕业之后发行的单曲：不生成任何记录
-      if (gradLimit && sRelease && sRelease > gradLimit) {
+      // 毕业之后发行的单曲：默认不生成任何记录；但如果该成员以 OG 身份被选入（纪念单），则仍然生成
+      if (gradLimit && sRelease && sRelease > gradLimit && !isOGPickedInSingle(m, s)) {
         continue;
       }
 
@@ -762,7 +777,12 @@ function withRecomputedSelections(data) {
 
       const slotIndex = slots.findIndex((x) => x === m.id);
       if (slotIndex === -1) {
-        // 没出现在站位里：统一视为“落选”
+        // 没出现在站位里：
+        // - 对于毕业后的单曲，默认不记录；
+        // - 对于毕业前（含毕业单曲）仍保持旧逻辑：记录为“落选”。
+        if (gradLimit && sRelease && sRelease > gradLimit) {
+          continue;
+        }
         next[sid] = "落选";
         continue;
       }
@@ -1671,8 +1691,40 @@ function MembersPage({ data, setData, admin }) {
                         : "border-zinc-200 bg-white text-zinc-700";
 
                       const rowM = value.match(/第(\d+)排/);
-                      const rowText = rowM ? `第${rowM[1]}排` : "";
-                      const role = value.includes("center") ? "center" : value.includes("护法") || value.includes("guardian") ? "guardian" : null;
+                      const rowNum = rowM ? Number(rowM[1]) : null;
+                      const rowText = rowNum ? `第${rowNum}排` : "";
+                      const role = value.includes("center")
+                        ? "center"
+                        : value.includes("护法") || value.includes("guardian")
+                        ? "guardian"
+                        : null;
+
+                      // 规则：若成员站位在前两排（第1/2排），则除 center/护法 外，不显示“第1排/第2排”；
+                      //      改为显示“x福神”，其中 x 为该单曲前两排（含 center/护法）总人数。
+                      const top2Count =
+                        rowNum && rowNum <= 2
+                          ? (data?.members || []).reduce((acc, mm) => {
+                              const vv = mm?.selectionHistory?.[k];
+                              const s =
+                                vv && typeof vv === "object"
+                                  ? String(vv.value ?? "")
+                                  : String(vv ?? "");
+                              const rm = s.match(/第(\d+)排/);
+                              const rn = rm ? Number(rm[1]) : null;
+                              return rn && rn <= 2 ? acc + 1 : acc;
+                            }, 0)
+                          : 0;
+
+                      const rowTagText =
+                        role === "center" || role === "guardian"
+                          ? ""
+                          : rowNum && rowNum <= 2 && top2Count
+                          ? `${top2Count}福神`
+                          : rowText;
+
+                      const isFukujinRowTag =
+                        typeof rowTagText === "string" && /福神$/.test(rowTagText);
+
 
                       return (
                         <div key={k} className="rounded-2xl border border-zinc-200/70 bg-white px-4 py-3">
@@ -1687,24 +1739,36 @@ function MembersPage({ data, setData, admin }) {
                                   毕业前最后一单
                                 </span>
                               ) : null}
+                              {singleObj && Array.isArray(singleObj.tags) && singleObj.tags.includes("纪念单") ? (
+                                <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-amber-800">
+                                  纪念单
+                                </span>
+                              ) : null}
                               {pickType ? (
                                 <span className={"inline-flex items-center rounded-full border px-2 py-0.5 " + typeTagClass}>
                                   {pickType}
                                 </span>
                               ) : null}
 
-                              {rowText ? (
-                                <span className="inline-flex items-center rounded-full border border-zinc-200 px-2 py-0.5 text-zinc-700">
-                                  {rowText}
+                              {rowTagText ? (
+                                <span
+                                  className={
+                                    "inline-flex items-center rounded-full border px-2 py-0.5 " +
+                                    (isFukujinRowTag
+                                      ? "border-rose-200/70 bg-gradient-to-r from-rose-50 to-amber-50 text-rose-700 shadow-sm"
+                                      : "border-zinc-200 text-zinc-700")
+                                  }
+                                >
+                                  {rowTagText}
                                 </span>
                               ) : null}
 
                               {role === "center" ? (
-                                <span className="inline-flex items-center rounded-full border border-amber-300 bg-amber-200 px-2 py-0.5 text-xs font-medium text-amber-900">
+                                <span className="inline-flex items-center rounded-full border border-amber-300/80 bg-amber-200/80 px-2 py-0.5 text-xs font-medium text-amber-950 shadow-sm shadow-amber-300/40 ring-1 ring-amber-300/30">
                                   CENTER
                                 </span>
                               ) : role === "guardian" ? (
-                                <span className="inline-flex items-center rounded-full border border-zinc-300 bg-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-900">
+                                <span className="inline-flex items-center rounded-full border border-zinc-300/80 bg-zinc-200/80 px-2 py-0.5 text-xs font-medium text-zinc-900 shadow-sm shadow-zinc-400/40 ring-1 ring-white/40">
                                   护法
                                 </span>
                               ) : null}
@@ -2167,6 +2231,7 @@ function SinglesPage({ data, setData, admin }) {
         title: "",
         release: "",
         cover: "",
+        tags: [],
         tracks: [
           { no: 1, title: "(A-side)", isAside: true, audio: "" },
           { no: 2, title: "", isAside: false, audio: "" },
@@ -2198,12 +2263,37 @@ function SinglesPage({ data, setData, admin }) {
 
   const saveSingle = () => {
     setData((prev) => {
+      // 纪念单：如果选拔里包含“以毕业身份参选”的成员，则自动打 tag「纪念单」
+      const computeMemorialTag = (single, allMembers) => {
+        const sRelease = isoDate(single?.release);
+        const tags = Array.isArray(single?.tags) ? [...single.tags] : [];
+        const filtered = tags.filter((t) => String(t || "").trim() && String(t).trim() !== "纪念单");
+
+        const slots = Array.isArray(single?.asideLineup?.slots) ? single.asideLineup.slots : [];
+        const membersById = new Map((allMembers || []).map((m) => [m.id, m]));
+        const hasOG = slots.some((mid) => {
+          if (!mid) return false;
+          const m = membersById.get(mid);
+          if (!m || m?.isActive) return false;
+          const gd = isoDate(m?.graduationDate);
+          if (!sRelease) return true;
+          if (!gd) return true;
+          return sRelease > gd;
+        });
+
+        return {
+          ...single,
+          tags: hasOG ? [...filtered, "纪念单"] : filtered,
+        };
+      };
+
+      const nextEditing = computeMemorialTag(editing, prev.members);
       const exists = prev.singles.some((x) => x.id === editing.id);
       const nextSingles = exists
         ? prev.singles.map((x) =>
-            x.id === editing.id ? editing : x
+            x.id === nextEditing.id ? nextEditing : x
           )
-        : [...prev.singles, editing];
+        : [...prev.singles, nextEditing];
 
       const nextData = { ...prev, singles: nextSingles };
       return withRecomputedSelections(nextData);
@@ -2275,6 +2365,11 @@ function SinglesPage({ data, setData, admin }) {
                       <Badge variant="secondary" className="bg-black/5">
                         A面选拔：{s.asideLineup?.selectionCount || 0}
                       </Badge>
+                      {Array.isArray(s.tags) && s.tags.includes("纪念单") ? (
+                        <Badge variant="secondary" className="bg-black/5">
+                          纪念单
+                        </Badge>
+                      ) : null}
                       <Badge variant="secondary" className="bg-black/5">
                         {s.tracks?.[0]?.audio ? "A面有音源" : "A面无音源"}
                       </Badge>
@@ -2638,6 +2733,11 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
               <Badge variant="secondary" className="bg-black/5">
                 站位排数：{single.asideLineup?.rows?.length || 0}
               </Badge>
+              {Array.isArray(single.tags) && single.tags.includes("纪念单") ? (
+                <Badge variant="secondary" className="bg-black/5">
+                  纪念单
+                </Badge>
+              ) : null}
               <Badge variant="secondary" className="bg-black/5">
                 {hasAnyAudio ? "已上传音源" : "未上传音源"}
               </Badge>
@@ -2794,7 +2894,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                                 className="text-zinc-900"
                                 style={{ fontSize: nameFont, lineHeight: 1.2, wordBreak: "break-word" }}
                               >
-                                {m.name}
+                                {!m.isActive ? "OG - " : ""}{m.name}
                                 {countText}
                               </div>
 
@@ -2942,26 +3042,43 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
   const slots = useMemo(() => normalizeSlots(lineup.slots), [lineup.slots, selectionCount]);
   const used = useMemo(() => new Set(slots.filter(Boolean)), [slots]);
 
-  // Graduated members should not appear in the picker for singles released after their graduation.
   const singleRelease = isoDate(singleDraft?.release);
-  const pickerMembers = useMemo(() => {
+
+  // 成员选择池（保持原逻辑）：
+  // - 现役成员永远可选
+  // - 已毕业成员：仅当单曲 release 早于/等于毕业日（即当时仍是现役）才出现在“现役/当期成员”池
+  const activeEligibleMembers = useMemo(() => {
     if (!singleRelease) return members;
     return (members || []).filter((m) => {
       const gd = isoDate(m?.graduationDate);
-      if (!gd) return true;
       if (m?.isActive) return true;
+      if (!gd) return true;
       return singleRelease <= gd;
+    });
+  }, [members, singleRelease]);
+
+  // OG（已毕业）成员池：仅展示“在该单曲 release 时已毕业”的成员
+  const ogEligibleMembers = useMemo(() => {
+    const sRelease = singleRelease;
+    return (members || []).filter((m) => {
+      if (m?.isActive) return false;
+      const gd = isoDate(m?.graduationDate);
+      if (!sRelease) return true;
+      if (!gd) return true;
+      return sRelease > gd;
     });
   }, [members, singleRelease]);
 
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerSlotIndex, setPickerSlotIndex] = useState(null);
   const [pickerRole, setPickerRole] = useState(null); // null | "center" | "guardian"
+  const [pickerPool, setPickerPool] = useState("active"); // "active" | "og"
 
   const openPickerForSlot = (slotIndex) => {
     setPickerSlotIndex(slotIndex);
     const r = (lineup.slotRoles || {})[slotIndex] || null;
     setPickerRole(r === "center" || r === "guardian" ? r : null);
+    setPickerPool("active");
     setPickerOpen(true);
   };
 
@@ -3114,8 +3231,32 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
             </button>
           </div>
 
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <div className="text-xs text-zinc-600 mr-1">成员池：</div>
+            <button
+              type="button"
+              className={
+                "px-3 py-1 rounded-md border text-sm " +
+                (pickerPool === "active" ? "bg-zinc-100 border-zinc-300" : "bg-white border-zinc-200")
+              }
+              onClick={() => setPickerPool("active")}
+            >
+              现役 / 当期
+            </button>
+            <button
+              type="button"
+              className={
+                "px-3 py-1 rounded-md border text-sm " +
+                (pickerPool === "og" ? "bg-zinc-100 border-zinc-300" : "bg-white border-zinc-200")
+              }
+              onClick={() => setPickerPool("og")}
+            >
+              OG（已毕业）
+            </button>
+          </div>
+
           <div className="grid max-h-[70vh] grid-cols-2 gap-3 overflow-auto p-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {pickerMembers.map((m) => (
+            {(pickerPool === "og" ? ogEligibleMembers : activeEligibleMembers).map((m) => (
               <button
                 key={m.id}
                 type="button"
