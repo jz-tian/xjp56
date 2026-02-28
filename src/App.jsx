@@ -88,20 +88,20 @@ function chineseToInt(s) {
 
 function getElectionBadge(raw) {
   const v = (raw ?? "").toString().trim();
-  if (!v) return { text: "—", className: "bg-zinc-50 text-zinc-600 border-zinc-200" };
-  if (v === "加入前") return { text: "加入前", className: "bg-zinc-100 text-zinc-700 border-zinc-200" };
-  if (v === "圈外") return { text: "圈外", className: "bg-zinc-50 text-zinc-600 border-zinc-200" };
+  if (!v) return { text: "—", className: "bg-slate-50 text-slate-500 border-teal-100" };
+  if (v === "加入前") return { text: "加入前", className: "bg-zinc-100 text-slate-600 border-teal-100" };
+  if (v === "圈外") return { text: "圈外", className: "bg-slate-50 text-slate-500 border-teal-100" };
 
   // 允许输入：14位 / 14 / 十四位 / 十四
   const numFromDigits = v.match(/\d+/);
   const n = numFromDigits ? parseInt(numFromDigits[0], 10) : chineseToInt(v);
 
   if (!Number.isFinite(n)) {
-    return { text: v, className: "bg-zinc-50 text-zinc-700 border-zinc-200" };
+    return { text: v, className: "bg-slate-50 text-slate-600 border-teal-100" };
   }
 
   // 规则：1-12 选拔，13-19 UG，20+ 圈外
-  if (n >= 20) return { text: "圈外", className: "bg-zinc-50 text-zinc-600 border-zinc-200" };
+  if (n >= 20) return { text: "圈外", className: "bg-slate-50 text-slate-500 border-teal-100" };
 
   const group = n >= 13 ? "UG" : "选拔";
   const text = `${n}位（${group}）`;
@@ -109,7 +109,7 @@ function getElectionBadge(raw) {
   // 配色：1 金，2 银，3-7 粉，8-12 选拔底色，13-19 UG 底色
   let className = "bg-sky-100 text-sky-900 border-sky-200";
   if (n === 1) className = "bg-amber-200 text-amber-900 border-amber-300";
-  else if (n === 2) className = "bg-zinc-200 text-zinc-900 border-zinc-300";
+  else if (n === 2) className = "bg-zinc-200 text-slate-900 border-teal-200";
   else if (n >= 3 && n <= 7) className = "bg-pink-200 text-pink-900 border-pink-300";
   else if (n <= 12) className = "bg-sky-100 text-sky-900 border-sky-200";
   else className = "bg-purple-100 text-purple-900 border-purple-200";
@@ -198,12 +198,12 @@ const computeMemberLineupHistory = (memberId, singles) => {
 const selectionKindTag = (kind) => {
   if (kind === "A面选拔") return { text: "A面选拔", className: "bg-emerald-50 text-emerald-800 border-emerald-200" };
   if (kind === "B面") return { text: "B面", className: "bg-sky-50 text-sky-800 border-sky-200" };
-  return { text: "未入选", className: "bg-zinc-50 text-zinc-700 border-zinc-200" };
+  return { text: "未入选", className: "bg-slate-50 text-slate-600 border-teal-100" };
 };
 
 const roleBadge = (role) => {
   if (role === "center") return { text: "CENTER", className: "bg-amber-200 text-amber-900 border-amber-300" };
-  if (role === "guardian") return { text: "护法", className: "bg-zinc-200 text-zinc-900 border-zinc-300" };
+  if (role === "guardian") return { text: "护法", className: "bg-zinc-200 text-slate-900 border-teal-200" };
   return null;
 };
 
@@ -239,7 +239,7 @@ function generationBadgeClass(gen = "") {
   if (g.startsWith("4")) return "bg-yellow-100 text-yellow-900";
   if (g.startsWith("5")) return ""; // styled via generationBadgeStyle
   if (g.startsWith("6")) return ""; // styled via generationBadgeStyle
-  return "bg-black/5 text-zinc-900";
+  return "bg-black/5 text-slate-900";
 }
 
 function generationBadgeStyle(gen = "") {
@@ -886,17 +886,17 @@ class ErrorBoundary extends React.Component {
 
 function AppShell({ children }) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-50 via-white to-zinc-100 text-zinc-900">
+    <div className="min-h-screen bg-[radial-gradient(1200px_600px_at_50%_-100px,rgba(20,184,166,0.18),transparent_60%),radial-gradient(900px_500px_at_0%_0%,rgba(45,212,191,0.14),transparent_60%),radial-gradient(900px_500px_at_100%_20%,rgba(99,102,241,0.10),transparent_55%)] bg-white text-slate-900">
       <div className="pointer-events-none fixed inset-0 opacity-60">
-        <div className="absolute -top-24 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-fuchsia-600/20 blur-3xl" />
-        <div className="absolute top-40 left-10 h-[420px] w-[420px] rounded-full bg-cyan-500/15 blur-3xl" />
-        <div className="absolute top-52 right-10 h-[420px] w-[420px] rounded-full bg-amber-400/10 blur-3xl" />
+        <div className="absolute -top-24 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-teal-400/25 blur-3xl" />
+        <div className="absolute top-40 left-10 h-[420px] w-[420px] rounded-full bg-emerald-400/18 blur-3xl" />
+        <div className="absolute top-52 right-10 h-[420px] w-[420px] rounded-full bg-sky-400/16 blur-3xl" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 pb-16">{children}</div>
 
-      <footer className="relative border-t border-zinc-200/70 py-10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 text-sm text-zinc-700">
+      <footer className="relative border-t border-teal-100/70 py-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 text-sm text-slate-600">
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4" />
             <span>XJP56 Showcase App</span>
@@ -904,7 +904,7 @@ function AppShell({ children }) {
               Local Demo
             </Badge>
           </div>
-          <div className="text-zinc-600">
+          <div className="text-slate-500">
             数据将通过后端 API 保存（不再使用 localStorage）。音频较大时建议后续升级
             后端存储 / 对象存储。
           </div>
@@ -923,19 +923,19 @@ function TopBar({ page, setPage, admin, setAdmin, onReset }) {
   ];
 
   return (
-    <div className="sticky top-0 z-40 -mx-4 mb-8 border-b border-zinc-200/70 bg-white/70 px-4 py-4 backdrop-blur">
+    <div className="sticky top-0 z-40 -mx-4 mb-10 border-b border-teal-100/70 bg-white/70 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 px-4 py-4">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
         <button
-          className="flex items-center gap-2 rounded-2xl px-3 py-2 hover:bg-white/70"
+          className="flex items-center gap-2 rounded-2xl px-3 py-2 hover:bg-teal-50/80 transition-colors"
           onClick={() => setPage("home")}
         >
-          <div className="grid h-9 w-9 place-items-center rounded-2xl bg-black/5">
+          <div className="grid h-9 w-9 place-items-center rounded-2xl bg-teal-500/10 ring-1 ring-teal-500/10">
             <Sparkles className="h-5 w-5" />
           </div>
           <div className="text-left">
             <div className="text-base font-semibold leading-tight">XJP56</div>
             <div className="flex items-center gap-2">
-            <div className="text-xs text-zinc-600">Modern Showcase</div>
+            <div className="text-xs text-slate-500">Modern Showcase</div>
             {admin ? (
               <Badge className="rounded-full bg-indigo-600 text-white" variant="secondary">
                 ADMIN
@@ -945,7 +945,7 @@ function TopBar({ page, setPage, admin, setAdmin, onReset }) {
           </div>
         </button>
 
-        <div className="hidden items-center gap-1 rounded-2xl border border-zinc-200/70 bg-white/70 p-1 md:flex">
+        <div className="hidden items-center gap-1 rounded-2xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow p-1 md:flex">
           {tabs.map((t) => {
             const Icon = t.icon;
             const active = page === t.key;
@@ -956,7 +956,7 @@ function TopBar({ page, setPage, admin, setAdmin, onReset }) {
                 className={
                   "flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition " +
                   (active
-                    ? "bg-zinc-900 text-white"
+                    ? "bg-slate-900 text-white"
                     : "text-zinc-800 hover:bg-black/5")
                 }
               >
@@ -977,8 +977,8 @@ function TopBar({ page, setPage, admin, setAdmin, onReset }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-60
     bg-white
-    text-zinc-900
-    border border-zinc-200
+    text-slate-900
+    border border-teal-100
     shadow-lg">
               <DropdownMenuLabel>控制台</DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -1010,10 +1010,10 @@ function TopBar({ page, setPage, admin, setAdmin, onReset }) {
                 菜单
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[360px] max-w-[90vw] max-h-[90vh] overflow-y-auto bg-white text-zinc-900">
+            <SheetContent side="right" className="w-[360px] max-w-[90vw] max-h-[90vh] overflow-y-auto bg-white text-slate-900">
               <SheetHeader>
-                <SheetTitle className="text-zinc-900">导航</SheetTitle>
-                <SheetDescription className="text-zinc-600">
+                <SheetTitle className="text-slate-900">导航</SheetTitle>
+                <SheetDescription className="text-slate-500">
                   快速切换页面
                 </SheetDescription>
               </SheetHeader>
@@ -1051,12 +1051,12 @@ function Hero({ activeMembersCount, totalMembersCount, singlesCount, postsCount,
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Card className="border-zinc-200/70 bg-white/70">
+        <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
           <CardHeader>
             <CardTitle className="text-3xl md:text-4xl">
               XJP56 官方主页（Demo）
             </CardTitle>
-            <CardDescription className="text-zinc-700">
+            <CardDescription className="text-slate-600">
               现代、大气、时尚的组合展示：成员 · 单曲 · Blog，以及完整的管理员编辑与站位拖拽。
             </CardDescription>
           </CardHeader>
@@ -1080,7 +1080,7 @@ function Hero({ activeMembersCount, totalMembersCount, singlesCount, postsCount,
                 看新闻
               </Button>
             </div>
-            <div className="rounded-2xl border border-zinc-200/70 bg-white/70 p-4 text-sm text-zinc-700">
+            <div className="rounded-2xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow p-4 text-sm text-slate-600">
               提示：进入「管理员模式」后，在各页面都能新增/编辑/删除数据；单曲页面支持「输入排数与每排人数→生成占位框→拖动成员公式照排站位→保存」。
               <br />
               新增：A面支持上传音频并在详情页播放。
@@ -1095,10 +1095,10 @@ function Hero({ activeMembersCount, totalMembersCount, singlesCount, postsCount,
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.05 }}
       >
-        <Card className="border-zinc-200/70 bg-white/70">
+        <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
           <CardHeader>
             <CardTitle>快速预览</CardTitle>
-            <CardDescription className="text-zinc-700">
+            <CardDescription className="text-slate-600">
               视觉主色随内容变化的“极简豪华”风格。
             </CardDescription>
           </CardHeader>
@@ -1129,8 +1129,8 @@ function Hero({ activeMembersCount, totalMembersCount, singlesCount, postsCount,
 
 function Stat({ label, value }) {
   return (
-    <div className="rounded-2xl border border-zinc-200/70 bg-white/70 p-4">
-      <div className="text-xs text-zinc-600">{label}</div>
+    <div className="rounded-2xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow p-4">
+      <div className="text-xs text-slate-500">{label}</div>
       <div className="mt-1 text-2xl font-semibold">{value}</div>
     </div>
   );
@@ -1138,13 +1138,13 @@ function Stat({ label, value }) {
 
 function PreviewTile({ title, desc, icon }) {
   return (
-    <div className="flex items-start gap-3 rounded-2xl border border-zinc-200/70 bg-white/70 p-4">
-      <div className="grid h-9 w-9 place-items-center rounded-2xl bg-black/5">
+    <div className="flex items-start gap-3 rounded-2xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow p-4">
+      <div className="grid h-9 w-9 place-items-center rounded-2xl bg-teal-500/10 ring-1 ring-teal-500/10">
         {icon}
       </div>
       <div>
         <div className="font-medium">{title}</div>
-        <div className="text-sm text-zinc-600">{desc}</div>
+        <div className="text-sm text-slate-500">{desc}</div>
       </div>
     </div>
   );
@@ -1155,7 +1155,7 @@ function SectionHeader({ title, subtitle, right }) {
     <div className="mb-5 flex flex-col items-start justify-between gap-3 md:flex-row md:items-end">
       <div>
         <div className="text-2xl font-semibold">{title}</div>
-        {subtitle ? <div className="mt-1 text-zinc-600">{subtitle}</div> : null}
+        {subtitle ? <div className="mt-1 text-slate-500">{subtitle}</div> : null}
       </div>
       {right ? <div className="flex items-center gap-2">{right}</div> : null}
     </div>
@@ -1167,10 +1167,10 @@ function ImageUploader({ label, value, onChange, hint }) {
     <div className="grid gap-2">
       <div className="flex items-center justify-between">
         <div className="text-sm font-medium">{label}</div>
-        {hint ? <div className="text-xs text-zinc-600">{hint}</div> : null}
+        {hint ? <div className="text-xs text-slate-500">{hint}</div> : null}
       </div>
       <div className="grid gap-2 md:grid-cols-[140px_1fr]">
-        <div className="relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70">
+        <div className="relative overflow-hidden rounded-2xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
           {value ? (
             <img
               src={resolveMediaUrl(value)}
@@ -1178,7 +1178,7 @@ function ImageUploader({ label, value, onChange, hint }) {
               className="h-[140px] w-[140px] object-cover bg-zinc-100"
             />
           ) : (
-            <div className="grid h-[140px] w-[140px] place-items-center text-zinc-600">
+            <div className="grid h-[140px] w-[140px] place-items-center text-slate-500">
               <ImageIcon className="h-5 w-5" />
             </div>
           )}
@@ -1195,7 +1195,7 @@ function ImageUploader({ label, value, onChange, hint }) {
               e.target.value = "";
             }}
           />
-          <div className="text-xs text-zinc-600">
+          <div className="text-xs text-slate-500">
             上传后会上传到后端并自动压缩（前端只保存 URL）。
           </div>
         </div>
@@ -1209,7 +1209,7 @@ function AudioUploader({ label, value, onChange, hint }) {
     <div className="grid gap-2">
       <div className="flex items-center justify-between">
         <div className="text-sm font-medium">{label}</div>
-        {hint ? <div className="text-xs text-zinc-600">{hint}</div> : null}
+        {hint ? <div className="text-xs text-slate-500">{hint}</div> : null}
       </div>
       <div className="grid gap-2">
         <Input
@@ -1223,7 +1223,7 @@ function AudioUploader({ label, value, onChange, hint }) {
             e.target.value = "";
           }}
         />
-        <div className="text-xs text-zinc-600">
+        <div className="text-xs text-slate-500">
           {value ? "已上传音源（可播放）。" : "未上传音源。"}
           {" "}
           （音频将上传到服务器）
@@ -1240,7 +1240,7 @@ function ScrollDialogContent({ className = "", children, ...props }) {
   // Mobile-friendly: make the whole dialog scrollable so details (e.g. “最喜欢的歌曲”) are reachable on small screens.
   const base =
     "top-[5vh] translate-y-0 w-[calc(100vw-2rem)] max-h-[90vh] overflow-y-auto overflow-x-hidden p-0 " +
-    "border-zinc-200/70 bg-white text-zinc-900 shadow-xl";
+    "border-teal-100/70 bg-white text-slate-900 shadow-xl";
   return (
     <DialogContent {...props} className={`${base} ${className}`}>
       <div className="p-6">{children}</div>
@@ -1385,7 +1385,7 @@ function MembersPage({ data, setData, admin }) {
       />
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <div className="text-sm text-zinc-600 mr-2">筛选：</div>
+        <div className="text-sm text-slate-500 mr-2">筛选：</div>
         <Button
           variant={statusFilter === "all" ? "default" : "secondary"}
           size="sm"
@@ -1409,7 +1409,7 @@ function MembersPage({ data, setData, admin }) {
         </Button>
 
         <div className="mx-2 h-4 w-px bg-zinc-200/70" />
-        <div className="text-sm text-zinc-600 mr-1">期数：</div>
+        <div className="text-sm text-slate-500 mr-1">期数：</div>
         <Button
           variant={genFilter === "all" ? "default" : "secondary"}
           size="sm"
@@ -1428,7 +1428,7 @@ function MembersPage({ data, setData, admin }) {
           </Button>
         ))}
 
-        <div className="ml-auto text-xs text-zinc-500">
+        <div className="ml-auto text-xs text-slate-500">
           共 {filteredMembers.length} 人
         </div>
       </div>
@@ -1441,7 +1441,7 @@ function MembersPage({ data, setData, admin }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25 }}
           >
-            <Card className="group overflow-hidden border-zinc-200/70 bg-white/70">
+            <Card className="group overflow-hidden border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
               <div className="relative">
                 <button className="block w-full" onClick={() => setSelected(m)}>
                   <img
@@ -1463,7 +1463,7 @@ function MembersPage({ data, setData, admin }) {
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <div className="text-base font-semibold leading-tight">{m.name}{!m.isActive ? "（卒）" : ""}</div>
-                    <div className="mt-0.5 text-xs text-zinc-600">{m.romaji || ""}</div>
+                    <div className="mt-0.5 text-xs text-slate-500">{m.romaji || ""}</div>
                   </div>
                   {admin ? (
                     <DropdownMenu>
@@ -1501,12 +1501,12 @@ function MembersPage({ data, setData, admin }) {
         open={!!selected}
         onOpenChange={(v) => (!v ? setSelected(null) : null)}
       >
-        <ScrollDialogContent className="max-w-4xl border-zinc-200/70 bg-white text-zinc-900">
+        <ScrollDialogContent className="max-w-4xl border-teal-100/70 bg-white text-slate-900">
           {selected ? (
             <div className="grid gap-6 md:grid-cols-2 items-start">
               <div className="grid gap-3">
                 {/* 需求：移除照片与“总选举顺位”之间的大块空白，让布局更紧凑（不改其他结构） */}
-                <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white aspect-[3/4]">
+                <div className="overflow-hidden rounded-2xl border border-teal-100/70 bg-white aspect-[3/4]">
                   <img
                     src={resolveMediaUrl(selected.avatar)}
                     alt={selected.name}
@@ -1514,7 +1514,7 @@ function MembersPage({ data, setData, admin }) {
                   />
                 </div>
 
-                <Card className="border-zinc-200/70 bg-white/70">
+                <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader>
                     <CardTitle className="text-base">总选举顺位</CardTitle>
                   </CardHeader>
@@ -1523,9 +1523,9 @@ function MembersPage({ data, setData, admin }) {
                       (selected.electionRanks || []).map((r, idx) => (
                         <div
                           key={`${r.edition || ""}-${r.rank || ""}-${idx}`}
-                          className="flex items-center justify-between rounded-xl border border-zinc-200/70 bg-white/70 px-3 py-2"
+                          className="flex items-center justify-between rounded-xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow px-3 py-2"
                         >
-                          <div className="text-zinc-700">{r.edition || "—"}</div>
+                          <div className="text-slate-600">{r.edition || "—"}</div>
                           {(() => {
                             const b = getElectionBadge(r.rank);
                             return (
@@ -1542,7 +1542,7 @@ function MembersPage({ data, setData, admin }) {
                         </div>
                       ))
                     ) : (
-                      <div className="text-zinc-600">—</div>
+                      <div className="text-slate-500">—</div>
                     )}
                   </CardContent>
                 </Card>
@@ -1552,10 +1552,10 @@ function MembersPage({ data, setData, admin }) {
                   <DialogTitle className="text-2xl">
                     <div className="flex items-baseline gap-3">
                       <div>{selected.name}</div>
-                      {selected.romaji ? <div className="text-sm text-zinc-600">{selected.romaji}</div> : null}
+                      {selected.romaji ? <div className="text-sm text-slate-500">{selected.romaji}</div> : null}
                     </div>
                   </DialogTitle>
-                  <DialogDescription className="text-zinc-600">
+                  <DialogDescription className="text-slate-500">
                     {selected.origin} · {selected.generation}
                     {!selected.isActive && selected.graduationDate ? (
                       <span className="ml-2">· 毕业：{isoDate(selected.graduationDate)}</span>
@@ -1567,7 +1567,7 @@ function MembersPage({ data, setData, admin }) {
                   </DialogDescription>
                 </DialogHeader>
 
-                <Card className="border-zinc-200/70 bg-white/70">
+                <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader>
                     <CardTitle className="text-base">基础信息</CardTitle>
                   </CardHeader>
@@ -1578,7 +1578,7 @@ function MembersPage({ data, setData, admin }) {
                     <Info label="爱好" value={selected.profile.hobby} />
                     <Info label="特长" value={selected.profile.skill} />
                     <div className="col-span-2">
-                      <div className="text-xs text-zinc-600">口号</div>
+                      <div className="text-xs text-slate-500">口号</div>
                       <div className="mt-1">{selected.profile.catchphrase}</div>
                     </div>
                   </CardContent>
@@ -1587,7 +1587,7 @@ function MembersPage({ data, setData, admin }) {
                 
 
                 {selected.generation && (String(selected.generation).startsWith("5") || String(selected.generation).startsWith("6")) && Array.isArray(selected.admireSenior) && selected.admireSenior.length ? (
-                  <Card className="border-zinc-200/70 bg-white/70">
+                  <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader>
                       <CardTitle className="text-base">憧憬的前辈</CardTitle>
                     </CardHeader>
@@ -1601,14 +1601,14 @@ function MembersPage({ data, setData, admin }) {
                 ) : null}
 
                 {selected.favoriteSong ? (
-                  <Card className="border-zinc-200/70 bg-white/70">
+                  <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader>
                       <CardTitle className="text-base">最喜欢的歌曲</CardTitle>
                       <CardDescription className="text-xs">从目前为止已发布曲目中随机选择</CardDescription>
                     </CardHeader>
                     <CardContent className="grid gap-2 text-sm">
                       <div className="flex items-center gap-2">
-                        <Music className="h-4 w-4 text-zinc-500" />
+                        <Music className="h-4 w-4 text-slate-500" />
                         <div className="font-medium">{selected.favoriteSong}</div>
                       </div>
 
@@ -1621,7 +1621,7 @@ function MembersPage({ data, setData, admin }) {
                         const sp = splitSingleTitle(single.title);
                         const singleName = sp.prefix ? `${sp.prefix} · ${sp.name}` : single.title;
                         return (
-                          <div className="text-xs text-zinc-600">
+                          <div className="text-xs text-slate-500">
                             收录：{singleName}（{single.release}）
                           </div>
                         );
@@ -1629,7 +1629,7 @@ function MembersPage({ data, setData, admin }) {
                     </CardContent>
                   </Card>
                 ) : null}
-<Card className="border-zinc-200/70 bg-white/70">
+<Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader>
                     <CardTitle className="text-base">历代单曲选拔状况</CardTitle>
                   </CardHeader>
@@ -1652,7 +1652,7 @@ function MembersPage({ data, setData, admin }) {
                     });
                     if (entries.length === 0) {
                       return (
-                        <div className="rounded-2xl border border-zinc-200/70 bg-white px-4 py-3 text-zinc-500">
+                        <div className="rounded-2xl border border-teal-100/70 bg-white px-4 py-3 text-slate-500">
                           —
                         </div>
                       );
@@ -1687,8 +1687,8 @@ function MembersPage({ data, setData, admin }) {
                         : pickType === "加入前"
                         ? "border-violet-200 bg-violet-50 text-violet-800"
                         : pickType === "落选"
-                        ? "border-zinc-200 bg-zinc-50 text-zinc-600"
-                        : "border-zinc-200 bg-white text-zinc-700";
+                        ? "border-teal-100 bg-slate-50 text-slate-500"
+                        : "border-teal-100 bg-white text-slate-600";
 
                       const rowM = value.match(/第(\d+)排/);
                       const rowNum = rowM ? Number(rowM[1]) : null;
@@ -1727,9 +1727,9 @@ function MembersPage({ data, setData, admin }) {
 
 
                       return (
-                        <div key={k} className="rounded-2xl border border-zinc-200/70 bg-white px-4 py-3">
+                        <div key={k} className="rounded-2xl border border-teal-100/70 bg-white px-4 py-3">
                           <div className="flex flex-col gap-2">
-                            <div className="text-sm font-medium text-zinc-900">
+                            <div className="text-sm font-medium text-slate-900">
                               {prefix ? `${prefix}: ${name}` : name}
                             </div>
 
@@ -1756,7 +1756,7 @@ function MembersPage({ data, setData, admin }) {
                                     "inline-flex items-center rounded-full border px-2 py-0.5 " +
                                     (isFukujinRowTag
                                       ? "border-rose-200/70 bg-gradient-to-r from-rose-50 to-amber-50 text-rose-700 shadow-sm"
-                                      : "border-zinc-200 text-zinc-700")
+                                      : "border-teal-100 text-slate-600")
                                   }
                                 >
                                   {rowTagText}
@@ -1768,7 +1768,7 @@ function MembersPage({ data, setData, admin }) {
                                   CENTER
                                 </span>
                               ) : role === "guardian" ? (
-                                <span className="inline-flex items-center rounded-full border border-zinc-300/80 bg-zinc-200/80 px-2 py-0.5 text-xs font-medium text-zinc-900 shadow-sm shadow-zinc-400/40 ring-1 ring-white/40">
+                                <span className="inline-flex items-center rounded-full border border-teal-200/80 bg-zinc-200/80 px-2 py-0.5 text-xs font-medium text-slate-900 shadow-sm shadow-zinc-400/40 ring-1 ring-white/40">
                                   护法
                                 </span>
                               ) : null}
@@ -1787,10 +1787,10 @@ function MembersPage({ data, setData, admin }) {
       </Dialog>
 
       <Dialog open={editorOpen} onOpenChange={setEditorOpen}>
-        <ScrollDialogContent className="max-w-3xl border-zinc-200/70 bg-white text-zinc-900">
+        <ScrollDialogContent className="max-w-3xl border-teal-100/70 bg-white text-slate-900">
           <DialogHeader>
             <DialogTitle>{editing?.name ? "编辑成员" : "新增成员"}</DialogTitle>
-            <DialogDescription className="text-zinc-600">
+            <DialogDescription className="text-slate-500">
               上传公式照（大头照）并编辑基础信息。
             </DialogDescription>
           </DialogHeader>
@@ -1841,7 +1841,7 @@ function MembersPage({ data, setData, admin }) {
                 </div>
                 <div className="grid gap-2">
                   <div className="text-sm font-medium">是否在籍</div>
-                  <div className="flex items-center gap-3 rounded-2xl border border-zinc-200/70 bg-white/70 px-3 py-2">
+                  <div className="flex items-center gap-3 rounded-2xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow px-3 py-2">
                     <input
                       type="checkbox"
                       checked={!!editing.isActive}
@@ -1853,7 +1853,7 @@ function MembersPage({ data, setData, admin }) {
                         }))
                       }
                     />
-                    <div className="text-sm text-zinc-700">在籍</div>
+                    <div className="text-sm text-slate-600">在籍</div>
                   </div>
                 </div>
 
@@ -1871,7 +1871,7 @@ function MembersPage({ data, setData, admin }) {
                       onChange={(e) => setEditing((p) => ({ ...p, graduationSongTitle: e.target.value }))}
                       placeholder="例如：Farewell Song / 无"
                     />
-                    <div className="text-xs text-zinc-600">把成员从在籍改为毕业时必须填写。</div>
+                    <div className="text-xs text-slate-500">把成员从在籍改为毕业时必须填写。</div>
                   </div>
                 ) : null}
               </div>
@@ -1883,7 +1883,7 @@ function MembersPage({ data, setData, admin }) {
                 hint="建议 1:1"
               />
 
-              <Card className="border-zinc-200/70 bg-white/70">
+              <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
                 <CardHeader>
                   <CardTitle className="text-base">基础信息</CardTitle>
                 </CardHeader>
@@ -1957,10 +1957,10 @@ function MembersPage({ data, setData, admin }) {
                 </CardContent>
               </Card>
 
-              <Card className="border-zinc-200/70 bg-white/70">
+              <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
                 <CardHeader>
                   <CardTitle className="text-base">总选举顺位</CardTitle>
-                  <CardDescription className="text-zinc-600">
+                  <CardDescription className="text-slate-500">
                     每行填写一届总选举的排名：输入数字 1-19 会自动标注（选拔/UG），20 及以后自动显示为「圈外」。不在榜单可写「加入前」。
                   </CardDescription>
                 </CardHeader>
@@ -2011,7 +2011,7 @@ function MembersPage({ data, setData, admin }) {
                       </div>
                     ))
                   ) : (
-                    <div className="text-sm text-zinc-600">—</div>
+                    <div className="text-sm text-slate-500">—</div>
                   )}
 
                   <div className="flex items-center justify-end">
@@ -2031,10 +2031,10 @@ function MembersPage({ data, setData, admin }) {
                 </CardContent>
               </Card>
 
-              <Card className="border-zinc-200/70 bg-white/70">
+              <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
                 <CardHeader>
                   <CardTitle className="text-base">历代单曲选拔状况</CardTitle>
-                  <CardDescription className="text-zinc-600">
+                  <CardDescription className="text-slate-500">
                     这里给你预留了 1st/2nd 两条；你也可以改 key。
                   </CardDescription>
                 </CardHeader>
@@ -2116,7 +2116,7 @@ function MembersPage({ data, setData, admin }) {
               </div>
             </div>
           ) : (
-            <div className="rounded-2xl border border-zinc-200 bg-white p-4 text-sm text-zinc-600">
+            <div className="rounded-2xl border border-teal-100 bg-white p-4 text-sm text-slate-500">
               加载中…（editing 为空）
             </div>
           )}
@@ -2142,8 +2142,8 @@ function LabeledInput({ label, value, onChange, placeholder }) {
 function Info({ label, value }) {
   return (
     <div>
-      <div className="text-xs text-zinc-600">{label}</div>
-      <div className="mt-1 text-zinc-900">{value || "—"}</div>
+      <div className="text-xs text-slate-500">{label}</div>
+      <div className="mt-1 text-slate-900">{value || "—"}</div>
     </div>
   );
 }
@@ -2339,7 +2339,7 @@ function SinglesPage({ data, setData, admin }) {
             <Card
               key={s.id}
               className={
-                "overflow-hidden border-zinc-200/70 bg-white/70 transition " +
+                "overflow-hidden border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow transition " +
                 (selectedId === s.id ? "ring-2 ring-zinc-300/70" : "")
               }
             >
@@ -2355,7 +2355,7 @@ function SinglesPage({ data, setData, admin }) {
                 <div className="flex items-start justify-between gap-3 p-4">
                   <div>
                     <div className="text-base font-semibold leading-tight">{s.title}</div>
-                    <div className="mt-1 text-sm text-zinc-600">
+                    <div className="mt-1 text-sm text-slate-500">
                       Release: {s.release || "—"}
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
@@ -2427,10 +2427,10 @@ function SinglesPage({ data, setData, admin }) {
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.25 }}
               >
-                <Card className="border-zinc-200/70 bg-white/70">
+                <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
                   <CardHeader>
                     <CardTitle>选择一首单曲</CardTitle>
-                    <CardDescription className="text-zinc-600">
+                    <CardDescription className="text-slate-500">
                       点击左侧列表中的封面进入详情页。
                     </CardDescription>
                   </CardHeader>
@@ -2442,10 +2442,10 @@ function SinglesPage({ data, setData, admin }) {
       </div>
 
       <Dialog open={editorOpen} onOpenChange={setEditorOpen}>
-        <ScrollDialogContent className="max-w-5xl border-zinc-200/70 bg-white text-zinc-900">
+        <ScrollDialogContent className="max-w-5xl border-teal-100/70 bg-white text-slate-900">
           <DialogHeader>
             <DialogTitle>{editing?.title ? "编辑单曲" : "新增单曲"}</DialogTitle>
-            <DialogDescription className="text-zinc-600">
+            <DialogDescription className="text-slate-500">
               可上传封面、编辑曲目与 A 面曲选拔站位（拖拽公式照），并上传 A 面音源。
             </DialogDescription>
           </DialogHeader>
@@ -2474,7 +2474,7 @@ function SinglesPage({ data, setData, admin }) {
                 hint="建议 1:1"
               />
 
-              <Card className="border-zinc-200/70 bg-white/70">
+              <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
                 <CardHeader className="flex flex-row items-center justify-between gap-3">
                   <CardTitle className="text-base">
                     曲目收录（{editing.tracks?.length || 0} tracks）
@@ -2534,7 +2534,7 @@ function SinglesPage({ data, setData, admin }) {
                 <CardContent className="grid gap-3">
                   {(Array.isArray(editing.tracks) ? editing.tracks : []).map((t, idx) => (
                     <div key={idx} className="grid gap-2 md:grid-cols-[120px_1fr_140px]">
-                      <Input value={`Track ${t.no}`} disabled className="bg-white/70" />
+                      <Input value={`Track ${t.no}`} disabled className="bg-white/75" />
                       <Input
                         value={t.title}
                         onChange={(e) => {
@@ -2552,7 +2552,7 @@ function SinglesPage({ data, setData, admin }) {
                           {t.isAside ? "A-side" : "B-side"}
                         </Badge>
                         {idx === 0 ? (
-                          <div className="text-xs text-zinc-600">A面支持音源与站位</div>
+                          <div className="text-xs text-slate-500">A面支持音源与站位</div>
                         ) : null}
                       </div>
 
@@ -2575,10 +2575,10 @@ function SinglesPage({ data, setData, admin }) {
                 </CardContent>
               </Card>
 
-              <Card className="border-zinc-200/70 bg-white/70">
+              <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
                 <CardHeader>
                   <CardTitle className="text-base">A 面曲选拔站位编辑</CardTitle>
-                  <CardDescription className="text-zinc-600">
+                  <CardDescription className="text-slate-500">
                     1) 输入排数与每排人数；2) 生成占位框；3) 从下方成员池拖拽公式照到占位框；4) 保存。
                   </CardDescription>
                 </CardHeader>
@@ -2705,17 +2705,17 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
   }, [currentTrack?.audio]);
 
   return (
-    <Card className="border-zinc-200/70 bg-white/70">
+    <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
       <CardHeader>
         <CardTitle className="text-xl">{single.title}</CardTitle>
-        <CardDescription className="text-zinc-700">
+        <CardDescription className="text-slate-600">
           Release: {single.release || "—"}
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
         <div className="grid gap-4 md:grid-cols-[220px_1fr]">
           <button
-            className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white"
+            className="overflow-hidden rounded-2xl border border-teal-100/70 bg-white"
             onClick={() => setCoverZoom(true)}
             title="点击放大封面"
           >
@@ -2743,7 +2743,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
               </Badge>
             </div>
 
-            <Card className="border-zinc-200/70 bg-white/70">
+            <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base">曲目收录</CardTitle>
               </CardHeader>
@@ -2751,10 +2751,10 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                 {tracks.map((t) => (
                   <div
                     key={t.no}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200/70 bg-white/70 px-3 py-2"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow px-3 py-2"
                   >
                     <div className="text-sm">
-                      <span className="text-zinc-600">Track {t.no}</span>
+                      <span className="text-slate-500">Track {t.no}</span>
                       <span className="mx-2">·</span>
                       <span className="font-medium">{t.title}</span>
                     </div>
@@ -2790,9 +2790,9 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                 ))}
 
                 {currentTrack?.audio ? (
-                  <div className="mt-2 rounded-2xl border border-zinc-200/70 bg-white/70 p-3">
+                  <div className="mt-2 rounded-2xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow p-3">
                     <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                      <div className="text-sm font-medium text-zinc-900">
+                      <div className="text-sm font-medium text-slate-900">
                         正在播放：Track {currentTrack.no} · {currentTrack.title}
                       </div>
                       <Badge variant="secondary" className="bg-black/5">
@@ -2805,7 +2805,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                       controls
                       className="w-full"
                     />
-                    <div className="mt-2 text-xs text-zinc-600">
+                    <div className="mt-2 text-xs text-slate-500">
                       音源为本地上传并保存为服务器文件 URL。
                     </div>
                   </div>
@@ -2814,17 +2814,17 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
             </Card>
 
             {single.notes ? (
-              <div className="rounded-2xl border border-zinc-200/70 bg-white/70 p-4 text-sm text-zinc-700">
+              <div className="rounded-2xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow p-4 text-sm text-slate-600">
                 {single.notes}
               </div>
             ) : null}
           </div>
         </div>
 
-        <Card className="border-zinc-200/70 bg-white/70">
+        <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="pb-3">
             <CardTitle className="text-base">A 面曲选拔站位</CardTitle>
-            <CardDescription className="text-zinc-600">
+            <CardDescription className="text-slate-500">
               以成员公式照排开（示例站位）。
             </CardDescription>
           </CardHeader>
@@ -2859,7 +2859,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                       <div
                         key={`${rIdx}-${i}`}
                         className={
-                          "group relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70 flex-none " +
+                          "group relative overflow-hidden rounded-2xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow flex-none " +
                           frameCls
                         }
                         style={{ width: tileW, height: tileH }}
@@ -2891,7 +2891,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                               ) : null}
 
                               <div
-                                className="text-zinc-900"
+                                className="text-slate-900"
                                 style={{ fontSize: nameFont, lineHeight: 1.2, wordBreak: "break-word" }}
                               >
                                 {!m.isActive ? "OG - " : ""}{m.name}
@@ -2914,7 +2914,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                             </div>
                           </div>
                         ) : (
-                          <div className="grid h-full w-full place-items-center text-xs text-zinc-500">空位</div>
+                          <div className="grid h-full w-full place-items-center text-xs text-slate-500">空位</div>
                         )}
                       </div>
                     );
@@ -2922,7 +2922,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
                 </div>
               ))}            </div>
             {admin ? (
-              <div className="text-xs text-zinc-600">
+              <div className="text-xs text-slate-500">
                 站位编辑请在「编辑单曲」弹窗里操作。
               </div>
             ) : null}
@@ -2931,14 +2931,14 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
       </CardContent>
 
       <Dialog open={coverZoom} onOpenChange={setCoverZoom}>
-        <ScrollDialogContent className="max-w-4xl border-zinc-200/70 bg-white text-zinc-900">
+        <ScrollDialogContent className="max-w-4xl border-teal-100/70 bg-white text-slate-900">
           <DialogHeader>
             <DialogTitle>封面放大</DialogTitle>
-            <DialogDescription className="text-zinc-600">
+            <DialogDescription className="text-slate-500">
               点击外部或按 ESC 关闭。
             </DialogDescription>
           </DialogHeader>
-          <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white">
+          <div className="overflow-hidden rounded-2xl border border-teal-100/70 bg-white">
             <img src={resolveMediaUrl(single.cover)} alt={single.title} className="w-full" />
           </div>
         </ScrollDialogContent>
@@ -2951,7 +2951,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
   // 防御：进入编辑页的首帧 editing 可能还是 null/undefined，避免直接白屏
   if (!singleDraft) {
     return (
-      <div className="rounded-2xl border border-zinc-200 bg-white p-4 text-sm text-zinc-600">
+      <div className="rounded-2xl border border-teal-100 bg-white p-4 text-sm text-slate-500">
         加载中…（singleDraft 为空）
       </div>
     );
@@ -3094,7 +3094,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
     const role = (lineup.slotRoles || {})[slotIndex];
     if (role === "center") {
       return (
-        <div className="absolute left-1 top-1 rounded-full bg-yellow-400/95 px-2 py-0.5 text-[10px] font-semibold text-zinc-900 shadow">
+        <div className="absolute left-1 top-1 rounded-full bg-yellow-400/95 px-2 py-0.5 text-[10px] font-semibold text-slate-900 shadow">
           center
         </div>
       );
@@ -3122,11 +3122,11 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
 
   return (
     <div className="grid gap-4">
-      <div className="rounded-2xl border border-zinc-200/70 bg-white/70 p-4 text-xs text-zinc-600">
+      <div className="rounded-2xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow p-4 text-xs text-slate-500">
         点击站位框选择成员（所有位置可设置 普通 / center / 护法）。
       </div>
 
-      <div className="rounded-2xl border border-zinc-200/70 bg-white/70 p-4">
+      <div className="rounded-2xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow p-4">
         <div className="grid gap-3">
           {/* 展示顺序：最上面=第1排（rows 最后一项），最下面=最后排 */}
           {rowMeta.map((r) => (
@@ -3140,7 +3140,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
                   <div key={slotIndex} className="flex flex-col items-center gap-2">
                     <div
                       className={
-                        "relative overflow-hidden rounded-2xl border border-dashed border-zinc-300/80 bg-white/70 " +
+                        "relative overflow-hidden rounded-2xl border border-dashed border-teal-200/80 bg-white/75 " +
                         roleFrameClass(slotIndex)
                       }
                       style={{ width: 90, height: 140 }}
@@ -3160,7 +3160,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
                           />
                           <button
                             type="button"
-                            className="absolute right-1 top-1 rounded-full bg-white/95 px-2 py-0.5 text-[10px] text-zinc-700 shadow"
+                            className="absolute right-1 top-1 rounded-full bg-white/95 px-2 py-0.5 text-[10px] text-slate-600 shadow"
                             onClick={(e) => {
                               e.stopPropagation();
                               clearSlot(slotIndex);
@@ -3171,7 +3171,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
                           </button>
                         </>
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-xs text-zinc-400">
+                        <div className="flex h-full w-full items-center justify-center text-xs text-slate-400">
                           —
                         </div>
                       )}
@@ -3189,21 +3189,21 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
       </div>
 
       <Dialog open={pickerOpen} onOpenChange={setPickerOpen}>
-        <DialogContent className="max-w-5xl border-zinc-200/70 bg-white text-zinc-900">
+        <DialogContent className="max-w-5xl border-teal-100/70 bg-white text-slate-900">
           <DialogHeader>
             <DialogTitle>选择成员</DialogTitle>
-            <DialogDescription className="text-zinc-600">
+            <DialogDescription className="text-slate-500">
               点击成员即可填入当前站位{pickerSlotIndex !== null ? `（#${pickerSlotIndex + 1}）` : ""}。
             </DialogDescription>
           </DialogHeader>
 
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <div className="text-xs text-zinc-600 mr-1">位置类型：</div>
+            <div className="text-xs text-slate-500 mr-1">位置类型：</div>
             <button
               type="button"
               className={
                 "px-3 py-1 rounded-md border text-sm " +
-                (pickerRole === null ? "bg-zinc-100 border-zinc-300" : "bg-white border-zinc-200")
+                (pickerRole === null ? "bg-zinc-100 border-teal-200" : "bg-white border-teal-100")
               }
               onClick={() => setPickerRole(null)}
             >
@@ -3213,7 +3213,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
               type="button"
               className={
                 "px-3 py-1 rounded-md border text-sm " +
-                (pickerRole === "center" ? "bg-yellow-100 border-yellow-300" : "bg-white border-zinc-200")
+                (pickerRole === "center" ? "bg-yellow-100 border-yellow-300" : "bg-white border-teal-100")
               }
               onClick={() => setPickerRole("center")}
             >
@@ -3223,7 +3223,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
               type="button"
               className={
                 "px-3 py-1 rounded-md border text-sm " +
-                (pickerRole === "guardian" ? "bg-zinc-100 border-zinc-300" : "bg-white border-zinc-200")
+                (pickerRole === "guardian" ? "bg-zinc-100 border-teal-200" : "bg-white border-teal-100")
               }
               onClick={() => setPickerRole("guardian")}
             >
@@ -3232,12 +3232,12 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
           </div>
 
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <div className="text-xs text-zinc-600 mr-1">成员池：</div>
+            <div className="text-xs text-slate-500 mr-1">成员池：</div>
             <button
               type="button"
               className={
                 "px-3 py-1 rounded-md border text-sm " +
-                (pickerPool === "active" ? "bg-zinc-100 border-zinc-300" : "bg-white border-zinc-200")
+                (pickerPool === "active" ? "bg-zinc-100 border-teal-200" : "bg-white border-teal-100")
               }
               onClick={() => setPickerPool("active")}
             >
@@ -3247,7 +3247,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
               type="button"
               className={
                 "px-3 py-1 rounded-md border text-sm " +
-                (pickerPool === "og" ? "bg-zinc-100 border-zinc-300" : "bg-white border-zinc-200")
+                (pickerPool === "og" ? "bg-zinc-100 border-teal-200" : "bg-white border-teal-100")
               }
               onClick={() => setPickerPool("og")}
             >
@@ -3262,7 +3262,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
                 type="button"
                 onClick={() => assignMemberToSlot(m.id)}
                 className={
-                  "group overflow-hidden rounded-2xl border border-zinc-200/70 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md flex flex-col " +
+                  "group overflow-hidden rounded-2xl border border-teal-100/70 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md flex flex-col " +
                   (used.has(m.id) ? "opacity-70" : "")
                 }
                 title={m.name}
@@ -3275,10 +3275,10 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
                   />
                 </div>
                 <div className="px-2 py-2">
-                  <div className="text-xs font-medium text-zinc-900">
+                  <div className="text-xs font-medium text-slate-900">
                     {m.name}{!m.isActive ? "（卒業）" : ""}
                   </div>
-                  <div className="text-[10px] text-zinc-600">{m.romaji || ""}</div>
+                  <div className="text-[10px] text-slate-500">{m.romaji || ""}</div>
                 </div>
               </button>
             ))}
@@ -3372,7 +3372,7 @@ function BlogPage({ data, setData, admin }) {
             <Card
               key={p.id}
               className={
-                "overflow-hidden border-zinc-200/70 bg-white/70 transition " +
+                "overflow-hidden border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow transition " +
                 (selectedId === p.id ? "ring-2 ring-zinc-300/70" : "")
               }
             >
@@ -3387,7 +3387,7 @@ function BlogPage({ data, setData, admin }) {
                 <div className="flex items-start justify-between gap-3 p-4">
                   <div>
                     <div className="text-base font-semibold leading-tight">{p.title}</div>
-                    <div className="mt-2 text-sm text-zinc-600">{p.date}</div>
+                    <div className="mt-2 text-sm text-slate-500">{p.date}</div>
                   </div>
                   {admin ? (
                     <DropdownMenu>
@@ -3420,13 +3420,13 @@ function BlogPage({ data, setData, admin }) {
 
         <div className="md:sticky md:top-[96px] md:self-start md:max-h-[calc(100vh-96px)] md:overflow-y-auto md:min-h-0">
           {selected ? (
-            <Card className="border-zinc-200/70 bg-white/70">
+            <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
               <CardHeader>
                 <CardTitle className="text-xl">{selected.title}</CardTitle>
-                <CardDescription className="text-zinc-700">{selected.date}</CardDescription>
+                <CardDescription className="text-slate-600">{selected.date}</CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
-                <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white">
+                <div className="overflow-hidden rounded-2xl border border-teal-100/70 bg-white">
                   <img
                     src={resolveMediaUrl(selected.cover)}
                     alt={selected.title}
@@ -3434,16 +3434,16 @@ function BlogPage({ data, setData, admin }) {
                   />
                 </div>
                 <div
-                  className="prose prose-invert max-w-none prose-p:text-zinc-800 prose-li:text-zinc-800 prose-strong:text-zinc-900"
+                  className="prose prose-invert max-w-none prose-p:text-zinc-800 prose-li:text-zinc-800 prose-strong:text-slate-900"
                   dangerouslySetInnerHTML={{ __html: resolveHtmlMedia(selected.content) }}
                 />
               </CardContent>
             </Card>
           ) : (
-            <Card className="border-zinc-200/70 bg-white/70">
+            <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
               <CardHeader>
                 <CardTitle>暂无新闻</CardTitle>
-                <CardDescription className="text-zinc-600">你可以在管理员模式下新增。</CardDescription>
+                <CardDescription className="text-slate-500">你可以在管理员模式下新增。</CardDescription>
               </CardHeader>
             </Card>
           )}
@@ -3451,10 +3451,10 @@ function BlogPage({ data, setData, admin }) {
       </div>
 
       <Dialog open={editorOpen} onOpenChange={setEditorOpen}>
-        <ScrollDialogContent className="max-w-5xl border-zinc-200/70 bg-white text-zinc-900">
+        <ScrollDialogContent className="max-w-5xl border-teal-100/70 bg-white text-slate-900">
           <DialogHeader>
             <DialogTitle>{editing?.title ? "编辑新闻" : "新增新闻"}</DialogTitle>
-            <DialogDescription className="text-zinc-600">
+            <DialogDescription className="text-slate-500">
               简易 Blog 编辑器（contenteditable）：支持粘贴文本、加粗、列表；可上传图片插入到光标处。
             </DialogDescription>
           </DialogHeader>
@@ -3501,7 +3501,7 @@ function BlogPage({ data, setData, admin }) {
                 >
                   有序列表
                 </Button>
-                <div className="flex items-center gap-2 rounded-xl border border-zinc-200/70 bg-white/70 px-3 py-2">
+                <div className="flex items-center gap-2 rounded-xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow px-3 py-2">
                   <Input
                     type="file"
                     accept="image/*"
@@ -3522,10 +3522,10 @@ function BlogPage({ data, setData, admin }) {
                   ref={editorRef}
                   contentEditable
                   suppressContentEditableWarning
-                  className="min-h-[240px] rounded-2xl border border-zinc-200/70 bg-white/70 p-4 text-zinc-900 outline-none"
+                  className="min-h-[240px] rounded-2xl border border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow p-4 text-slate-900 outline-none"
                   dangerouslySetInnerHTML={{ __html: editing.content }}
                 />
-                <div className="text-xs text-zinc-600">
+                <div className="text-xs text-slate-500">
                   小提示：可以直接复制粘贴外部文本/图片（不同浏览器表现略有差异）。
                 </div>
               </div>
@@ -3595,7 +3595,7 @@ export default function XJP56App() {
   if (!loaded) {
     return (
       <AppShell>
-        <div className="py-20 text-center text-zinc-600">Loading…</div>
+        <div className="py-20 text-center text-slate-500">Loading…</div>
       </AppShell>
     );
   }
@@ -3620,7 +3620,7 @@ export default function XJP56App() {
   if (!data) {
     return (
       <AppShell>
-        <div className="py-20 text-center text-zinc-600">No data</div>
+        <div className="py-20 text-center text-slate-500">No data</div>
       </AppShell>
     );
   }
@@ -3678,10 +3678,10 @@ export default function XJP56App() {
             </div>
 
             <div className="mt-8">
-              <Card className="border-zinc-200/70 bg-white/70">
+              <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
                 <CardHeader>
                   <CardTitle className="text-base">测试清单</CardTitle>
-                  <CardDescription className="text-zinc-600">
+                  <CardDescription className="text-slate-500">
                     你可以按下面步骤验证需求是否全部满足。
                   </CardDescription>
                 </CardHeader>
@@ -3754,14 +3754,14 @@ export default function XJP56App() {
 
 function QuickCard({ title, desc, icon, actionLabel, onAction }) {
   return (
-    <Card className="border-zinc-200/70 bg-white/70">
+    <Card className="border-teal-100/80 bg-white/75 backdrop-blur-xl shadow-sm hover:shadow-md transition-shadow">
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
           <div>
             <CardTitle className="text-lg">{title}</CardTitle>
-            <CardDescription className="text-zinc-700">{desc}</CardDescription>
+            <CardDescription className="text-slate-600">{desc}</CardDescription>
           </div>
-          <div className="grid h-10 w-10 place-items-center rounded-2xl bg-black/5">
+          <div className="grid h-10 w-10 place-items-center rounded-2xl bg-teal-500/10 ring-1 ring-teal-500/10">
             {icon}
           </div>
         </div>
@@ -3778,7 +3778,7 @@ function QuickCard({ title, desc, icon, actionLabel, onAction }) {
 function ChecklistItem({ children }) {
   return (
     <div className="flex gap-2">
-      <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-white/70" />
+      <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-white/75" />
       <div>{children}</div>
     </div>
   );

@@ -1,12 +1,15 @@
 @import "tailwindcss";
 
-/* Minimal base reset for Vite + React.
-   IMPORTANT: remove Vite's default body flex-centering,
-   otherwise dialogs/pages can look cut off and won't scroll correctly. */
-
 html, body, #root { height: 100%; }
 body { margin: 0; }
 
 :root {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: #ffffff;
 }

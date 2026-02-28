@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/sheet";
 import {
   Plus,
+  Minus,
   Users,
   Disc3,
   Newspaper,
@@ -65,7 +66,189 @@ import {
 
 // ---------- Utils ----------
 const uid = () => Math.random().toString(36).slice(2, 10);
+
+
+// --- 总选举顺位展示：把“十四位/14位/14/圈外/加入前”等统一格式化 ---
+const _cnDigit = { "零":0,"一":1,"二":2,"三":3,"四":4,"五":5,"六":6,"七":7,"八":8,"九":9 };
+function chineseToInt(s) {
+  // 仅需支持到几十位（本项目足够用）
+  if (!s) return NaN;
+  s = String(s).replace(/位/g, "").trim();
+  if (/^\d+$/.test(s)) return parseInt(s, 10);
+  if (s === "十") return 10;
+  const tenIdx = s.indexOf("十");
+  if (tenIdx === -1) return _cnDigit[s] ?? NaN;
+  const left = s.slice(0, tenIdx);
+  const right = s.slice(tenIdx + 1);
+  const tens = left ? (_cnDigit[left] ?? NaN) : 1;
+  const ones = right ? (_cnDigit[right] ?? NaN) : 0;
+  if (Number.isNaN(tens) || Number.isNaN(ones)) return NaN;
+  return tens * 10 + ones;
+}
+
+function getElectionBadge(raw) {
+  const v = (raw ?? "").toString().trim();
+  if (!v) return { text: "—", className: "bg-zinc-50 text-zinc-600 border-zinc-200" };
+  if (v === "加入前") return { text: "加入前", className: "bg-zinc-100 text-zinc-700 border-zinc-200" };
+  if (v === "圈外") return { text: "圈外", className: "bg-zinc-50 text-zinc-600 border-zinc-200" };
+
+  // 允许输入：14位 / 14 / 十四位 / 十四
+  const numFromDigits = v.match(/\d+/);
+  const n = numFromDigits ? parseInt(numFromDigits[0], 10) : chineseToInt(v);
+
+  if (!Number.isFinite(n)) {
+    return { text: v, className: "bg-zinc-50 text-zinc-700 border-zinc-200" };
+  }
+
+  // 规则：1-12 选拔，13-19 UG，20+ 圈外
+  if (n >= 20) return { text: "圈外", className: "bg-zinc-50 text-zinc-600 border-zinc-200" };
+
+  const group = n >= 13 ? "UG" : "选拔";
+  const text = `${n}位（${group}）`;
+
+  // 配色：1 金，2 银，3-7 粉，8-12 选拔底色，13-19 UG 底色
+  let className = "bg-sky-100 text-sky-900 border-sky-200";
+  if (n === 1) className = "bg-amber-200 text-amber-900 border-amber-300";
+  else if (n === 2) className = "bg-zinc-200 text-zinc-900 border-zinc-300";
+  else if (n >= 3 && n <= 7) className = "bg-pink-200 text-pink-900 border-pink-300";
+  else if (n <= 12) className = "bg-sky-100 text-sky-900 border-sky-200";
+  else className = "bg-purple-100 text-purple-900 border-purple-200";
+
+  return { text, className };
+}
+
+
+const splitSingleTitle = (fullTitle) => {
+  // Expect formats like: "1st Single · Neon Bloom"
+  const t = (fullTitle ?? "").toString().trim();
+  if (!t) return { prefix: "", name: "" };
+  const parts = t.split("·").map((s) => s.trim()).filter(Boolean);
+  if (parts.length <= 1) return { prefix: "", name: t };
+  return { prefix: parts[0], name: parts.slice(1).join(" · ") };
+};
+
+const buildRowMeta = (rows) => {
+  const out = [];
+  let start = 0;
+  for (let i = 0; i < (rows ?? []).length; i += 1) {
+    const n = Number(rows[i]) || 0;
+    out.push({ rowIndexFromBack: i + 1, start, end: start + n });
+    start += n;
+  }
+  return out;
+};
+
+const getRowFromFrontBySlot = (rows, slotIndex) => {
+  const meta = buildRowMeta(rows);
+  for (const r of meta) {
+    if (slotIndex >= r.start && slotIndex < r.end) {
+      const totalRows = meta.length || 1;
+      // 约定：rows 数组从“后排”到“前排”，所以越靠后的 rowIndexFromBack 越前排
+      const rowFromFront = totalRows - r.rowIndexFromBack + 1;
+      return rowFromFront;
+    }
+  }
+  return 1;
+};
+
+// rows 数组按“后排 -> 前排”顺序存储：例如 [5,5,1] 代表 3 排，其中最后的 1 是“第 1 排（最前）”。
+// 这里返回“从后往前数”的排数：1 表示最后排（最靠后），rows.length 表示最前排。
+const getRowFromBack = (rows, slotIndex) => {
+  const meta = buildRowMeta(rows);
+  for (const r of meta) {
+    if (slotIndex >= r.start && slotIndex < r.end) return r.rowIndexFromBack;
+  }
+  return 1;
+};
+
+const computeMemberLineupHistory = (memberId, singles) => {
+  if (!memberId) return [];
+  const list = [];
+  for (const s of (singles ?? [])) {
+    const rows = s?.asideLineup?.rows ?? [];
+    const slots = s?.asideLineup?.slots ?? [];
+    const slotRoles = s?.asideLineup?.slotRoles ?? {};
+
+    const idx = slots.findIndex((x) => x === memberId);
+    if (idx === -1) {
+      list.push({ singleId: s?.id, singleTitle: s?.title, kind: "未入选" });
+      continue;
+    }
+
+    const rowFromFront = getRowFromFrontBySlot(rows, idx);
+    // role 对所有位置生效（不再限制第1排）
+    const role = slotRoles?.[idx] ?? null;
+    list.push({
+      singleId: s?.id,
+      singleTitle: s?.title,
+      kind: "A面选拔",
+      rowFromFront,
+      role,
+    });
+  }
+
+  // 最新在后，历史在前：按 releaseDate 升序
+  return list.sort((a, b) => {
+    const da = (singles.find((x) => x.id === a.singleId)?.releaseDate ?? "").toString();
+    const db = (singles.find((x) => x.id === b.singleId)?.releaseDate ?? "").toString();
+    return da.localeCompare(db);
+  });
+};
+
+const selectionKindTag = (kind) => {
+  if (kind === "A面选拔") return { text: "A面选拔", className: "bg-emerald-50 text-emerald-800 border-emerald-200" };
+  if (kind === "B面") return { text: "B面", className: "bg-sky-50 text-sky-800 border-sky-200" };
+  return { text: "未入选", className: "bg-zinc-50 text-zinc-700 border-zinc-200" };
+};
+
+const roleBadge = (role) => {
+  if (role === "center") return { text: "CENTER", className: "bg-amber-200 text-amber-900 border-amber-300" };
+  if (role === "guardian") return { text: "护法", className: "bg-zinc-200 text-zinc-900 border-zinc-300" };
+  return null;
+};
+
+// ---------- Graduation helpers ----------
+const isoDate = (v) => (v ? String(v).slice(0, 10) : "");
+
+function getLastSingleBeforeGrad({ graduationDate }, singles) {
+  const gd = isoDate(graduationDate);
+  if (!gd) return { lastSingleId: null, lastRelease: "" };
+  let best = null;
+  for (const s of Array.isArray(singles) ? singles : []) {
+    const r = isoDate(s?.release);
+    if (!r) continue;
+    if (r <= gd) {
+      if (!best || r > best.release) best = { id: s.id, release: r };
+    }
+  }
+  return { lastSingleId: best?.id ?? null, lastRelease: best?.release ?? "" };
+}
+
+function formatElectionRank(raw) {
+  return getElectionBadge(raw).text;
+}
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+
+
+function generationBadgeClass(gen = "") {
+  // return Tailwind-like class strings for default generations; for 3期/5期 we return empty so styles handle colors.
+  const g = String(gen || "");
+  if (g.startsWith("1")) return "bg-pink-100 text-pink-900";
+  if (g.startsWith("2")) return "bg-green-100 text-green-900";
+  if (g.startsWith("3")) return ""; // styled via generationBadgeStyle
+  if (g.startsWith("4")) return "bg-yellow-100 text-yellow-900";
+  if (g.startsWith("5")) return ""; // styled via generationBadgeStyle
+  if (g.startsWith("6")) return ""; // styled via generationBadgeStyle
+  return "bg-black/5 text-zinc-900";
+}
+
+function generationBadgeStyle(gen = "") {
+  const g = String(gen || "");
+  if (g.startsWith("3")) return { backgroundColor: "#DDE8FF", color: "#154ECF", padding: '0.125rem 0.75rem', borderRadius: '9999px', fontWeight: 600 };
+  if (g.startsWith("5")) return { backgroundColor: "#C9F3FF", color: "#00303A", padding: '0.125rem 0.75rem', borderRadius: '9999px', fontWeight: 600 };
+  if (g.startsWith("6")) return { backgroundColor: "#E9D5FF", color: "#5B21B6", padding: '0.125rem 0.75rem', borderRadius: '9999px', fontWeight: 600 };;
+  return undefined;
+}
 
 function readFileAsDataURL(file) {
   return new Promise((resolve, reject) => {
@@ -131,7 +314,8 @@ const seedMembers = [
     name: "星野 明里",
     origin: "东京 · 练马",
     generation: "1期",
-    avatar: "https://placehold.co/800x800/png?text=Akari&font=montserrat",
+    isActive: true,
+        avatar: "https://placehold.co/800x800/png?text=Akari&font=montserrat",
     profile: {
       height: "160cm",
       birthday: "2004-03-12",
@@ -150,7 +334,8 @@ const seedMembers = [
     name: "白石 由奈",
     origin: "大阪 · 吹田",
     generation: "1期",
-    avatar: "https://placehold.co/800x800/png?text=Yuna&font=montserrat",
+    isActive: true,
+        avatar: "https://placehold.co/800x800/png?text=Yuna&font=montserrat",
     profile: {
       height: "158cm",
       birthday: "2005-10-02",
@@ -169,7 +354,8 @@ const seedMembers = [
     name: "西园 凛",
     origin: "名古屋 · 千种",
     generation: "1期",
-    avatar: "https://placehold.co/800x800/png?text=Rin&font=montserrat",
+    isActive: true,
+        avatar: "https://placehold.co/800x800/png?text=Rin&font=montserrat",
     profile: {
       height: "163cm",
       birthday: "2003-07-19",
@@ -188,7 +374,8 @@ const seedMembers = [
     name: "夏目 纱希",
     origin: "福冈 · 博多",
     generation: "2期",
-    avatar: "https://placehold.co/800x800/png?text=Saki&font=montserrat",
+    isActive: true,
+        avatar: "https://placehold.co/800x800/png?text=Saki&font=montserrat",
     profile: {
       height: "156cm",
       birthday: "2006-01-28",
@@ -207,7 +394,8 @@ const seedMembers = [
     name: "橘 美香",
     origin: "札幌 · 中央",
     generation: "2期",
-    avatar: "https://placehold.co/800x800/png?text=Mika&font=montserrat",
+    isActive: true,
+        avatar: "https://placehold.co/800x800/png?text=Mika&font=montserrat",
     profile: {
       height: "165cm",
       birthday: "2004-11-11",
@@ -226,7 +414,8 @@ const seedMembers = [
     name: "小鸟游 真优",
     origin: "京都 · 伏见",
     generation: "2期",
-    avatar: "https://placehold.co/800x800/png?text=Mayu&font=montserrat",
+    isActive: true,
+        avatar: "https://placehold.co/800x800/png?text=Mayu&font=montserrat",
     profile: {
       height: "159cm",
       birthday: "2005-05-09",
@@ -245,7 +434,8 @@ const seedMembers = [
     name: "藤森 菜奈",
     origin: "横滨 · 港北",
     generation: "3期",
-    avatar: "https://placehold.co/800x800/png?text=Nana&font=montserrat",
+    isActive: true,
+        avatar: "https://placehold.co/800x800/png?text=Nana&font=montserrat",
     profile: {
       height: "162cm",
       birthday: "2006-08-21",
@@ -264,7 +454,8 @@ const seedMembers = [
     name: "早川 雏",
     origin: "广岛 · 中区",
     generation: "3期",
-    avatar: "https://placehold.co/800x800/png?text=Hina&font=montserrat",
+    isActive: true,
+        avatar: "https://placehold.co/800x800/png?text=Hina&font=montserrat",
     profile: {
       height: "154cm",
       birthday: "2007-02-14",
@@ -283,7 +474,8 @@ const seedMembers = [
     name: "月岛 玲奈",
     origin: "神户 · 灘",
     generation: "3期",
-    avatar: "https://placehold.co/800x800/png?text=Reina&font=montserrat",
+    isActive: true,
+        avatar: "https://placehold.co/800x800/png?text=Reina&font=montserrat",
     profile: {
       height: "167cm",
       birthday: "2003-12-03",
@@ -302,7 +494,8 @@ const seedMembers = [
     name: "神崎 菖蒲",
     origin: "仙台 · 青叶",
     generation: "3期",
-    avatar: "https://placehold.co/800x800/png?text=Ayame&font=montserrat",
+    isActive: true,
+        avatar: "https://placehold.co/800x800/png?text=Ayame&font=montserrat",
     profile: {
       height: "161cm",
       birthday: "2006-09-30",
@@ -405,27 +598,292 @@ const seedPosts = [
   },
 ];
 
-// ---------- Local Storage ----------
-const STORAGE_KEY = "xjp56_app_v2_audio";
+// ---------- Backend API ----------
+// 不再使用 localStorage：数据与图片都走后端。
+// 约定：
+// - GET  {API_BASE}/data   -> { members, singles, posts }
+// - POST {API_BASE}/data  -> 覆盖保存
+// - POST {API_BASE}/upload (form-data: image) -> { url }
+// ✅ 使用相对路径，避免 ngrok/手机端访问时写死 localhost
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
-function loadData() {
-  const fallback = { members: seedMembers, singles: seedSingles, posts: seedPosts };
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    // 兼容旧 key（如果你之前跑过 v1）
-    const old = localStorage.getItem("xjp56_app_v1");
-    const migrated = old ? migrateData(old) : null;
-    return migrated ?? fallback;
+// ✅ 前端渲染媒体资源时：/uploads/... 需要在生产环境拼上后端域名；本地开发同域时保持相对路径
+function resolveMediaUrl(v) {
+  if (!v) return v;
+  if (typeof v !== "string") return v;
+  // 已经是完整链接就不动
+  if (/^https?:\/\//i.test(v)) return v;
+  // 仅处理后端静态资源
+  if (v.startsWith("/uploads/")) {
+    return API_BASE ? `${API_BASE}${v}` : v;
   }
-  const migrated = migrateData(raw);
-  return migrated ?? fallback;
+  return v;
 }
 
-function saveData(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+// ✅ 用于 Blog 富文本：把 <img src="/uploads/..."> 转为指向后端域名
+function resolveHtmlMedia(html) {
+  if (!html || typeof html !== "string") return html;
+  if (!API_BASE) return html;
+  return html.replace(/(src|href)=("|')\/uploads\//g, `$1=$2${API_BASE}/uploads/`);
+}
+
+// ✅ 把任何绝对 uploads URL 归一成相对路径（/uploads/...），确保可跨终端访问
+function toRelativeUploadsUrl(v) {
+  if (!v) return v;
+  if (typeof v !== "string") return v;
+  if (v.startsWith("/uploads/")) return v;
+  const m = v.match(/https?:\/\/[^/]+(\/uploads\/.*)$/i);
+  if (m && m[1]) return m[1];
+  return v;
+}
+
+function sanitizeDbPayload(db) {
+  if (!db || typeof db !== "object") return db;
+  const out = JSON.parse(JSON.stringify(db));
+  if (Array.isArray(out.members)) {
+    for (const m of out.members) {
+      if (m && typeof m === "object" && typeof m.avatar === "string") {
+        m.avatar = toRelativeUploadsUrl(m.avatar);
+      }
+    }
+  }
+  if (Array.isArray(out.singles)) {
+    for (const s of out.singles) {
+      if (!s || typeof s !== "object") continue;
+      if (typeof s.cover === "string") s.cover = toRelativeUploadsUrl(s.cover);
+      if (Array.isArray(s.tracks)) {
+        for (const t of s.tracks) {
+          if (t && typeof t === "object" && typeof t.audio === "string") {
+            t.audio = toRelativeUploadsUrl(t.audio);
+          }
+        }
+      }
+    }
+  }
+  if (Array.isArray(out.posts)) {
+    for (const p of out.posts) {
+      if (p && typeof p === "object" && typeof p.cover === "string") {
+        p.cover = toRelativeUploadsUrl(p.cover);
+      }
+    }
+  }
+  return out;
+}
+
+async function apiGetData() {
+  const res = await fetch(`${API_BASE}/data`);
+  if (!res.ok) throw new Error("Failed to load data");
+  return res.json();
+}
+
+async function apiSaveData(data) {
+  const cleaned = sanitizeDbPayload(data);
+  const res = await fetch(`${API_BASE}/data`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(cleaned),
+  });
+  if (!res.ok) throw new Error("Failed to save data");
+}
+
+async function uploadImage(file) {
+  const form = new FormData();
+  form.append("image", file);
+  const res = await fetch(`${API_BASE}/upload`, { method: "POST", body: form });
+  if (!res.ok) throw new Error("Upload failed");
+  const json = await res.json();
+  return json.url;
+}
+
+async function uploadAudio(file) {
+  const form = new FormData();
+  form.append("audio", file);
+  const res = await fetch(`${API_BASE}/upload-audio`, { method: "POST", body: form });
+  if (!res.ok) throw new Error("Upload audio failed");
+  const json = await res.json();
+  return json.url;
+}
+
+function isEmptyRemoteData(remote) {
+  // 当后端是新库/空库时：{members:[], singles:[], posts:[]}
+  // 我们希望自动灌入 seed，避免页面空空如也不好测试。
+  if (!remote || typeof remote !== "object") return true;
+  const m = Array.isArray(remote.members) ? remote.members.length : 0;
+  const s = Array.isArray(remote.singles) ? remote.singles.length : 0;
+  const p = Array.isArray(remote.posts) ? remote.posts.length : 0;
+  return m + s + p === 0;
+}
+
+
+function withRecomputedSelections(data) {
+  const singles = Array.isArray(data?.singles) ? data.singles : [];
+  const members = Array.isArray(data?.members) ? data.members : [];
+
+  // 纪念单判定：当单曲 release 在成员毕业日之后（或未填写 release），且成员为非现役，并被选入该单曲站位
+  const isOGPickedInSingle = (member, single) => {
+    if (!member || !single) return false;
+    if (member?.isActive) return false;
+    const slots = Array.isArray(single?.asideLineup?.slots) ? single.asideLineup.slots : [];
+    if (!slots.includes(member.id)) return false;
+    const sRelease = isoDate(single?.release);
+    const gd = isoDate(member?.graduationDate);
+    // 未填 release：只要被选入且是毕业成员，就视作纪念单参与
+    if (!sRelease) return true;
+    // 未填毕业日：只要被选入且是毕业成员，也视作纪念单参与
+    if (!gd) return true;
+    return sRelease > gd;
+  };
+
+  const nextMembers = members.map((m) => {
+    const prev =
+      m?.selectionHistory && typeof m.selectionHistory === "object"
+        ? m.selectionHistory
+        : {};
+
+    // 毕业成员：只保留毕业前（含毕业单曲）的记录
+    const gradInfo =
+      m?.isActive === false
+        ? getLastSingleBeforeGrad(m, singles)
+        : { lastSingleId: null, lastRelease: "" };
+    const gradLimit = gradInfo?.lastRelease || "";
+
+    // ✅ 关键：不再把 prev 整体拷贝进来，而是从当期 singles 重新生成
+    const next = {};
+
+    for (const s of singles) {
+      const sid = s?.id;
+      if (!sid) continue;
+
+      const sRelease = isoDate(s?.release);
+      // 毕业之后发行的单曲：默认不生成任何记录；但如果该成员以 OG 身份被选入（纪念单），则仍然生成
+      if (gradLimit && sRelease && sRelease > gradLimit && !isOGPickedInSingle(m, s)) {
+        continue;
+      }
+
+      const manual = (prev?.[sid] ?? "").toString().trim();
+      // 允许在成员编辑里“手动标记为加入前”，此时不受站位影响
+      if (manual.includes("加入前")) {
+        next[sid] = "加入前";
+        continue;
+      }
+
+      const lineup = s?.asideLineup || {};
+      const slots = Array.isArray(lineup.slots) ? lineup.slots : [];
+      const rowSizes = Array.isArray(lineup.rows) ? lineup.rows : [];
+      const slotRoles =
+        lineup.slotRoles && typeof lineup.slotRoles === "object"
+          ? lineup.slotRoles
+          : {};
+
+      const slotIndex = slots.findIndex((x) => x === m.id);
+      if (slotIndex === -1) {
+        // 没出现在站位里：
+        // - 对于毕业后的单曲，默认不记录；
+        // - 对于毕业前（含毕业单曲）仍保持旧逻辑：记录为“落选”。
+        if (gradLimit && sRelease && sRelease > gradLimit) {
+          continue;
+        }
+        next[sid] = "落选";
+        continue;
+      }
+
+      const rowFromBack = getRowFromBack(rowSizes, slotIndex);
+      const rowCount = rowSizes.length || 1;
+      const rowFromFront = rowCount - rowFromBack + 1;
+
+      const roleRaw = slotRoles?.[slotIndex] ?? null;
+      const role =
+        roleRaw === "center"
+          ? "center"
+          : roleRaw === "guardian" || roleRaw === "护法"
+          ? "护法"
+          : "";
+
+      next[sid] = `A面选拔（第${rowFromFront}排${role ? " " + role : ""}）`;
+    }
+
+    return { ...m, selectionHistory: next };
+  });
+
+  return { ...data, members: nextMembers };
+}
+// 兼容旧数据：早期 selectionHistory 可能以“标题/描述”作为 key。
+// 这里把能识别出来的条目迁移成以 single.id 为 key（避免改标题后展示为空 & 避免重复）。
+function migrateSelectionHistoryKeys(members, singles) {
+  const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
+  const extractTitleFromLegacyKey = (k) => {
+    // 旧 key 形如："1st Single · Red Star Love A面选拔（第1排 center）"
+    const parts = String(k || "").split("·").map((x) => x.trim()).filter(Boolean);
+    if (parts.length >= 2) return parts.slice(1).join(" · ");
+    return String(k || "");
+  };
+  const resolveSingleId = (k, v) => {
+    if (!k) return v?.singleId || null;
+    // 1) 已经是 id
+    const byId = singles.find((s) => s.id === k);
+    if (byId) return byId.id;
+    // 2) value 里有 singleId
+    if (v && typeof v === "object" && v.singleId) return v.singleId;
+    // 3) 通过标题匹配
+    const t = norm(extractTitleFromLegacyKey(k));
+    const exact = singles.find((s) => norm(s.title) === t);
+    if (exact) return exact.id;
+    const included = singles.find((s) => t.includes(norm(s.title)) || norm(s.title).includes(t));
+    return included ? included.id : null;
+  };
+
+  return (members || []).map((m) => {
+    const hist = m.selectionHistory || {};
+    const next = {};
+
+    // 先放入已经是 id 的 key（优先级最高）
+    for (const [k, v] of Object.entries(hist)) {
+      if (singles.some((s) => s.id === k)) next[k] = v;
+    }
+    // 再处理 legacy key（只在目标 id 尚未存在时写入）
+    for (const [k, v] of Object.entries(hist)) {
+      if (singles.some((s) => s.id === k)) continue;
+      const sid = resolveSingleId(k, v);
+      if (sid && next[sid] == null) next[sid] = v;
+      else if (!sid) next[k] = v;
+    }
+
+    return { ...m, selectionHistory: next };
+  });
 }
 
 // ---------- Components ----------
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, info) {
+    // eslint-disable-next-line no-console
+    console.error("Render error:", error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+                        <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+          <div className="font-semibold">页面渲染出错（已拦截，避免白屏）</div>
+          <div className="mt-2 break-words whitespace-pre-wrap">
+            {String(this.state.error || "")}
+          </div>
+          <div className="mt-2 text-xs text-red-700">
+            请把控制台（Console）里第一条红色报错复制给我，我可以精准修复。
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function AppShell({ children }) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 via-white to-zinc-100 text-zinc-900">
@@ -447,8 +905,8 @@ function AppShell({ children }) {
             </Badge>
           </div>
           <div className="text-zinc-600">
-            数据保存在浏览器 localStorage（刷新后仍在）。音频较大时建议后续升级
-            IndexedDB。
+            数据将通过后端 API 保存（不再使用 localStorage）。音频较大时建议后续升级
+            后端存储 / 对象存储。
           </div>
         </div>
       </footer>
@@ -584,7 +1042,7 @@ function TopBar({ page, setPage, admin, setAdmin, onReset }) {
   );
 }
 
-function Hero({ membersCount, singlesCount, postsCount, onGo }) {
+function Hero({ activeMembersCount, totalMembersCount, singlesCount, postsCount, onGo }) {
   return (
     <div className="grid gap-6 md:grid-cols-12">
       <motion.div
@@ -604,7 +1062,7 @@ function Hero({ membersCount, singlesCount, postsCount, onGo }) {
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid grid-cols-3 gap-3">
-              <Stat label="成员" value={membersCount} />
+              <Stat label="成员（在籍 / 历代）" value={`${activeMembersCount} / ${totalMembersCount}`} />
               <Stat label="单曲" value={singlesCount} />
               <Stat label="新闻" value={postsCount} />
             </div>
@@ -715,9 +1173,9 @@ function ImageUploader({ label, value, onChange, hint }) {
         <div className="relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70">
           {value ? (
             <img
-              src={value}
+              src={resolveMediaUrl(value)}
               alt="preview"
-              className="h-[140px] w-[140px] object-cover"
+              className="h-[140px] w-[140px] object-cover bg-zinc-100"
             />
           ) : (
             <div className="grid h-[140px] w-[140px] place-items-center text-zinc-600">
@@ -732,12 +1190,13 @@ function ImageUploader({ label, value, onChange, hint }) {
             onChange={async (e) => {
               const file = e.target.files?.[0];
               if (!file) return;
-              const dataUrl = await readFileAsDataURL(file);
-              onChange(dataUrl);
+              const url = await uploadImage(file);
+              onChange(url);
+              e.target.value = "";
             }}
           />
           <div className="text-xs text-zinc-600">
-            上传后会转成 dataURL 保存在 localStorage（用于 demo）。
+            上传后会上传到后端并自动压缩（前端只保存 URL）。
           </div>
         </div>
       </div>
@@ -759,17 +1218,17 @@ function AudioUploader({ label, value, onChange, hint }) {
           onChange={async (e) => {
             const file = e.target.files?.[0];
             if (!file) return;
-            const dataUrl = await readFileAsDataURL(file);
-            onChange(dataUrl);
+            const url = await uploadAudio(file);
+            onChange(url);
             e.target.value = "";
           }}
         />
         <div className="text-xs text-zinc-600">
           {value ? "已上传音源（可播放）。" : "未上传音源。"}
           {" "}
-          （提示：音频较大时 localStorage 可能容量不足）
+          （音频将上传到服务器）
         </div>
-        {value ? <audio className="w-full" controls src={value} /> : null}
+        {value ? <audio className="w-full" controls src={resolveMediaUrl(value)} /> : null}
       </div>
     </div>
   );
@@ -778,32 +1237,66 @@ function AudioUploader({ label, value, onChange, hint }) {
 
 // DialogContent wrapper: fixed height + inner scroll (prevents dialogs being cut off)
 function ScrollDialogContent({ className = "", children, ...props }) {
+  // Mobile-friendly: make the whole dialog scrollable so details (e.g. “最喜欢的歌曲”) are reachable on small screens.
   const base =
-    "top-[5vh] translate-y-0 w-[calc(100vw-2rem)] max-h-[90vh] overflow-hidden p-0 " +
+    "top-[5vh] translate-y-0 w-[calc(100vw-2rem)] max-h-[90vh] overflow-y-auto overflow-x-hidden p-0 " +
     "border-zinc-200/70 bg-white text-zinc-900 shadow-xl";
   return (
     <DialogContent {...props} className={`${base} ${className}`}>
-      <div className="max-h-[90vh] overflow-y-auto p-6">{children}</div>
+      <div className="p-6">{children}</div>
     </DialogContent>
   );
 }
+
 
 
 function MembersPage({ data, setData, admin }) {
   const [selected, setSelected] = useState(null);
   const [editorOpen, setEditorOpen] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [statusFilter, setStatusFilter] = useState("all"); // all | active | inactive
+  const [genFilter, setGenFilter] = useState("all"); // all | "1期" | "2期" ...
 
   const members = data.members;
+
+  const generations = useMemo(() => {
+    const set = new Set();
+    members.forEach((m) => {
+      const g = (m.generation ?? "").toString().trim();
+      if (g) set.add(g);
+    });
+    const arr = Array.from(set);
+    // 尽量按数字期排序：1期,2期...
+    arr.sort((a, b) => {
+      const na = parseInt(String(a).replace(/\D/g, ""), 10);
+      const nb = parseInt(String(b).replace(/\D/g, ""), 10);
+      if (Number.isFinite(na) && Number.isFinite(nb)) return na - nb;
+      return String(a).localeCompare(String(b));
+    });
+    return arr;
+  }, [members]);
+
+  const filteredMembers = useMemo(() => {
+    let list = members;
+    if (statusFilter === "active") list = list.filter((m) => m.isActive);
+    if (statusFilter === "inactive") list = list.filter((m) => !m.isActive);
+    if (genFilter !== "all") list = list.filter((m) => (m.generation ?? "").toString().trim() === genFilter);
+    return list;
+  }, [members, statusFilter, genFilter]);
 
   const openEdit = (m) => {
     setEditing(
       m ?? {
         id: `m_${uid()}`,
         name: "",
+        romaji: "",
         origin: "",
         generation: "",
         avatar: "",
+        isActive: true,
+        graduationDate: "",
+        // 总选举顺位：[{ edition: "第一届", rank: "一位" }, ...]
+        electionRanks: [],
         profile: {
           height: "",
           birthday: "",
@@ -822,15 +1315,37 @@ function MembersPage({ data, setData, admin }) {
   };
 
   const saveMember = () => {
+    // 切换到毕业（isActive === false）时，必须填写毕业日期与毕业曲（可以写“无”）
+    if (editing && editing.isActive === false) {
+      const gd = isoDate(editing.graduationDate);
+      if (!gd) {
+        // eslint-disable-next-line no-alert
+        alert("请先填写毕业日期（YYYY-MM-DD）");
+        return;
+      }
+      const gTitle = (editing.graduationSongTitle || "").toString().trim();
+      if (!gTitle) {
+        // eslint-disable-next-line no-alert
+        alert("请填写毕业曲的 title（填写“无”表示没有毕业曲且在成员界面不显示）");
+        return;
+      }
+    }
     setData((prev) => {
       const exists = prev.members.some((x) => x.id === editing.id);
       const nextMembers = exists
-        ? prev.members.map((x) => (x.id === editing.id ? editing : x))
-        : [editing, ...prev.members];
-      return { ...prev, members: nextMembers };
+        ? prev.members.map((x) =>
+            x.id === editing.id ? editing : x
+          )
+        : [...prev.members, editing];
+
+      return withRecomputedSelections({
+        ...prev,
+        members: nextMembers,
+      });
     });
     setEditorOpen(false);
   };
+
 
   const deleteMember = (id) => {
     setData((prev) => {
@@ -840,10 +1355,17 @@ function MembersPage({ data, setData, admin }) {
         ...s,
         asideLineup: {
           ...s.asideLineup,
-          slots: s.asideLineup.slots.map((mid) => (mid === id ? null : mid)),
+          slots: s.asideLineup.slots.map((mid) =>
+            mid === id ? null : mid
+          ),
         },
       }));
-      return { ...prev, members: nextMembers, singles: nextSingles };
+
+      return withRecomputedSelections({
+        ...prev,
+        members: nextMembers,
+        singles: nextSingles,
+      });
     });
   };
 
@@ -862,8 +1384,57 @@ function MembersPage({ data, setData, admin }) {
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {members.map((m) => (
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <div className="text-sm text-zinc-600 mr-2">筛选：</div>
+        <Button
+          variant={statusFilter === "all" ? "default" : "secondary"}
+          size="sm"
+          onClick={() => setStatusFilter("all")}
+        >
+          全部
+        </Button>
+        <Button
+          variant={statusFilter === "active" ? "default" : "secondary"}
+          size="sm"
+          onClick={() => setStatusFilter("active")}
+        >
+          在籍
+        </Button>
+        <Button
+          variant={statusFilter === "inactive" ? "default" : "secondary"}
+          size="sm"
+          onClick={() => setStatusFilter("inactive")}
+        >
+          毕业
+        </Button>
+
+        <div className="mx-2 h-4 w-px bg-zinc-200/70" />
+        <div className="text-sm text-zinc-600 mr-1">期数：</div>
+        <Button
+          variant={genFilter === "all" ? "default" : "secondary"}
+          size="sm"
+          onClick={() => setGenFilter("all")}
+        >
+          全部期
+        </Button>
+        {generations.map((g) => (
+          <Button
+            key={g}
+            variant={genFilter === g ? "default" : "secondary"}
+            size="sm"
+            onClick={() => setGenFilter(g)}
+          >
+            {g}
+          </Button>
+        ))}
+
+        <div className="ml-auto text-xs text-zinc-500">
+          共 {filteredMembers.length} 人
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {filteredMembers.map((m) => (
           <motion.div
             key={m.id}
             initial={{ opacity: 0, y: 10 }}
@@ -874,36 +1445,36 @@ function MembersPage({ data, setData, admin }) {
               <div className="relative">
                 <button className="block w-full" onClick={() => setSelected(m)}>
                   <img
-                    src={m.avatar}
+                    src={resolveMediaUrl(m.avatar)}
                     alt={m.name}
-                    className="h-56 w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                    className={"aspect-[3/4] w-full object-cover bg-zinc-100 transition duration-300 group-hover:scale-[1.02] " + (!m.isActive ? "grayscale" : "") }
                   />
                 </button>
-                <div className="absolute left-3 top-3 flex gap-2">
+                <div className="absolute left-2 top-2 flex gap-2">
                   <Badge
-                    className="bg-black/5 text-zinc-900"
+                    className={generationBadgeClass(m.generation)} style={generationBadgeStyle(m.generation)}
                     variant="secondary"
                   >
                     {m.generation}
                   </Badge>
                 </div>
               </div>
-              <CardContent className="pt-4">
+              <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <div className="text-lg font-semibold leading-tight">
-                      {m.name}
-                    </div>
-                    <div className="mt-1 text-sm text-zinc-600">{m.origin}</div>
+                    <div className="text-base font-semibold leading-tight">{m.name}{!m.isActive ? "（卒）" : ""}</div>
+                    <div className="mt-0.5 text-xs text-zinc-600">{m.romaji || ""}</div>
                   </div>
                   {admin ? (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="secondary">
+                        <Button size="icon" variant="secondary" className="h-8 w-8">
                           <Settings className="h-4 w-4" />
                         </Button>
+
+
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="bg-white opacity-100">
                         <DropdownMenuItem onClick={() => openEdit(m)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           编辑
@@ -932,19 +1503,67 @@ function MembersPage({ data, setData, admin }) {
       >
         <ScrollDialogContent className="max-w-4xl border-zinc-200/70 bg-white text-zinc-900">
           {selected ? (
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70">
-                <img
-                  src={selected.avatar}
-                  alt={selected.name}
-                  className="h-[380px] w-full object-cover"
-                />
+            <div className="grid gap-6 md:grid-cols-2 items-start">
+              <div className="grid gap-3">
+                {/* 需求：移除照片与“总选举顺位”之间的大块空白，让布局更紧凑（不改其他结构） */}
+                <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white aspect-[3/4]">
+                  <img
+                    src={resolveMediaUrl(selected.avatar)}
+                    alt={selected.name}
+                    className={"h-full w-full object-cover bg-zinc-100 " + (!selected.isActive ? "grayscale" : "") }
+                  />
+                </div>
+
+                <Card className="border-zinc-200/70 bg-white/70">
+                  <CardHeader>
+                    <CardTitle className="text-base">总选举顺位</CardTitle>
+                  </CardHeader>
+                  <CardContent className="grid gap-2 text-sm">
+                    {(selected.electionRanks || []).length ? (
+                      (selected.electionRanks || []).map((r, idx) => (
+                        <div
+                          key={`${r.edition || ""}-${r.rank || ""}-${idx}`}
+                          className="flex items-center justify-between rounded-xl border border-zinc-200/70 bg-white/70 px-3 py-2"
+                        >
+                          <div className="text-zinc-700">{r.edition || "—"}</div>
+                          {(() => {
+                            const b = getElectionBadge(r.rank);
+                            return (
+                              <span
+                                className={
+                                  "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium " +
+                                  b.className
+                                }
+                              >
+                                {b.text}
+                              </span>
+                            );
+                          })()}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-zinc-600">—</div>
+                    )}
+                  </CardContent>
+                </Card>
               </div>
               <div className="grid gap-4">
                 <DialogHeader>
-                  <DialogTitle className="text-2xl">{selected.name}</DialogTitle>
+                  <DialogTitle className="text-2xl">
+                    <div className="flex items-baseline gap-3">
+                      <div>{selected.name}</div>
+                      {selected.romaji ? <div className="text-sm text-zinc-600">{selected.romaji}</div> : null}
+                    </div>
+                  </DialogTitle>
                   <DialogDescription className="text-zinc-600">
                     {selected.origin} · {selected.generation}
+                    {!selected.isActive && selected.graduationDate ? (
+                      <span className="ml-2">· 毕业：{isoDate(selected.graduationDate)}</span>
+                    ) : null}
+                    {/* 毕业曲：有且不为 "无" 时显示 */}
+                    {!selected.isActive && (selected.graduationSongTitle || "").trim() && (selected.graduationSongTitle || "").trim() !== "无" ? (
+                      <span className="ml-2">· 毕业曲：{selected.graduationSongTitle}</span>
+                    ) : null}
                   </DialogDescription>
                 </DialogHeader>
 
@@ -965,21 +1584,201 @@ function MembersPage({ data, setData, admin }) {
                   </CardContent>
                 </Card>
 
-                <Card className="border-zinc-200/70 bg-white/70">
+                
+
+                {selected.generation && (String(selected.generation).startsWith("5") || String(selected.generation).startsWith("6")) && Array.isArray(selected.admireSenior) && selected.admireSenior.length ? (
+                  <Card className="border-zinc-200/70 bg-white/70">
+                    <CardHeader>
+                      <CardTitle className="text-base">憧憬的前辈</CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid gap-1 text-sm">
+                      {selected.admireSenior.map((id) => {
+                        const mm = (data.members || []).find((x) => x.id === id);
+                        return mm ? <div key={id}>{mm.name}</div> : null;
+                      })}
+                    </CardContent>
+                  </Card>
+                ) : null}
+
+                {selected.favoriteSong ? (
+                  <Card className="border-zinc-200/70 bg-white/70">
+                    <CardHeader>
+                      <CardTitle className="text-base">最喜欢的歌曲</CardTitle>
+                      <CardDescription className="text-xs">从目前为止已发布曲目中随机选择</CardDescription>
+                    </CardHeader>
+                    <CardContent className="grid gap-2 text-sm">
+                      <div className="flex items-center gap-2">
+                        <Music className="h-4 w-4 text-zinc-500" />
+                        <div className="font-medium">{selected.favoriteSong}</div>
+                      </div>
+
+                      {(() => {
+                        const song = selected.favoriteSong;
+                        const single = (data.singles || []).find((sg) =>
+                          (sg.tracks || []).some((t) => (typeof t === "string" ? t : t?.title) === song)
+                        );
+                        if (!single) return null;
+                        const sp = splitSingleTitle(single.title);
+                        const singleName = sp.prefix ? `${sp.prefix} · ${sp.name}` : single.title;
+                        return (
+                          <div className="text-xs text-zinc-600">
+                            收录：{singleName}（{single.release}）
+                          </div>
+                        );
+                      })()}
+                    </CardContent>
+                  </Card>
+                ) : null}
+<Card className="border-zinc-200/70 bg-white/70">
                   <CardHeader>
                     <CardTitle className="text-base">历代单曲选拔状况</CardTitle>
                   </CardHeader>
                   <CardContent className="grid gap-2 text-sm">
-                    {Object.entries(selected.selectionHistory || {}).map(([k, v]) => (
-                      <div
-                        key={k}
-                        className="flex items-center justify-between rounded-xl border border-zinc-200/70 bg-white/70 px-3 py-2"
-                      >
-                        <div className="text-zinc-700">{k}</div>
-                        <div className="text-zinc-900">{v || "—"}</div>
-                      </div>
-                    ))}
-                  </CardContent>
+                  {(() => {
+                    const raw = selected?.selectionHistory || {};
+                    const gradLast = (!selected?.isActive && selected?.graduationDate)
+                      ? getLastSingleBeforeGrad(selected, data?.singles || [])
+                      : { lastSingleId: null, lastRelease: "" };
+                    const lastSingleIdBeforeGrad = gradLast.lastSingleId;
+                    const entries = Object.entries(raw).map(([k, v]) => {
+                      if (v && typeof v === "object") {
+                        return {
+                          k,
+                          label: v.label ?? k,
+                          value: v.value ?? "",
+                        };
+                      }
+                      return { k, label: k, value: String(v ?? "") };
+                    });
+                    if (entries.length === 0) {
+                      return (
+                        <div className="rounded-2xl border border-zinc-200/70 bg-white px-4 py-3 text-zinc-500">
+                          —
+                        </div>
+                      );
+                    }
+
+                    return entries.map(({ k, label, value }) => {
+                      // selectionHistory 的 key 通常是 single.id（例如 s1/s2）。
+                      // 为避免显示成 “s1”，优先用 singles 里真实的 title。
+                      const singleObj = (data?.singles || []).find((s) => s.id === k);
+                      // label 可能是旧版本写入的显示标题；如果 singleObj 存在就用它。
+                      let title = (singleObj?.title ?? label ?? "").toString();
+                      // If old data had something like "1st Single · 1st Single · X", keep only the last 2 segments
+                      const parts = title.split("·").map((s) => s.trim()).filter(Boolean);
+                      if (parts.length >= 3) title = parts.slice(parts.length - 2).join(" · ");
+
+                      const { prefix, name } = splitSingleTitle(title);
+
+                      // value format examples: "A面选拔（第1排 center）" / "B面（第2排 护法）" / "未入选"
+                      const pickType = value.includes("加入前")
+                        ? "加入前"
+                        : value.includes("A面")
+                        ? "A面选拔"
+                        : value.includes("B面")
+                        ? "B面"
+                        : value.includes("落选") || value.includes("未入选")
+                        ? "落选"
+                        : "";
+                      const typeTagClass = pickType === "A面选拔"
+                        ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                        : pickType === "B面"
+                        ? "border-sky-200 bg-sky-50 text-sky-800"
+                        : pickType === "加入前"
+                        ? "border-violet-200 bg-violet-50 text-violet-800"
+                        : pickType === "落选"
+                        ? "border-zinc-200 bg-zinc-50 text-zinc-600"
+                        : "border-zinc-200 bg-white text-zinc-700";
+
+                      const rowM = value.match(/第(\d+)排/);
+                      const rowNum = rowM ? Number(rowM[1]) : null;
+                      const rowText = rowNum ? `第${rowNum}排` : "";
+                      const role = value.includes("center")
+                        ? "center"
+                        : value.includes("护法") || value.includes("guardian")
+                        ? "guardian"
+                        : null;
+
+                      // 规则：若成员站位在前两排（第1/2排），则除 center/护法 外，不显示“第1排/第2排”；
+                      //      改为显示“x福神”，其中 x 为该单曲前两排（含 center/护法）总人数。
+                      const top2Count =
+                        rowNum && rowNum <= 2
+                          ? (data?.members || []).reduce((acc, mm) => {
+                              const vv = mm?.selectionHistory?.[k];
+                              const s =
+                                vv && typeof vv === "object"
+                                  ? String(vv.value ?? "")
+                                  : String(vv ?? "");
+                              const rm = s.match(/第(\d+)排/);
+                              const rn = rm ? Number(rm[1]) : null;
+                              return rn && rn <= 2 ? acc + 1 : acc;
+                            }, 0)
+                          : 0;
+
+                      const rowTagText =
+                        role === "center" || role === "guardian"
+                          ? ""
+                          : rowNum && rowNum <= 2 && top2Count
+                          ? `${top2Count}福神`
+                          : rowText;
+
+                      const isFukujinRowTag =
+                        typeof rowTagText === "string" && /福神$/.test(rowTagText);
+
+
+                      return (
+                        <div key={k} className="rounded-2xl border border-zinc-200/70 bg-white px-4 py-3">
+                          <div className="flex flex-col gap-2">
+                            <div className="text-sm font-medium text-zinc-900">
+                              {prefix ? `${prefix}: ${name}` : name}
+                            </div>
+
+                            <div className="flex flex-wrap items-center gap-2 text-xs">
+                              {!selected?.isActive && lastSingleIdBeforeGrad && k === lastSingleIdBeforeGrad ? (
+                                <span className="inline-flex items-center rounded-full border border-fuchsia-200 bg-fuchsia-50 px-2 py-0.5 text-fuchsia-800">
+                                  毕业前最后一单
+                                </span>
+                              ) : null}
+                              {singleObj && Array.isArray(singleObj.tags) && singleObj.tags.includes("纪念单") ? (
+                                <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-amber-800">
+                                  纪念单
+                                </span>
+                              ) : null}
+                              {pickType ? (
+                                <span className={"inline-flex items-center rounded-full border px-2 py-0.5 " + typeTagClass}>
+                                  {pickType}
+                                </span>
+                              ) : null}
+
+                              {rowTagText ? (
+                                <span
+                                  className={
+                                    "inline-flex items-center rounded-full border px-2 py-0.5 " +
+                                    (isFukujinRowTag
+                                      ? "border-rose-200/70 bg-gradient-to-r from-rose-50 to-amber-50 text-rose-700 shadow-sm"
+                                      : "border-zinc-200 text-zinc-700")
+                                  }
+                                >
+                                  {rowTagText}
+                                </span>
+                              ) : null}
+
+                              {role === "center" ? (
+                                <span className="inline-flex items-center rounded-full border border-amber-300/80 bg-amber-200/80 px-2 py-0.5 text-xs font-medium text-amber-950 shadow-sm shadow-amber-300/40 ring-1 ring-amber-300/30">
+                                  CENTER
+                                </span>
+                              ) : role === "guardian" ? (
+                                <span className="inline-flex items-center rounded-full border border-zinc-300/80 bg-zinc-200/80 px-2 py-0.5 text-xs font-medium text-zinc-900 shadow-sm shadow-zinc-400/40 ring-1 ring-white/40">
+                                  护法
+                                </span>
+                              ) : null}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    });
+                  })()}
+                </CardContent>
                 </Card>
               </div>
             </div>
@@ -998,7 +1797,7 @@ function MembersPage({ data, setData, admin }) {
 
           {editing ? (
             <div className="grid gap-5">
-              <div className="grid gap-3 md:grid-cols-2">
+              <div className="grid gap-3 md:grid-cols-3">
                 <div className="grid gap-2">
                   <div className="text-sm font-medium">姓名</div>
                   <Input
@@ -1009,7 +1808,18 @@ function MembersPage({ data, setData, admin }) {
                     placeholder="例如：星野 明里"
                   />
                 </div>
+                
                 <div className="grid gap-2">
+                  <div className="text-sm font-medium">罗马音</div>
+                  <Input
+                    value={editing.romaji || ""}
+                    onChange={(e) =>
+                      setEditing((p) => ({ ...p, romaji: e.target.value }))
+                    }
+                    placeholder="例如：Akari Hoshino"
+                  />
+                </div>
+<div className="grid gap-2">
                   <div className="text-sm font-medium">出身</div>
                   <Input
                     value={editing.origin}
@@ -1029,6 +1839,41 @@ function MembersPage({ data, setData, admin }) {
                     placeholder="例如：2期"
                   />
                 </div>
+                <div className="grid gap-2">
+                  <div className="text-sm font-medium">是否在籍</div>
+                  <div className="flex items-center gap-3 rounded-2xl border border-zinc-200/70 bg-white/70 px-3 py-2">
+                    <input
+                      type="checkbox"
+                      checked={!!editing.isActive}
+                      onChange={(e) =>
+                        setEditing((p) => ({
+                          ...p,
+                          isActive: e.target.checked,
+                          graduationDate: e.target.checked ? "" : (p.graduationDate || ""),
+                        }))
+                      }
+                    />
+                    <div className="text-sm text-zinc-700">在籍</div>
+                  </div>
+                </div>
+
+                {!editing.isActive ? (
+                  <div className="grid gap-2">
+                    <div className="text-sm font-medium">毕业日期</div>
+                    <Input
+                      value={editing.graduationDate || ""}
+                      onChange={(e) => setEditing((p) => ({ ...p, graduationDate: e.target.value }))}
+                      placeholder="YYYY-MM-DD"
+                    />
+                    <div className="text-sm font-medium">毕业曲（填“无”表示不显示）</div>
+                    <Input
+                      value={editing.graduationSongTitle || ""}
+                      onChange={(e) => setEditing((p) => ({ ...p, graduationSongTitle: e.target.value }))}
+                      placeholder="例如：Farewell Song / 无"
+                    />
+                    <div className="text-xs text-zinc-600">把成员从在籍改为毕业时必须填写。</div>
+                  </div>
+                ) : null}
               </div>
 
               <ImageUploader
@@ -1114,6 +1959,80 @@ function MembersPage({ data, setData, admin }) {
 
               <Card className="border-zinc-200/70 bg-white/70">
                 <CardHeader>
+                  <CardTitle className="text-base">总选举顺位</CardTitle>
+                  <CardDescription className="text-zinc-600">
+                    每行填写一届总选举的排名：输入数字 1-19 会自动标注（选拔/UG），20 及以后自动显示为「圈外」。不在榜单可写「加入前」。
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-3">
+                  {(editing.electionRanks || []).length ? (
+                    (editing.electionRanks || []).map((r, idx) => (
+                      <div
+                        key={`${r.edition || ""}-${r.rank || ""}-${idx}`}
+                        className="grid gap-2 md:grid-cols-[1fr_1fr_auto]"
+                      >
+                        <Input
+                          value={r.edition || ""}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setEditing((p) => {
+                              const next = [...(p.electionRanks || [])];
+                              next[idx] = { ...(next[idx] || {}), edition: val };
+                              return { ...p, electionRanks: next };
+                            });
+                          }}
+                          placeholder="例如：第一届"
+                        />
+                        <Input
+                          value={r.rank || ""}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setEditing((p) => {
+                              const next = [...(p.electionRanks || [])];
+                              next[idx] = { ...(next[idx] || {}), rank: val };
+                              return { ...p, electionRanks: next };
+                            });
+                          }}
+                          placeholder="例如：14"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          onClick={() =>
+                            setEditing((p) => {
+                              const next = [...(p.electionRanks || [])];
+                              next.splice(idx, 1);
+                              return { ...p, electionRanks: next };
+                            })
+                          }
+                        >
+                          删除
+                        </Button>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-sm text-zinc-600">—</div>
+                  )}
+
+                  <div className="flex items-center justify-end">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={() =>
+                        setEditing((p) => ({
+                          ...p,
+                          electionRanks: [...(p.electionRanks || []), { edition: "", rank: "" }],
+                        }))
+                      }
+                    >
+                      新增一条
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-zinc-200/70 bg-white/70">
+                <CardHeader>
                   <CardTitle className="text-base">历代单曲选拔状况</CardTitle>
                   <CardDescription className="text-zinc-600">
                     这里给你预留了 1st/2nd 两条；你也可以改 key。
@@ -1121,7 +2040,7 @@ function MembersPage({ data, setData, admin }) {
                 </CardHeader>
                 <CardContent className="grid gap-3">
                   {Object.entries(editing.selectionHistory || {}).map(([k, v]) => (
-                    <div key={k} className="grid gap-2 md:grid-cols-[160px_1fr]">
+                    <div key={k} className="grid gap-2 md:grid-cols-[160px_1fr_auto]">
                       <Input
                         value={k}
                         onChange={(e) => {
@@ -1149,7 +2068,24 @@ function MembersPage({ data, setData, admin }) {
                         }}
                         placeholder="例如：A面选拔（2列）"
                       />
-                    </div>
+                    
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        className="h-9 w-9"
+                        onClick={() => {
+                          setEditing((p) => {
+                            const next = { ...(p.selectionHistory || {}) };
+                            delete next[k];
+                            return { ...p, selectionHistory: next };
+                          });
+                        }}
+                        title="删除这条记录"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+</div>
                   ))}
                   <Button
                     variant="secondary"
@@ -1179,7 +2115,11 @@ function MembersPage({ data, setData, admin }) {
                 </Button>
               </div>
             </div>
-          ) : null}
+          ) : (
+            <div className="rounded-2xl border border-zinc-200 bg-white p-4 text-sm text-zinc-600">
+              加载中…（editing 为空）
+            </div>
+          )}
         </ScrollDialogContent>
       </Dialog>
     </div>
@@ -1218,10 +2158,68 @@ function SinglesPage({ data, setData, admin }) {
   const [selectedId, setSelectedId] = useState(null);
   const selected = data.singles.find((s) => s.id === selectedId) || null;
 
+  // ✅ 手机端：点击单曲后自动滚动到详情区域（不影响电脑版）
+  const detailAnchorRef = useRef(null);
+  useEffect(() => {
+    if (!selectedId) return;
+    if (typeof window === "undefined") return;
+    // 仅在 md 以下（<768px）生效，确保电脑版保持一模一样
+    if (window.innerWidth >= 768) return;
+
+    const raf = window.requestAnimationFrame(() => {
+      detailAnchorRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+    return () => window.cancelAnimationFrame(raf);
+  }, [selectedId]);
+
+  // ✅ 单曲站位显示：截止到当前单曲“发布顺序(按 release 升序)”的累计选拔次数
+  // - 第 1 张单曲：站位成员显示（初）
+  // - 第 N 张单曲：显示截至该张单曲为止的累计次数（1 -> 初，2+ -> 数字）
+  const cumulativeCounts = useMemo(() => {
+    if (!selectedId) return new Map();
+
+    // 1) 先按 release 升序排（如果 release 解析失败，就按原数组顺序兜底）
+    const withIndex = (data.singles || []).map((s, i) => ({ s, i }));
+    const parsed = (v) => {
+      const t = Date.parse(v || "");
+      return Number.isFinite(t) ? t : null;
+    };
+    const hasAnyDate = withIndex.some((x) => parsed(x.s.release) !== null);
+
+    const ordered = hasAnyDate
+      ? [...withIndex].sort((a, b) => {
+          const ta = parsed(a.s.release);
+          const tb = parsed(b.s.release);
+          if (ta === null && tb === null) return a.i - b.i;
+          if (ta === null) return 1;
+          if (tb === null) return -1;
+          return ta - tb; // 升序：旧 -> 新
+        })
+      : withIndex;
+
+    // 2) 累计统计：每张单曲的 asideLineup 里出现一次算“进入一次”
+    const counts = new Map();
+    const countsBySingleId = new Map(); // singleId -> Map(memberId -> count)
+
+    for (const { s } of ordered) {
+      const slots = s?.asideLineup?.slots || [];
+      const appeared = new Set(slots.filter(Boolean)); // 同一张单曲里防重复
+      for (const mid of appeared) {
+        counts.set(mid, (counts.get(mid) || 0) + 1);
+      }
+      // 存一份快照给该张单曲
+      countsBySingleId.set(s.id, new Map(counts));
+    }
+
+    return countsBySingleId.get(selectedId) || new Map();
+  }, [data.singles, selectedId]);
+
   const [editorOpen, setEditorOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [lineupCfg, setLineupCfg] = useState({
-    selectionCount: 12,
     rowsText: "5,7",
   });
 
@@ -1233,6 +2231,7 @@ function SinglesPage({ data, setData, admin }) {
         title: "",
         release: "",
         cover: "",
+        tags: [],
         tracks: [
           { no: 1, title: "(A-side)", isAside: true, audio: "" },
           { no: 2, title: "", isAside: false, audio: "" },
@@ -1248,16 +2247,15 @@ function SinglesPage({ data, setData, admin }) {
 
     // 深拷贝，避免编辑时污染原对象
     const copy = JSON.parse(JSON.stringify(draft));
-    // 兼容旧数据结构
-    copy.tracks = [
-      ensureTrackShape(copy.tracks?.[0], 1, true),
-      ensureTrackShape(copy.tracks?.[1], 2, false),
-      ensureTrackShape(copy.tracks?.[2], 3, false),
-    ];
+    // 兼容旧数据结构：允许任意 track 数量，但至少保留 1 条（A面）
+    const rawTracks = Array.isArray(copy.tracks) ? copy.tracks : [];
+    const safeTracks = rawTracks.length > 0 ? rawTracks : [{}];
+    copy.tracks = safeTracks.map((t, i) =>
+      ensureTrackShape(t, i + 1, i === 0)
+    );
 
     setEditing(copy);
     setLineupCfg({
-      selectionCount: copy.asideLineup.selectionCount || 12,
       rowsText: (copy.asideLineup.rows || [5, 7]).join(","),
     });
     setEditorOpen(true);
@@ -1265,20 +2263,53 @@ function SinglesPage({ data, setData, admin }) {
 
   const saveSingle = () => {
     setData((prev) => {
+      // 纪念单：如果选拔里包含“以毕业身份参选”的成员，则自动打 tag「纪念单」
+      const computeMemorialTag = (single, allMembers) => {
+        const sRelease = isoDate(single?.release);
+        const tags = Array.isArray(single?.tags) ? [...single.tags] : [];
+        const filtered = tags.filter((t) => String(t || "").trim() && String(t).trim() !== "纪念单");
+
+        const slots = Array.isArray(single?.asideLineup?.slots) ? single.asideLineup.slots : [];
+        const membersById = new Map((allMembers || []).map((m) => [m.id, m]));
+        const hasOG = slots.some((mid) => {
+          if (!mid) return false;
+          const m = membersById.get(mid);
+          if (!m || m?.isActive) return false;
+          const gd = isoDate(m?.graduationDate);
+          if (!sRelease) return true;
+          if (!gd) return true;
+          return sRelease > gd;
+        });
+
+        return {
+          ...single,
+          tags: hasOG ? [...filtered, "纪念单"] : filtered,
+        };
+      };
+
+      const nextEditing = computeMemorialTag(editing, prev.members);
       const exists = prev.singles.some((x) => x.id === editing.id);
       const nextSingles = exists
-        ? prev.singles.map((x) => (x.id === editing.id ? editing : x))
-        : [editing, ...prev.singles];
-      return { ...prev, singles: nextSingles };
+        ? prev.singles.map((x) =>
+            x.id === nextEditing.id ? nextEditing : x
+          )
+        : [...prev.singles, nextEditing];
+
+      const nextData = { ...prev, singles: nextSingles };
+      return withRecomputedSelections(nextData);
     });
+
     setEditorOpen(false);
   };
 
+
   const deleteSingle = (id) => {
-    setData((prev) => ({
-      ...prev,
-      singles: prev.singles.filter((s) => s.id !== id),
-    }));
+    setData((prev) =>
+      withRecomputedSelections({
+        ...prev,
+        singles: prev.singles.filter((s) => s.id !== id),
+      })
+    );
     if (selectedId === id) setSelectedId(null);
   };
 
@@ -1297,7 +2328,12 @@ function SinglesPage({ data, setData, admin }) {
         }
       />
 
-      <div className="grid gap-4 md:grid-cols-[1fr_1.1fr]">
+      {/*
+        需求：当站位每排人数较少（如 5 人）时，右侧内容宽度变小会导致两列随内容伸缩，
+        进而让左侧单曲卡片看起来被拉长。
+        仅将两列改为 minmax(0, …) 固定分配，避免被内容挤压/拉伸。
+      */}
+      <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] ">
         <div className="grid gap-4">
           {data.singles.map((s) => (
             <Card
@@ -1310,14 +2346,15 @@ function SinglesPage({ data, setData, admin }) {
               <div className="grid md:grid-cols-[160px_1fr]">
                 <button className="block w-full" onClick={() => setSelectedId(s.id)}>
                   <img
-                    src={s.cover}
+                    src={resolveMediaUrl(s.cover)}
                     alt={s.title}
-                    className="h-[160px] w-full object-cover md:w-[160px]"
+                    // 手机端：封面完整显示不裁切；电脑版保持原样
+                    className="w-full object-contain bg-zinc-100 md:h-[160px] md:w-[160px] md:object-cover"
                   />
                 </button>
                 <div className="flex items-start justify-between gap-3 p-4">
                   <div>
-                    <div className="text-lg font-semibold leading-tight">{s.title}</div>
+                    <div className="text-base font-semibold leading-tight">{s.title}</div>
                     <div className="mt-1 text-sm text-zinc-600">
                       Release: {s.release || "—"}
                     </div>
@@ -1328,6 +2365,11 @@ function SinglesPage({ data, setData, admin }) {
                       <Badge variant="secondary" className="bg-black/5">
                         A面选拔：{s.asideLineup?.selectionCount || 0}
                       </Badge>
+                      {Array.isArray(s.tags) && s.tags.includes("纪念单") ? (
+                        <Badge variant="secondary" className="bg-black/5">
+                          纪念单
+                        </Badge>
+                      ) : null}
                       <Badge variant="secondary" className="bg-black/5">
                         {s.tracks?.[0]?.audio ? "A面有音源" : "A面无音源"}
                       </Badge>
@@ -1337,11 +2379,11 @@ function SinglesPage({ data, setData, admin }) {
                   {admin ? (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="secondary">
+                        <Button size="icon" variant="secondary" className="h-8 w-8">
                           <Settings className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="bg-white opacity-100">
                         <DropdownMenuItem onClick={() => openEdit(s)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           编辑
@@ -1363,7 +2405,9 @@ function SinglesPage({ data, setData, admin }) {
           ))}
         </div>
 
-        <div className="md:sticky md:top-[96px] md:self-start">
+        <div className="md:sticky md:top-[96px] md:self-start md:max-h-[calc(100vh-96px)] md:overflow-y-auto md:min-h-0">
+          {/* 手机端自动滚动锚点（md 以上不受影响） */}
+          <div ref={detailAnchorRef} />
           <AnimatePresence mode="wait">
             {selected ? (
               <motion.div
@@ -1373,7 +2417,7 @@ function SinglesPage({ data, setData, admin }) {
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.25 }}
               >
-                <SingleDetail single={selected} membersById={membersById} admin={admin} />
+                <ErrorBoundary><SingleDetail single={selected} membersById={membersById} admin={admin} cumulativeCounts={cumulativeCounts} /></ErrorBoundary>
               </motion.div>
             ) : (
               <motion.div
@@ -1431,11 +2475,64 @@ function SinglesPage({ data, setData, admin }) {
               />
 
               <Card className="border-zinc-200/70 bg-white/70">
-                <CardHeader>
-                  <CardTitle className="text-base">曲目收录（3 tracks）</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between gap-3">
+                  <CardTitle className="text-base">
+                    曲目收录（{editing.tracks?.length || 0} tracks）
+                  </CardTitle>
+
+                  <div className="flex items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={() => {
+                        setEditing((p) => {
+                          const prevTracks = Array.isArray(p.tracks) ? p.tracks : [];
+                          const next = [...prevTracks, { no: prevTracks.length + 1, title: "", isAside: false, audio: "" }].map(
+                            (t, i) => ({
+                              ...t,
+                              no: i + 1,
+                              isAside: i === 0,
+                              audio: i === 0 ? (t.audio || "") : "",
+                            })
+                          );
+                          return { ...p, tracks: next };
+                        });
+                      }}
+                      title="增加曲目"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={() => {
+                        setEditing((p) => {
+                          const prevTracks = Array.isArray(p.tracks) ? p.tracks : [];
+                          if (prevTracks.length <= 1) return p; // 至少保留 A面
+                          const trimmed = prevTracks.slice(0, -1);
+                          const next = trimmed.map((t, i) => ({
+                            ...t,
+                            no: i + 1,
+                            isAside: i === 0,
+                            audio: i === 0 ? (t.audio || "") : "",
+                          }));
+                          return { ...p, tracks: next };
+                        });
+                      }}
+                      disabled={(editing.tracks?.length || 0) <= 1}
+                      title="减少曲目（从末尾删除）"
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </CardHeader>
                 <CardContent className="grid gap-3">
-                  {editing.tracks.map((t, idx) => (
+                  {(Array.isArray(editing.tracks) ? editing.tracks : []).map((t, idx) => (
                     <div key={idx} className="grid gap-2 md:grid-cols-[120px_1fr_140px]">
                       <Input value={`Track ${t.no}`} disabled className="bg-white/70" />
                       <Input
@@ -1459,10 +2556,9 @@ function SinglesPage({ data, setData, admin }) {
                         ) : null}
                       </div>
 
-                      {idx === 0 ? (
-                        <div className="md:col-span-3">
+                      <div className="md:col-span-3">
                           <AudioUploader
-                            label="A面音源（可选）"
+                            label={`${idx === 0 ? 'A面音源（可选）' : `Track ${t.no} 音源（可选）`}`}
                             value={t.audio || ""}
                             onChange={(audio) => {
                               setEditing((p) => {
@@ -1474,7 +2570,6 @@ function SinglesPage({ data, setData, admin }) {
                             hint="支持 mp3 / m4a / wav 等"
                           />
                         </div>
-                      ) : null}
                     </div>
                   ))}
                 </CardContent>
@@ -1484,23 +2579,12 @@ function SinglesPage({ data, setData, admin }) {
                 <CardHeader>
                   <CardTitle className="text-base">A 面曲选拔站位编辑</CardTitle>
                   <CardDescription className="text-zinc-600">
-                    1) 输入选拔人数 + 排数与每排人数；2) 生成占位框；3) 从下方成员池拖拽公式照到占位框；4) 保存。
+                    1) 输入排数与每排人数；2) 生成占位框；3) 从下方成员池拖拽公式照到占位框；4) 保存。
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
                   <div className="grid gap-3 md:grid-cols-3">
-                    <LabeledInput
-                      label="选拔人数"
-                      value={String(lineupCfg.selectionCount)}
-                      onChange={(v) =>
-                        setLineupCfg((p) => ({
-                          ...p,
-                          selectionCount: clamp(parseInt(v || "0", 10) || 0, 1, 48),
-                        }))
-                      }
-                      placeholder="例如：12"
-                    />
-                    <LabeledInput
+                                        <LabeledInput
                       label="每排人数（用逗号分隔）"
                       value={lineupCfg.rowsText}
                       onChange={(v) => setLineupCfg((p) => ({ ...p, rowsText: v }))}
@@ -1515,12 +2599,12 @@ function SinglesPage({ data, setData, admin }) {
                             .split(",")
                             .map((x) => parseInt(x.trim(), 10))
                             .filter((x) => Number.isFinite(x) && x > 0);
-                          const selectionCount = clamp(lineupCfg.selectionCount, 1, 48);
-                          const slots = Array(selectionCount).fill(null);
+                          const total = rows.reduce((a, b) => a + b, 0);
+                          const slots = Array(total).fill(null);
                           setEditing((p) => ({
                             ...p,
                             asideLineup: {
-                              selectionCount,
+                              ...p.asideLineup,
                               rows,
                               slots,
                             },
@@ -1564,23 +2648,61 @@ function SinglesPage({ data, setData, admin }) {
   );
 }
 
-function SingleDetail({ single, membersById, admin }) {
+function SingleDetail({single, membersById, admin, cumulativeCounts}) {
   const [coverZoom, setCoverZoom] = useState(false);
   const audioRef = useRef(null);
+  const [currentTrack, setCurrentTrack] = useState(null); // { no, title, audio }
 
   const rows = single.asideLineup?.rows || [];
   const slots = single.asideLineup?.slots || [];
+  const slotRolesForView = single.asideLineup?.slotRoles || {};
 
-  // Build row-major slices according to rows, but capped by slots length
-  let idx = 0;
-  const rowSlices = rows.map((n) => {
-    const slice = slots.slice(idx, idx + n);
-    idx += n;
-    return slice;
+  // 站位展示规则（按你的需求重做）：
+  // 1) 不管每排人数是多少，头像/卡片尺寸都固定为“每排 3 人”时的大小，不做缩放；
+  // 2) 人数/排数过多时，不拉伸外层卡片，改为站位区域内部滚动查看；
+  // 3) 手机端同样保持不变形：必要时支持横向/纵向滚动。
+  const maxPerRow = rows.length ? Math.max(...rows.map((n) => Number(n) || 0)) : 0;
+  const lineupScale = 1; // 基于“每排 5 人”时的尺寸（不随人数变化缩放）
+  const tileW = 96;
+  const tileH = 176;
+  const imgH = 92;
+  const nameFont = 12;
+  const badgeFont = 11;
+  const rowGap = 18;
+  // 人数较多时不缩放：站位区域整体启用横向滚动（避免挤压导致缩放/变形）
+  // rows 的含义：越靠后的数字越前排（最后一个是第1排）
+  let __idx = 0;
+  const rowMetaForView = rows.map((n, rowIdx) => {
+    const start = __idx;
+    const end = __idx + n;
+    __idx = end;
+    const rowNumber = rows.length - rowIdx; // rowIdx=0 => 最后排；rowIdx=last => 第1排
+    return { n, start, end, rowIdx, rowNumber };
   });
 
-  const asideTrack = single.tracks?.find((t) => t.isAside) || single.tracks?.[0];
-  const hasAudio = !!asideTrack?.audio;
+  const tracks = Array.isArray(single.tracks) ? single.tracks : [];
+  const asideTrack = tracks.find((t) => t.isAside) || tracks[0];
+  const hasAnyAudio = tracks.some((t) => !!t?.audio);
+  const hasAsideAudio = !!asideTrack?.audio;
+
+  // 切换单曲时，默认选中“有音源的优先轨道”（优先 A 面）
+  useEffect(() => {
+    const preferred = (hasAsideAudio ? asideTrack : null) || tracks.find((t) => !!t?.audio) || null;
+    setCurrentTrack(preferred);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [single?.id]);
+
+  // 当切换到某个音源时，自动播放
+  useEffect(() => {
+    if (!currentTrack?.audio) return;
+    const el = audioRef.current;
+    if (!el) return;
+    // 让浏览器有机会先更新 src
+    const t = setTimeout(() => {
+      try { el.load(); } catch (e) {}
+    }, 0);
+    return () => clearTimeout(t);
+  }, [currentTrack?.audio]);
 
   return (
     <Card className="border-zinc-200/70 bg-white/70">
@@ -1593,14 +2715,14 @@ function SingleDetail({ single, membersById, admin }) {
       <CardContent className="grid gap-4">
         <div className="grid gap-4 md:grid-cols-[220px_1fr]">
           <button
-            className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70"
+            className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white"
             onClick={() => setCoverZoom(true)}
             title="点击放大封面"
           >
             <img
-              src={single.cover}
+              src={resolveMediaUrl(single.cover)}
               alt={single.title}
-              className="h-[220px] w-full object-cover"
+              className="aspect-square w-full object-contain bg-white"
             />
           </button>
           <div className="grid gap-3">
@@ -1611,8 +2733,13 @@ function SingleDetail({ single, membersById, admin }) {
               <Badge variant="secondary" className="bg-black/5">
                 站位排数：{single.asideLineup?.rows?.length || 0}
               </Badge>
+              {Array.isArray(single.tags) && single.tags.includes("纪念单") ? (
+                <Badge variant="secondary" className="bg-black/5">
+                  纪念单
+                </Badge>
+              ) : null}
               <Badge variant="secondary" className="bg-black/5">
-                {hasAudio ? "A面可播放" : "A面未上传音源"}
+                {hasAnyAudio ? "已上传音源" : "未上传音源"}
               </Badge>
             </div>
 
@@ -1621,7 +2748,7 @@ function SingleDetail({ single, membersById, admin }) {
                 <CardTitle className="text-base">曲目收录</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-2">
-                {single.tracks.map((t) => (
+                {tracks.map((t) => (
                   <div
                     key={t.no}
                     className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200/70 bg-white/70 px-3 py-2"
@@ -1632,16 +2759,23 @@ function SingleDetail({ single, membersById, admin }) {
                       <span className="font-medium">{t.title}</span>
                     </div>
 
-                    {t.isAside ? (
-                      hasAudio ? (
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="bg-black/5">
+                        {t.isAside ? "A-side" : "B-side"}
+                      </Badge>
+
+                      {t.audio ? (
                         <Button
                           variant="secondary"
                           size="sm"
                           onClick={() => {
-                            if (!audioRef.current) return;
-                            audioRef.current.play();
+                            setCurrentTrack({ no: t.no, title: t.title, audio: t.audio });
+                            // 如果当前已经选中该曲，直接触发播放
+                            if (currentTrack?.no === t.no) {
+                              audioRef.current?.play().catch(() => {});
+                            }
                           }}
-                          title="播放A面音源"
+                          title={`播放 Track ${t.no}`}
                         >
                           <Music className="mr-2 h-4 w-4" />
                           播放
@@ -1650,25 +2784,29 @@ function SingleDetail({ single, membersById, admin }) {
                         <Badge variant="secondary" className="bg-black/5">
                           未上传音源
                         </Badge>
-                      )
-                    ) : (
-                      <Badge variant="secondary" className="bg-black/5">
-                        B-side
-                      </Badge>
-                    )}
+                      )}
+                    </div>
                   </div>
                 ))}
 
-                {hasAudio ? (
+                {currentTrack?.audio ? (
                   <div className="mt-2 rounded-2xl border border-zinc-200/70 bg-white/70 p-3">
+                    <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                      <div className="text-sm font-medium text-zinc-900">
+                        正在播放：Track {currentTrack.no} · {currentTrack.title}
+                      </div>
+                      <Badge variant="secondary" className="bg-black/5">
+                        {tracks.find((t) => t.no === currentTrack.no)?.isAside ? "A-side" : "B-side"}
+                      </Badge>
+                    </div>
                     <audio
                       ref={audioRef}
-                      src={asideTrack.audio}
+                      src={resolveMediaUrl(currentTrack.audio)}
                       controls
                       className="w-full"
                     />
                     <div className="mt-2 text-xs text-zinc-600">
-                      音源为本地上传并以 dataURL 保存（demo）。
+                      音源为本地上传并保存为服务器文件 URL。
                     </div>
                   </div>
                 ) : null}
@@ -1691,35 +2829,98 @@ function SingleDetail({ single, membersById, admin }) {
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
-            <div className="grid gap-3">
-              {rowSlices.map((slice, rIdx) => (
-                <div key={rIdx} className="flex flex-wrap justify-center gap-3">
-                  {slice.map((mid, i) => {
+            {/* 站位区域：固定卡片尺寸，不随人数缩放；人数过多时使用横向滚动查看 */}
+            <div className="grid gap-3 overflow-x-auto overflow-y-visible pb-2 px-4" style={{ scrollPaddingLeft: 16, scrollPaddingRight: 16 }}>
+              {rowMetaForView.map((r, rIdx) => (
+                <div
+                  key={rIdx}
+                  className="flex flex-nowrap justify-center w-full pb-1"
+                  style={{ gap: rowGap }}
+                >
+                  {slots.slice(r.start, r.end).map((mid, i) => {
+                    const slotIndex = r.start + i;
                     const m = mid ? membersById.get(mid) : null;
+                    const role = slotRolesForView?.[slotIndex] ?? null;
+                    const rb = roleBadge(role);
+                    const frameCls =
+                      role === "center"
+                        ? "ring-2 ring-amber-400"
+                        : role === "guardian"
+                        ? "ring-2 ring-zinc-300"
+                        : "";
+
+                    const genTextRaw = m?.generation ? String(m.generation) : "";
+                    const genText = genTextRaw ? (genTextRaw.includes("期") ? genTextRaw : `${genTextRaw}期`) : "";
+
+                    const count = m ? (cumulativeCounts?.get(m.id) || 0) : 0;
+                    const countText = count <= 0 ? "" : count === 1 ? "（初）" : `（${count}）`;
+
                     return (
                       <div
                         key={`${rIdx}-${i}`}
-                        className="group relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70"
-                        style={{ width: 84, height: 84 }}
+                        className={
+                          "group relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70 flex-none " +
+                          frameCls
+                        }
+                        style={{ width: tileW, height: tileH }}
                         title={m ? m.name : "空位"}
                       >
                         {m ? (
-                          <img
-                            src={m.avatar}
-                            alt={m.name}
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <div className="grid h-full w-full place-items-center text-xs text-zinc-600">
-                            —
+                          <div className="grid h-full w-full" style={{ gridTemplateRows: `${imgH}px auto` }}>
+                            <div className="overflow-hidden rounded-xl bg-white">
+                              <img
+                                src={resolveMediaUrl(m.avatar)}
+                                alt={m.name}
+                                className={"h-full w-full object-contain bg-white " + (!m.isActive ? "grayscale" : "")}
+                              />
+                            </div>
+
+                            <div className="px-2 pt-2 pb-2 text-center">
+                              {genText ? (
+                                <div className="mb-1 flex justify-center">
+                                  <span
+                                    className={
+                                      "inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-semibold " +
+                                      generationBadgeClass(genText)
+                                    }
+                                    style={{ fontSize: badgeFont, ...generationBadgeStyle(genText) }}
+                                  >
+                                    {genText}
+                                  </span>
+                                </div>
+                              ) : null}
+
+                              <div
+                                className="text-zinc-900"
+                                style={{ fontSize: nameFont, lineHeight: 1.2, wordBreak: "break-word" }}
+                              >
+                                {!m.isActive ? "OG - " : ""}{m.name}
+                                {countText}
+                              </div>
+
+                              {rb ? (
+                                <div className="mt-2 flex justify-center">
+                                  <span
+                                    className={
+                                      "inline-flex items-center rounded-full border px-3 py-1 font-semibold " +
+                                      rb.className
+                                    }
+                                    style={{ fontSize: badgeFont }}
+                                  >
+                                    {rb.text}
+                                  </span>
+                                </div>
+                              ) : null}
+                            </div>
                           </div>
+                        ) : (
+                          <div className="grid h-full w-full place-items-center text-xs text-zinc-500">空位</div>
                         )}
                       </div>
                     );
                   })}
                 </div>
-              ))}
-            </div>
+              ))}            </div>
             {admin ? (
               <div className="text-xs text-zinc-600">
                 站位编辑请在「编辑单曲」弹窗里操作。
@@ -1737,8 +2938,8 @@ function SingleDetail({ single, membersById, admin }) {
               点击外部或按 ESC 关闭。
             </DialogDescription>
           </DialogHeader>
-          <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70">
-            <img src={single.cover} alt={single.title} className="w-full" />
+          <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white">
+            <img src={resolveMediaUrl(single.cover)} alt={single.title} className="w-full" />
           </div>
         </ScrollDialogContent>
       </Dialog>
@@ -1747,176 +2948,346 @@ function SingleDetail({ single, membersById, admin }) {
 }
 
 function LineupEditor({ singleDraft, setSingleDraft, members }) {
+  // 防御：进入编辑页的首帧 editing 可能还是 null/undefined，避免直接白屏
+  if (!singleDraft) {
+    return (
+      <div className="rounded-2xl border border-zinc-200 bg-white p-4 text-sm text-zinc-600">
+        加载中…（singleDraft 为空）
+      </div>
+    );
+  }
+  members = Array.isArray(members) ? members : [];
   const lineup =
     singleDraft.asideLineup || { selectionCount: 12, rows: [5, 7], slots: [] };
   const rows = lineup.rows || [];
-  const selectionCount = lineup.selectionCount || 0;
+  const selectionCount = (rows || []).reduce((a, b) => a + b, 0);
 
-  // Ensure slots length
-  const slots = useMemo(() => {
-    const base = Array.isArray(lineup.slots) ? [...lineup.slots] : [];
-    if (base.length < selectionCount) {
-      base.push(...Array(selectionCount - base.length).fill(null));
+  // slotRoles: 对所有位置生效
+  const slotRoles = lineup.slotRoles || {}; // { [slotIndex]: "center" | "guardian" }
+
+  const rowMeta = useMemo(() => {
+    let idx = 0;
+    return rows.map((n, rowIdx) => {
+      const start = idx;
+      const end = idx + n;
+      idx = end;
+      // rows 的含义：越靠后的数字越前排（最后一个是第1排）
+      const rowNumber = rows.length - rowIdx; // rowIdx=0 => 最后排；rowIdx=last => 第1排
+      return { n, start, end, rowIdx, rowNumber };
+    });
+  }, [rows]);
+
+  const slotRolesForView = singleDraft.asideLineup?.slotRoles || {};
+  const getRowNumberBySlotForView = (slotIndex) => {
+    for (const r of rowMeta) {
+      if (slotIndex >= r.start && slotIndex < r.end) return r.rowNumber;
     }
-    if (base.length > selectionCount) {
-      base.length = selectionCount;
+    return null;
+  };
+  const roleFrameClassForView = (slotIndex) => {
+    const role = slotRolesForView[slotIndex];
+    if (role === "center") {
+      return "ring-2 ring-yellow-400";
     }
-    return base;
-  }, [lineup.slots, selectionCount]);
-
-  useEffect(() => {
-    if ((lineup.slots?.length || 0) !== slots.length) {
-      setSingleDraft((p) => ({
-        ...p,
-        asideLineup: { ...p.asideLineup, slots },
-      }));
+    if (role === "guardian") {
+      return "ring-2 ring-zinc-300";
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return "";
+  };
+  const centerSuffixForView = (slotIndex) => (slotRolesForView[slotIndex] === "center" ? "（center）" : "");
 
-  // Layout slices
-  let idx = 0;
-  const rowMeta = rows.map((n) => {
-    const start = idx;
-    const end = idx + n;
-    idx = end;
-    return { n, start, end };
-  });
+  const getRowNumberBySlot = (slotIndex) => {
+    for (const r of rowMeta) {
+      if (slotIndex >= r.start && slotIndex < r.end) return r.rowNumber;
+    }
+    return null;
+  };
 
-  const onDropToSlot = (slotIndex, memberId) => {
+  const normalizeSlots = (rawSlots) => {
+    const nextSlots = Array.isArray(rawSlots) ? [...rawSlots] : [];
+    if (nextSlots.length < selectionCount) {
+      nextSlots.push(...Array(selectionCount - nextSlots.length).fill(null));
+    }
+    if (nextSlots.length > selectionCount) nextSlots.length = selectionCount;
+    return nextSlots;
+  };
+
+  const onSetSlot = (slotIndex, memberId, role) => {
     setSingleDraft((p) => {
-      const nextSlots = [
-        ...(p.asideLineup?.slots || Array(selectionCount).fill(null)),
-      ];
-      // 保持 slots 长度
-      if (nextSlots.length < selectionCount) {
-        nextSlots.push(...Array(selectionCount - nextSlots.length).fill(null));
-      }
-      if (nextSlots.length > selectionCount) nextSlots.length = selectionCount;
-
+      const nextSlots = normalizeSlots(p.asideLineup?.slots);
       nextSlots[slotIndex] = memberId;
+
+      const nextRoles = { ...(p.asideLineup?.slotRoles || {}) };
+      // role 对所有位置生效
+      if (role === "center" || role === "guardian") nextRoles[slotIndex] = role;
+      else delete nextRoles[slotIndex];
+
       return {
         ...p,
         asideLineup: {
           ...(p.asideLineup || {}),
-          selectionCount,
           rows,
+          selectionCount,
           slots: nextSlots,
+          slotRoles: nextRoles,
         },
       };
     });
   };
 
   const clearSlot = (slotIndex) => {
-    setSingleDraft((p) => {
-      const nextSlots = [...(p.asideLineup?.slots || [])];
-      nextSlots[slotIndex] = null;
-      return { ...p, asideLineup: { ...p.asideLineup, slots: nextSlots } };
-    });
+    onSetSlot(slotIndex, null, null);
   };
 
-  const used = new Set(slots.filter(Boolean));
+  const slots = useMemo(() => normalizeSlots(lineup.slots), [lineup.slots, selectionCount]);
+  const used = useMemo(() => new Set(slots.filter(Boolean)), [slots]);
+
+  const singleRelease = isoDate(singleDraft?.release);
+
+  // 成员选择池（保持原逻辑）：
+  // - 现役成员永远可选
+  // - 已毕业成员：仅当单曲 release 早于/等于毕业日（即当时仍是现役）才出现在“现役/当期成员”池
+  const activeEligibleMembers = useMemo(() => {
+    if (!singleRelease) return members;
+    return (members || []).filter((m) => {
+      const gd = isoDate(m?.graduationDate);
+      if (m?.isActive) return true;
+      if (!gd) return true;
+      return singleRelease <= gd;
+    });
+  }, [members, singleRelease]);
+
+  // OG（已毕业）成员池：仅展示“在该单曲 release 时已毕业”的成员
+  const ogEligibleMembers = useMemo(() => {
+    const sRelease = singleRelease;
+    return (members || []).filter((m) => {
+      if (m?.isActive) return false;
+      const gd = isoDate(m?.graduationDate);
+      if (!sRelease) return true;
+      if (!gd) return true;
+      return sRelease > gd;
+    });
+  }, [members, singleRelease]);
+
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerSlotIndex, setPickerSlotIndex] = useState(null);
+  const [pickerRole, setPickerRole] = useState(null); // null | "center" | "guardian"
+  const [pickerPool, setPickerPool] = useState("active"); // "active" | "og"
+
+  const openPickerForSlot = (slotIndex) => {
+    setPickerSlotIndex(slotIndex);
+    const r = (lineup.slotRoles || {})[slotIndex] || null;
+    setPickerRole(r === "center" || r === "guardian" ? r : null);
+    setPickerPool("active");
+    setPickerOpen(true);
+  };
+
+  const assignMemberToSlot = (memberId) => {
+    if (pickerSlotIndex === null) return;
+    onSetSlot(pickerSlotIndex, memberId, pickerRole);
+    setPickerOpen(false);
+    setPickerSlotIndex(null);
+    setPickerRole(null);
+  };
+
+  const roleBadge = (slotIndex) => {
+    const role = (lineup.slotRoles || {})[slotIndex];
+    if (role === "center") {
+      return (
+        <div className="absolute left-1 top-1 rounded-full bg-yellow-400/95 px-2 py-0.5 text-[10px] font-semibold text-zinc-900 shadow">
+          center
+        </div>
+      );
+    }
+    if (role === "guardian") {
+      return (
+        <div className="absolute left-1 top-1 rounded-full bg-zinc-200/95 px-2 py-0.5 text-[10px] font-semibold text-zinc-800 shadow">
+          护法
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const roleFrameClass = (slotIndex) => {
+    const role = (lineup.slotRoles || {})[slotIndex];
+    if (role === "center") {
+      return "ring-2 ring-yellow-400";
+    }
+    if (role === "guardian") {
+      return "ring-2 ring-zinc-300";
+    }
+    return "";
+  };
 
   return (
     <div className="grid gap-4">
-      <div className="rounded-2xl border border-zinc-200/70 bg-white/70 p-4">
-        <div className="mb-3 flex items-center justify-between">
-          <div className="text-sm font-medium">站位占位框</div>
-          <div className="flex items-center gap-2 text-xs text-zinc-600">
-            <Move className="h-4 w-4" />
-            拖动下方成员到空位 / 点击头像右上角可清空
-          </div>
-        </div>
-
-        <div className="grid gap-3">
-          {rowMeta.map((r, rIdx) => {
-            const slice = slots.slice(r.start, r.end);
-            return (
-              <div key={rIdx} className="flex flex-wrap justify-center gap-3">
-                {Array.from({ length: r.n }).map((_, i) => {
-                  const slotIndex = r.start + i;
-                  const mid = slice[i] ?? null;
-                  const m = mid ? members.find((x) => x.id === mid) : null;
-                  return (
-                    <div
-                      key={slotIndex}
-                      className="relative overflow-hidden rounded-2xl border border-dashed border-zinc-300/80 bg-white/70"
-                      style={{ width: 90, height: 90 }}
-                      onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => {
-                        e.preventDefault();
-                        const memberId = e.dataTransfer.getData("text/memberId");
-                        if (memberId) onDropToSlot(slotIndex, memberId);
-                      }}
-                      title={m ? m.name : "拖拽成员到此"}
-                    >
-                      {m ? (
-                        <>
-                          <img
-                            src={m.avatar}
-                            alt={m.name}
-                            className="h-full w-full object-cover"
-                          />
-                          <button
-                            className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full bg-white/90 text-zinc-800 hover:bg-white"
-                            onClick={() => clearSlot(slotIndex)}
-                            title="清空"
-                          >
-                            ×
-                          </button>
-                        </>
-                      ) : (
-                        <div className="grid h-full w-full place-items-center text-xs text-zinc-600">
-                          空位
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="mt-4 text-xs text-zinc-600">
-          备注：行布局只负责“排开效果”；slots 最终保存的是站位顺序（按行从左到右、从上到下）。
-        </div>
+      <div className="rounded-2xl border border-zinc-200/70 bg-white/70 p-4 text-xs text-zinc-600">
+        点击站位框选择成员（所有位置可设置 普通 / center / 护法）。
       </div>
 
       <div className="rounded-2xl border border-zinc-200/70 bg-white/70 p-4">
-        <div className="mb-3 flex items-center justify-between">
-          <div className="text-sm font-medium">成员池（拖拽公式照）</div>
-          <div className="text-xs text-zinc-600">
-            已使用：{used.size} / {selectionCount}
-          </div>
-        </div>
-        <div className="flex flex-wrap justify-center gap-3">
-          {members.map((m) => (
-            <div
-              key={m.id}
-              className={
-                "relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70 " +
-                (used.has(m.id) ? "opacity-60" : "")
-              }
-              style={{ width: 78, height: 78 }}
-              draggable
-              onDragStart={(e) => {
-                e.dataTransfer.setData("text/memberId", m.id);
-              }}
-              title={m.name}
-            >
-              <img src={m.avatar} alt={m.name} className="h-full w-full object-cover" />
-              <div className="absolute bottom-0 left-0 right-0 bg-white/90 px-1 py-0.5 text-[10px] text-zinc-900">
-                {m.name}
-              </div>
+        <div className="grid gap-3">
+          {/* 展示顺序：最上面=第1排（rows 最后一项），最下面=最后排 */}
+          {rowMeta.map((r) => (
+            <div key={`${r.start}-${r.end}`} className="flex justify-center gap-3">
+              {Array.from({ length: r.n }).map((_, ci) => {
+                const slotIndex = r.start + ci;
+                const memberId = slots[slotIndex];
+                const m = members.find((x) => x.id === memberId) || null;
+
+                return (
+                  <div key={slotIndex} className="flex flex-col items-center gap-2">
+                    <div
+                      className={
+                        "relative overflow-hidden rounded-2xl border border-dashed border-zinc-300/80 bg-white/70 " +
+                        roleFrameClass(slotIndex)
+                      }
+                      style={{ width: 90, height: 140 }}
+                      onClick={() => openPickerForSlot(slotIndex)}
+                      title={m ? m.name : "空位"}
+                    >
+                      {roleBadge(slotIndex)}
+                      {m ? (
+                        <>
+                          <img
+                            src={resolveMediaUrl(m.avatar)}
+                            alt={m.name}
+                            className={
+                              "h-full w-full object-cover bg-zinc-100 " +
+                              (!m.isActive ? "grayscale" : "")
+                            }
+                          />
+                          <button
+                            type="button"
+                            className="absolute right-1 top-1 rounded-full bg-white/95 px-2 py-0.5 text-[10px] text-zinc-700 shadow"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              clearSlot(slotIndex);
+                            }}
+                            title="清空"
+                          >
+                            清空
+                          </button>
+                        </>
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xs text-zinc-400">
+                          —
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="text-xs font-medium text-zinc-800">
+                      {m ? `${m.name}${!m.isActive ? "（卒業）" : ""}` : ""}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>
       </div>
+
+      <Dialog open={pickerOpen} onOpenChange={setPickerOpen}>
+        <DialogContent className="max-w-5xl border-zinc-200/70 bg-white text-zinc-900">
+          <DialogHeader>
+            <DialogTitle>选择成员</DialogTitle>
+            <DialogDescription className="text-zinc-600">
+              点击成员即可填入当前站位{pickerSlotIndex !== null ? `（#${pickerSlotIndex + 1}）` : ""}。
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <div className="text-xs text-zinc-600 mr-1">位置类型：</div>
+            <button
+              type="button"
+              className={
+                "px-3 py-1 rounded-md border text-sm " +
+                (pickerRole === null ? "bg-zinc-100 border-zinc-300" : "bg-white border-zinc-200")
+              }
+              onClick={() => setPickerRole(null)}
+            >
+              普通
+            </button>
+            <button
+              type="button"
+              className={
+                "px-3 py-1 rounded-md border text-sm " +
+                (pickerRole === "center" ? "bg-yellow-100 border-yellow-300" : "bg-white border-zinc-200")
+              }
+              onClick={() => setPickerRole("center")}
+            >
+              center
+            </button>
+            <button
+              type="button"
+              className={
+                "px-3 py-1 rounded-md border text-sm " +
+                (pickerRole === "guardian" ? "bg-zinc-100 border-zinc-300" : "bg-white border-zinc-200")
+              }
+              onClick={() => setPickerRole("guardian")}
+            >
+              护法
+            </button>
+          </div>
+
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <div className="text-xs text-zinc-600 mr-1">成员池：</div>
+            <button
+              type="button"
+              className={
+                "px-3 py-1 rounded-md border text-sm " +
+                (pickerPool === "active" ? "bg-zinc-100 border-zinc-300" : "bg-white border-zinc-200")
+              }
+              onClick={() => setPickerPool("active")}
+            >
+              现役 / 当期
+            </button>
+            <button
+              type="button"
+              className={
+                "px-3 py-1 rounded-md border text-sm " +
+                (pickerPool === "og" ? "bg-zinc-100 border-zinc-300" : "bg-white border-zinc-200")
+              }
+              onClick={() => setPickerPool("og")}
+            >
+              OG（已毕业）
+            </button>
+          </div>
+
+          <div className="grid max-h-[70vh] grid-cols-2 gap-3 overflow-auto p-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {(pickerPool === "og" ? ogEligibleMembers : activeEligibleMembers).map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => assignMemberToSlot(m.id)}
+                className={
+                  "group overflow-hidden rounded-2xl border border-zinc-200/70 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md flex flex-col " +
+                  (used.has(m.id) ? "opacity-70" : "")
+                }
+                title={m.name}
+              >
+                <div className="aspect-[3/4] w-full bg-zinc-100 rounded-xl overflow-hidden">
+                  <img
+                    src={resolveMediaUrl(m.avatar)}
+                    alt={m.name}
+                    className={"h-full w-full object-cover " + (!m.isActive ? "grayscale" : "")}
+                  />
+                </div>
+                <div className="px-2 py-2">
+                  <div className="text-xs font-medium text-zinc-900">
+                    {m.name}{!m.isActive ? "（卒業）" : ""}
+                  </div>
+                  <div className="text-[10px] text-zinc-600">{m.romaji || ""}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
-
 function BlogPage({ data, setData, admin }) {
   const [selectedId, setSelectedId] = useState(data.posts[0]?.id || null);
   const selected = data.posts.find((p) => p.id === selectedId) || null;
@@ -1961,7 +3332,7 @@ function BlogPage({ data, setData, admin }) {
   };
 
   const insertImage = async (file) => {
-    const url = await readFileAsDataURL(file);
+    const url = await uploadImage(file);
     if (!editorRef.current) return;
     const img = document.createElement("img");
     img.src = url;
@@ -2008,7 +3379,7 @@ function BlogPage({ data, setData, admin }) {
               <div className="grid md:grid-cols-[160px_1fr]">
                 <button className="block" onClick={() => setSelectedId(p.id)}>
                   <img
-                    src={p.cover}
+                    src={resolveMediaUrl(p.cover)}
                     alt={p.title}
                     className="h-[140px] w-full object-cover md:h-[160px] md:w-[160px]"
                   />
@@ -2021,11 +3392,11 @@ function BlogPage({ data, setData, admin }) {
                   {admin ? (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="secondary">
+                        <Button size="icon" variant="secondary" className="h-8 w-8">
                           <Settings className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="bg-white opacity-100">
                         <DropdownMenuItem onClick={() => openEdit(p)}>
                           <Pencil className="mr-2 h-4 w-4" />
                           编辑
@@ -2047,7 +3418,7 @@ function BlogPage({ data, setData, admin }) {
           ))}
         </div>
 
-        <div className="md:sticky md:top-[96px] md:self-start">
+        <div className="md:sticky md:top-[96px] md:self-start md:max-h-[calc(100vh-96px)] md:overflow-y-auto md:min-h-0">
           {selected ? (
             <Card className="border-zinc-200/70 bg-white/70">
               <CardHeader>
@@ -2055,16 +3426,16 @@ function BlogPage({ data, setData, admin }) {
                 <CardDescription className="text-zinc-700">{selected.date}</CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
-                <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70">
+                <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white">
                   <img
-                    src={selected.cover}
+                    src={resolveMediaUrl(selected.cover)}
                     alt={selected.title}
                     className="w-full object-cover"
                   />
                 </div>
                 <div
                   className="prose prose-invert max-w-none prose-p:text-zinc-800 prose-li:text-zinc-800 prose-strong:text-zinc-900"
-                  dangerouslySetInnerHTML={{ __html: selected.content }}
+                  dangerouslySetInnerHTML={{ __html: resolveHtmlMedia(selected.content) }}
                 />
               </CardContent>
             </Card>
@@ -2179,22 +3550,80 @@ function BlogPage({ data, setData, admin }) {
 export default function XJP56App() {
   const [page, setPage] = useState("home");
   const [admin, setAdmin] = useState(false);
-  const [data, setData] = useState(() => {
-    if (typeof window === "undefined") {
-      return { members: seedMembers, singles: seedSingles, posts: seedPosts };
-    }
-    return loadData();
-  });
+  const [data, setData] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    saveData(data);
-  }, [data]);
+    let cancelled = false;
+    apiGetData()
+      .then((remote) => {
+        if (cancelled) return;
+        const base = remote || { members: [], singles: [], posts: [] };
+        const migratedMembers = migrateSelectionHistoryKeys(base.members || [], base.singles || []);
+        const normalized = withRecomputedSelections({ ...base, members: migratedMembers });
+        setData(normalized);
+        setLoaded(true);
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        setError(String(e?.message || e || "Failed to load data"));
+        setData(withRecomputedSelections({ members: [], singles: [], posts: [] }));
+        setLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!loaded || !data) return;
+    const t = setTimeout(() => {
+      const next = withRecomputedSelections(data);
+      apiSaveData(next).catch(() => {});
+    }, 300);
+    return () => clearTimeout(t);
+  }, [data, loaded]);
 
   const onReset = () => {
-    setData({ members: seedMembers, singles: seedSingles, posts: seedPosts });
+    const empty = withRecomputedSelections({ members: [], singles: [], posts: [] });
+    setData(empty);
     setPage("home");
+    apiSaveData(empty).catch(() => {});
   };
+
+  if (!loaded) {
+    return (
+      <AppShell>
+        <div className="py-20 text-center text-zinc-600">Loading…</div>
+      </AppShell>
+    );
+  }
+
+  if (error) {
+    return (
+      <AppShell>
+        <div className="mx-auto mt-16 max-w-xl rounded-2xl border border-red-200 bg-red-50 p-6 text-red-900">
+          <div className="font-semibold">后端连接失败</div>
+          <div className="mt-2 text-sm break-words">{error}</div>
+          <div className="mt-4 flex gap-2">
+            <Button onClick={() => window.location.reload()}>刷新重试</Button>
+          </div>
+          <div className="mt-3 text-xs text-red-800">
+            请确认后端已启动，且 /data 接口可访问。
+          </div>
+        </div>
+      </AppShell>
+    );
+  }
+
+  if (!data) {
+    return (
+      <AppShell>
+        <div className="py-20 text-center text-zinc-600">No data</div>
+      </AppShell>
+    );
+  }
 
   return (
     <AppShell>
@@ -2217,7 +3646,8 @@ export default function XJP56App() {
             transition={{ duration: 0.25 }}
           >
             <Hero
-              membersCount={data.members.length}
+              activeMembersCount={data.members.filter((m) => m.isActive).length}
+              totalMembersCount={data.members.length}
               singlesCount={data.singles.length}
               postsCount={data.posts.length}
               onGo={setPage}
