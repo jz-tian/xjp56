@@ -2593,7 +2593,7 @@ function SingleDetail({single, membersById, admin, cumulativeCounts, noFrame}) {
           </div>
         </div>
       )}
-      <div className={`${noFrame ? "pt-0" : "p-4"} grid gap-6`}>
+      <div className={`${noFrame ? "pt-0" : "p-4"} grid gap-10`}>
         {/* Centered large cover + badges */}
         <div className="flex flex-col items-center gap-4">
           <button
@@ -2691,16 +2691,21 @@ function SingleDetail({single, membersById, admin, cumulativeCounts, noFrame}) {
         </div>
 
         {single.notes ? (
-          <div className="border border-[#E0E0E0] bg-[#F7F7F7] p-4 text-sm text-[#6B6B6B]">
-            {single.notes}
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-5 h-px bg-[#1C1C1C]" />
+              <div className="text-[10px] tracking-[0.25em] font-medium text-[#1C1C1C] uppercase">Introduction</div>
+            </div>
+            <p className="text-sm text-[#6B6B6B] leading-relaxed">{single.notes}</p>
           </div>
         ) : null}
 
-        <div className="border border-[#E0E0E0] bg-white">
-          <div className="px-4 py-3 border-b border-[#E0E0E0]">
-            <div className="text-sm font-medium text-[#1C1C1C]">A 面曲选拔站位</div>
+        <div>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-5 h-px bg-[#1C1C1C]" />
+            <div className="text-[10px] tracking-[0.25em] font-medium text-[#1C1C1C] uppercase">Formation</div>
           </div>
-          <div className="p-4 grid gap-4">
+          <div className="grid gap-4">
             {/* 站位区域：固定卡片尺寸，不随人数缩放；人数过多时使用横向滚动查看 */}
             <div className="grid gap-3 overflow-x-auto overflow-y-visible pb-2 px-4" style={{ scrollPaddingLeft: 16, scrollPaddingRight: 16 }}>
               {rowMetaForView.map((r, rIdx) => (
@@ -2731,8 +2736,8 @@ function SingleDetail({single, membersById, admin, cumulativeCounts, noFrame}) {
                       <div
                         key={`${rIdx}-${i}`}
                         className={
-                          "group relative overflow-hidden border bg-white flex-none " +
-                          (role === "center" ? "border-amber-400 ring-1 ring-amber-300" : role === "guardian" ? "border-[#B0B0B0]" : "border-[#E0E0E0]")
+                          "group relative overflow-hidden bg-white flex-none " +
+                          (role === "center" ? "ring-2 ring-amber-400" : role === "guardian" ? "ring-1 ring-zinc-300" : "")
                         }
                         style={{ width: tileW, height: tileH }}
                         title={m ? m.name : "空位"}
