@@ -1333,7 +1333,7 @@ function MembersPage({ data, setData, admin }) {
   };
 
   return (
-    <div>
+    <div className="px-4 py-8 mx-auto max-w-7xl">
       <SectionHeader
         right={
           admin ? (
@@ -1345,7 +1345,7 @@ function MembersPage({ data, setData, admin }) {
         }
       />
 
-      <div className="mt-4 flex flex-wrap items-center gap-2">
+      <div className="mt-6 flex flex-wrap items-center gap-2">
         {[
           { key: "all", label: "全部" },
           { key: "active", label: "在籍" },
@@ -1387,7 +1387,7 @@ function MembersPage({ data, setData, admin }) {
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {filteredMembers.map((m) => (
           <motion.div
             key={m.id}
@@ -1395,7 +1395,7 @@ function MembersPage({ data, setData, admin }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25 }}
           >
-            <div className="group overflow-hidden border border-[#E0E0E0] bg-white">
+            <div className="group overflow-hidden">
               <div className="relative">
                 <button className="block w-full" onClick={() => setSelected(m)}>
                   <img
@@ -2193,7 +2193,7 @@ function SinglesPage({ data, setData, admin }) {
   };
 
   return (
-    <div>
+    <div className="px-4 py-8 mx-auto max-w-7xl">
       <SectionHeader
         right={
           admin ? (
