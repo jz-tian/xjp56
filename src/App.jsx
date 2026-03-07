@@ -1335,8 +1335,6 @@ function MembersPage({ data, setData, admin }) {
   return (
     <div>
       <SectionHeader
-        title="成员展示"
-        subtitle="点击成员大头照：放大查看基础信息与历代单曲选拔状况。"
         right={
           admin ? (
             <Button onClick={() => openEdit(null)}>
@@ -2250,8 +2248,6 @@ function SinglesPage({ data, setData, admin }) {
   return (
     <div>
       <SectionHeader
-        title="单曲展示"
-        subtitle="主界面展示每首单曲封面与标题；点入后可看曲目收录、A面选拔站位；管理员可编辑封面/曲目信息/站位/音源。"
         right={
           admin ? (
             <Button onClick={() => openEdit(null)}>
@@ -2262,61 +2258,27 @@ function SinglesPage({ data, setData, admin }) {
         }
       />
 
-      {/*
-        需求：当站位每排人数较少（如 5 人）时，右侧内容宽度变小会导致两列随内容伸缩，
-        进而让左侧单曲卡片看起来被拉长。
-        仅将两列改为 minmax(0, …) 固定分配，避免被内容挤压/拉伸。
-      */}
-      <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] ">
-        <div className="grid gap-4">
-          {data.singles.map((s) => (
+      {/* Discography grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-8">
+        {data.singles.map((s) => {
+          const { prefix, name } = splitSingleTitle(s.title);
+          return (
             <div
               key={s.id}
-              className={
-                "overflow-hidden border bg-white transition-colors cursor-pointer " +
-                (selectedId === s.id ? "border-[#1C1C1C]" : "border-[#E0E0E0] hover:border-[#B0B0B0]")
-              }
+              className="cursor-pointer group"
               onClick={() => setSelectedId(s.id)}
             >
-              <div className="grid md:grid-cols-[140px_1fr]">
+              <div className="relative overflow-hidden bg-[#F0F0F0] aspect-square">
                 <img
                   src={resolveMediaUrl(s.cover)}
                   alt={s.title}
-                  className="w-full object-contain bg-[#F0F0F0] md:h-[140px] md:w-[140px] md:object-cover"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 />
-                <div className="flex items-start justify-between gap-3 p-4">
-                  <div>
-                    <div className="text-sm font-medium text-[#1C1C1C] leading-tight">{s.title}</div>
-                    <div className="mt-1 text-xs text-[#6B6B6B] tracking-wider">
-                      {s.release ? s.release.replace(/-/g, ".") : "—"}
-                    </div>
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                      <span className="text-[10px] tracking-wider border border-[#E0E0E0] bg-[#F0F0F0] text-[#6B6B6B] px-2 py-0.5">
-                        {s.tracks?.length || 0} tracks
-                      </span>
-                      <span className="text-[10px] tracking-wider border border-[#E0E0E0] bg-[#F0F0F0] text-[#6B6B6B] px-2 py-0.5">
-                        选拔 {s.asideLineup?.selectionCount || 0}人
-                      </span>
-                      {Array.isArray(s.tags) && s.tags.includes("纪念单") ? (
-                        <span className="text-[10px] tracking-wider border border-amber-200 bg-amber-50 text-amber-800 px-2 py-0.5">
-                          纪念单
-                        </span>
-                      ) : null}
-                      {s.tracks?.[0]?.audio ? (
-                        <span className="text-[10px] tracking-wider border border-emerald-200 bg-emerald-50 text-emerald-800 px-2 py-0.5">
-                          ♪ 音源
-                        </span>
-                      ) : null}
-                    </div>
-                  </div>
-
-                  {admin ? (
+                {admin ? (
+                  <div className="absolute top-2 right-2" onClick={(e) => e.stopPropagation()}>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <button
-                          className="w-7 h-7 flex items-center justify-center border border-[#E0E0E0] hover:bg-[#F0F0F0] transition-colors"
-                          onClick={(e) => e.stopPropagation()}
-                        >
+                        <button className="w-7 h-7 flex items-center justify-center bg-white/90 border border-[#E0E0E0] hover:bg-white transition-colors">
                           <Settings className="h-3.5 w-3.5 text-[#1C1C1C]" />
                         </button>
                       </DropdownMenuTrigger>
@@ -2332,44 +2294,31 @@ function SinglesPage({ data, setData, admin }) {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  ) : null}
+                  </div>
+                ) : null}
+              </div>
+              <div className="mt-3">
+                <div className="text-[10px] tracking-[0.15em] text-[#6B6B6B] uppercase">{prefix}</div>
+                <div className="text-sm font-medium text-[#1C1C1C] leading-snug mt-0.5">{name || s.title}</div>
+                <div className="text-xs text-[#6B6B6B] mt-1 tracking-wider">
+                  {s.release ? s.release.replace(/-/g, ".") : "—"}
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-
-        <div className="md:sticky md:top-[96px] md:self-start md:max-h-[calc(100vh-96px)] md:overflow-y-auto md:min-h-0">
-          {/* 手机端自动滚动锚点（md 以上不受影响） */}
-          <div ref={detailAnchorRef} />
-          <AnimatePresence mode="wait">
-            {selected ? (
-              <motion.div
-                key={selected.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.25 }}
-              >
-                <ErrorBoundary><SingleDetail single={selected} membersById={membersById} admin={admin} cumulativeCounts={cumulativeCounts} /></ErrorBoundary>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="empty"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.25 }}
-              >
-                <div className="border border-[#E0E0E0] bg-white p-6">
-                  <div className="text-sm font-medium text-[#1C1C1C]">选择一首单曲</div>
-                  <div className="mt-1 text-xs text-[#6B6B6B]">点击左侧列表中的封面进入详情页。</div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+          );
+        })}
       </div>
+
+      {/* Single detail modal */}
+      <Dialog open={!!selectedId} onOpenChange={(open) => { if (!open) setSelectedId(null); }}>
+        <ScrollDialogContent className="max-w-5xl">
+          {selected ? (
+            <ErrorBoundary>
+              <SingleDetail single={selected} membersById={membersById} admin={admin} cumulativeCounts={cumulativeCounts} noFrame />
+            </ErrorBoundary>
+          ) : null}
+        </ScrollDialogContent>
+      </Dialog>
 
       <Dialog open={editorOpen} onOpenChange={setEditorOpen}>
         <ScrollDialogContent className="max-w-5xl">
@@ -2570,7 +2519,7 @@ function SinglesPage({ data, setData, admin }) {
   );
 }
 
-function SingleDetail({single, membersById, admin, cumulativeCounts}) {
+function SingleDetail({single, membersById, admin, cumulativeCounts, noFrame}) {
   const [coverZoom, setCoverZoom] = useState(false);
   const audioRef = useRef(null);
   const [currentTrack, setCurrentTrack] = useState(null); // { no, title, audio }
@@ -2627,110 +2576,125 @@ function SingleDetail({single, membersById, admin, cumulativeCounts}) {
   }, [currentTrack?.audio]);
 
   return (
-    <div className="border border-[#E0E0E0] bg-white">
-      <div className="px-4 py-3 border-b border-[#E0E0E0]">
-        <div className="text-base font-medium text-[#1C1C1C]">{single.title}</div>
-        <div className="text-xs text-[#6B6B6B] tracking-wider mt-0.5">
-          {single.release ? single.release.replace(/-/g, ".") : "—"}
+    <div className={noFrame ? "" : "border border-[#E0E0E0] bg-white"}>
+      {!noFrame && (
+        <div className="px-4 py-3 border-b border-[#E0E0E0]">
+          <div className="text-base font-medium text-[#1C1C1C]">{single.title}</div>
+          <div className="text-xs text-[#6B6B6B] tracking-wider mt-0.5">
+            {single.release ? single.release.replace(/-/g, ".") : "—"}
+          </div>
         </div>
-      </div>
-      <div className="p-4 grid gap-4">
-        <div className="grid gap-4 md:grid-cols-[200px_1fr]">
+      )}
+      {noFrame && (
+        <div className="mb-4 text-center">
+          <div className="text-lg font-medium text-[#1C1C1C]">{single.title}</div>
+          <div className="text-xs text-[#6B6B6B] tracking-wider mt-1">
+            {single.release ? single.release.replace(/-/g, ".") : "—"}
+          </div>
+        </div>
+      )}
+      <div className={`${noFrame ? "pt-0" : "p-4"} grid gap-6`}>
+        {/* Centered large cover + badges */}
+        <div className="flex flex-col items-center gap-4">
           <button
-            className="overflow-hidden border border-[#E0E0E0] bg-white"
+            className="overflow-hidden bg-[#F0F0F0] w-full max-w-[260px] sm:max-w-[320px]"
             onClick={() => setCoverZoom(true)}
             title="点击放大封面"
           >
             <img
               src={resolveMediaUrl(single.cover)}
               alt={single.title}
-              className="aspect-square w-full object-contain bg-[#F0F0F0]"
+              className="aspect-square w-full object-cover"
             />
           </button>
-          <div className="grid gap-3">
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[10px] tracking-wider border border-[#E0E0E0] bg-[#F0F0F0] text-[#6B6B6B] px-2 py-0.5">
-                选拔 {single.asideLineup?.selectionCount || 0}人
-              </span>
-              <span className="text-[10px] tracking-wider border border-[#E0E0E0] bg-[#F0F0F0] text-[#6B6B6B] px-2 py-0.5">
-                {single.asideLineup?.rows?.length || 0} 排
-              </span>
-              {Array.isArray(single.tags) && single.tags.includes("纪念单") ? (
-                <span className="text-[10px] tracking-wider border border-amber-200 bg-amber-50 text-amber-800 px-2 py-0.5">纪念单</span>
-              ) : null}
-              {hasAnyAudio ? (
-                <span className="text-[10px] tracking-wider border border-emerald-200 bg-emerald-50 text-emerald-800 px-2 py-0.5">♪ 音源</span>
-              ) : null}
-            </div>
-
-            <div className="border border-[#E0E0E0] bg-white">
-              <div className="px-4 py-2.5 border-b border-[#E0E0E0]">
-                <div className="text-sm font-medium text-[#1C1C1C]">曲目收录</div>
-              </div>
-              <div className="p-3 grid gap-2">
-                {tracks.map((t) => (
-                  <div
-                    key={t.no}
-                    className="flex items-center justify-between gap-3 border border-[#E0E0E0] bg-white px-3 py-2"
-                  >
-                    <div className="text-sm">
-                      <span className="text-[#6B6B6B]">Track {t.no}</span>
-                      <span className="mx-2 text-[#D0D0D0]">·</span>
-                      <span className="font-medium text-[#1C1C1C]">{t.title}</span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] border border-[#E0E0E0] bg-[#F0F0F0] text-[#6B6B6B] px-2 py-0.5">
-                        {t.isAside ? "A-side" : "B-side"}
-                      </span>
-                      {t.audio ? (
-                        <button
-                          className="flex items-center gap-1 text-xs border border-[#1C1C1C] text-[#1C1C1C] px-3 py-1 hover:bg-[#1C1C1C] hover:text-white transition-colors"
-                          onClick={() => {
-                            setCurrentTrack({ no: t.no, title: t.title, audio: t.audio });
-                            if (currentTrack?.no === t.no) {
-                              audioRef.current?.play().catch(() => {});
-                            }
-                          }}
-                        >
-                          <Music className="h-3 w-3" />
-                          播放
-                        </button>
-                      ) : (
-                        <span className="text-[10px] border border-[#E0E0E0] bg-[#F0F0F0] text-[#6B6B6B] px-2 py-0.5">无音源</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-
-                {currentTrack?.audio ? (
-                  <div className="mt-1 border border-[#E0E0E0] bg-[#F7F7F7] p-3">
-                    <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                      <div className="text-xs font-medium text-[#1C1C1C]">
-                        ♪ Track {currentTrack.no} · {currentTrack.title}
-                      </div>
-                      <span className="text-[10px] border border-[#E0E0E0] bg-white text-[#6B6B6B] px-2 py-0.5">
-                        {tracks.find((t) => t.no === currentTrack.no)?.isAside ? "A-side" : "B-side"}
-                      </span>
-                    </div>
-                    <audio
-                      ref={audioRef}
-                      src={resolveMediaUrl(currentTrack.audio)}
-                      controls
-                      className="w-full"
-                    />
-                  </div>
-                ) : null}
-              </div>
-            </div>
-
-            {single.notes ? (
-              <div className="border border-[#E0E0E0] bg-[#F7F7F7] p-4 text-sm text-[#6B6B6B]">
-                {single.notes}
-              </div>
+          <div className="flex flex-wrap justify-center gap-2">
+            <span className="text-[10px] tracking-wider border border-[#E0E0E0] bg-[#F0F0F0] text-[#6B6B6B] px-2 py-0.5">
+              选拔 {single.asideLineup?.selectionCount || 0}人
+            </span>
+            <span className="text-[10px] tracking-wider border border-[#E0E0E0] bg-[#F0F0F0] text-[#6B6B6B] px-2 py-0.5">
+              {single.asideLineup?.rows?.length || 0} 排
+            </span>
+            {Array.isArray(single.tags) && single.tags.includes("纪念单") ? (
+              <span className="text-[10px] tracking-wider border border-amber-200 bg-amber-50 text-amber-800 px-2 py-0.5">纪念单</span>
+            ) : null}
+            {hasAnyAudio ? (
+              <span className="text-[10px] tracking-wider border border-emerald-200 bg-emerald-50 text-emerald-800 px-2 py-0.5">♪ 音源</span>
             ) : null}
           </div>
         </div>
+
+        {/* Track list — Nogizaka-style minimal numbered list */}
+        <div>
+          {/* Section header */}
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-5 h-px bg-[#1C1C1C]" />
+            <div className="text-[10px] tracking-[0.25em] font-medium text-[#1C1C1C] uppercase">Tracklist</div>
+          </div>
+
+          {/* Audio player — appears above list when a track is selected */}
+          {currentTrack?.audio ? (
+            <div className="mb-4 bg-[#F7F7F7] px-4 py-3">
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <div className="text-xs text-[#1C1C1C]">
+                  {currentTrack.no}.&nbsp;&nbsp;{currentTrack.title}
+                </div>
+                <span className="text-[10px] tracking-wider text-[#6B6B6B]">
+                  {tracks.find((t) => t.no === currentTrack.no)?.isAside ? "A-side" : "B-side"}
+                </span>
+              </div>
+              <audio
+                ref={audioRef}
+                src={resolveMediaUrl(currentTrack.audio)}
+                controls
+                className="w-full"
+              />
+            </div>
+          ) : null}
+
+          {/* Track rows */}
+          <div>
+            {tracks.map((t) => (
+              <div
+                key={t.no}
+                className="flex items-center gap-4 py-3 border-b border-[#E0E0E0] first:border-t first:border-[#E0E0E0]"
+              >
+                {/* Play button or track number */}
+                {t.audio ? (
+                  <button
+                    className="w-6 h-6 rounded-full border border-[#1C1C1C] flex items-center justify-center shrink-0 hover:bg-[#1C1C1C] hover:text-white transition-colors text-[#1C1C1C]"
+                    onClick={() => {
+                      setCurrentTrack({ no: t.no, title: t.title, audio: t.audio });
+                      if (currentTrack?.no === t.no) {
+                        audioRef.current?.play().catch(() => {});
+                      }
+                    }}
+                    title="播放"
+                  >
+                    <Music className="h-2.5 w-2.5" />
+                  </button>
+                ) : (
+                  <span className="w-6 text-center text-sm text-[#AAAAAA] shrink-0">{t.no}.</span>
+                )}
+
+                {/* Title */}
+                <span className={`text-sm flex-1 min-w-0 ${t.audio ? "text-[#1C1C1C]" : "text-[#6B6B6B]"}`}>
+                  {t.title}
+                </span>
+
+                {/* A/B-side tag */}
+                <span className="text-[10px] tracking-wider text-[#AAAAAA] shrink-0">
+                  {t.isAside ? "A-side" : "B-side"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {single.notes ? (
+          <div className="border border-[#E0E0E0] bg-[#F7F7F7] p-4 text-sm text-[#6B6B6B]">
+            {single.notes}
+          </div>
+        ) : null}
 
         <div className="border border-[#E0E0E0] bg-white">
           <div className="px-4 py-3 border-b border-[#E0E0E0]">
