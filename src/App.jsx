@@ -1104,11 +1104,64 @@ function Hero({ singles, members, activeMembersCount, totalMembersCount, singles
             className="absolute inset-0"
           >
             {current?.cover ? (
-              <img
-                src={resolveMediaUrl(current.cover)}
-                alt={current.title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              <>
+                {/* Base: heavily blurred fill for color tone */}
+                <img
+                  src={resolveMediaUrl(current.cover)}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover scale-125"
+                  style={{ filter: "blur(40px) brightness(0.5) saturate(1.8)" }}
+                />
+                {/* Left accent: large cover bleeding in from left, medium blur */}
+                <img
+                  src={resolveMediaUrl(current.cover)}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute w-auto"
+                  style={{
+                    height: "130%",
+                    top: "50%",
+                    left: "-8%",
+                    transform: "translateY(-50%)",
+                    filter: "blur(12px) brightness(0.8) saturate(1.4)",
+                    opacity: 0.85,
+                    mixBlendMode: "screen",
+                  }}
+                />
+                {/* Right accent: mirrored cover bleeding in from right */}
+                <img
+                  src={resolveMediaUrl(current.cover)}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute w-auto"
+                  style={{
+                    height: "130%",
+                    top: "50%",
+                    right: "-8%",
+                    transform: "translateY(-50%) scaleX(-1)",
+                    filter: "blur(12px) brightness(0.8) saturate(1.4)",
+                    opacity: 0.85,
+                    mixBlendMode: "screen",
+                  }}
+                />
+                {/* Center vignette: fade side accents into center cleanly */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: "radial-gradient(ellipse 55% 100% at 50% 50%, transparent 30%, rgba(0,0,0,0.35) 100%)",
+                  }}
+                />
+                {/* Crisp centered cover at native aspect ratio */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <img
+                    src={resolveMediaUrl(current.cover)}
+                    alt={current.title}
+                    className="h-full w-auto max-h-full object-contain"
+                    style={{ filter: "drop-shadow(0 0 48px rgba(0,0,0,0.7))" }}
+                  />
+                </div>
+              </>
             ) : (
               <div className="absolute inset-0 bg-[#1C1C1C]" />
             )}
