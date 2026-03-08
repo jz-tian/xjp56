@@ -1654,8 +1654,64 @@ function MemberDetailContent({ member, data }) {
             return { k, label: k, value: String(v ?? "") };
           });
           if (entries.length === 0) return <div className="text-sm text-[#6B6B6B]">—</div>;
+
+          // ---- 动态统计 ----
+          let selectionCount = 0;
+          let fukujinCount = 0;
+          let guardianCount = 0;
+          let centerCount = 0;
+          let centerSoloCount = 0;
+          entries.forEach(({ k, value }) => {
+            if (!value.includes("A面")) return;
+            selectionCount++;
+            const rowM = value.match(/第(\d+)排/);
+            const rowNum = rowM ? Number(rowM[1]) : null;
+            const isCenter = value.includes("center");
+            const isGuardian = value.includes("护法") || value.includes("guardian");
+            if (rowNum && rowNum <= 2) fukujinCount++;
+            if (isGuardian) guardianCount++;
+            if (isCenter) {
+              const totalCenters = (data?.members || []).reduce((acc, mm) => {
+                const vv = mm?.selectionHistory?.[k];
+                const sv = vv && typeof vv === "object" ? String(vv.value ?? "") : String(vv ?? "");
+                return sv.includes("center") ? acc + 1 : acc;
+              }, 0);
+              if (totalCenters === 1) centerSoloCount++;
+              centerCount += totalCenters > 0 ? 1 / totalCenters : 1;
+            }
+          });
+          const fmtCenter = parseFloat(centerCount.toFixed(2)).toString();
+
           return (
             <div>
+              {/* 统计摘要 */}
+              {selectionCount > 0 && (
+                <div className="flex flex-wrap justify-center items-center gap-x-5 gap-y-2 py-3 mb-2 border-t border-b border-[#E0E0E0]">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-[10px] tracking-[0.15em] text-[#AAAAAA] uppercase">选拔</span>
+                    <span className="text-base font-light text-[#1C1C1C] tabular-nums leading-none">{selectionCount}</span>
+                  </div>
+                  {fukujinCount > 0 && (
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-[10px] tracking-[0.15em] text-[#AAAAAA] uppercase">福神</span>
+                      <span className="text-base font-light text-[#1C1C1C] tabular-nums leading-none">{fukujinCount}</span>
+                    </div>
+                  )}
+                  {guardianCount > 0 && (
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-[10px] tracking-[0.15em] text-[#AAAAAA] uppercase">护法</span>
+                      <span className="text-base font-light text-[#1C1C1C] tabular-nums leading-none">{guardianCount}</span>
+                    </div>
+                  )}
+                  {centerCount > 0 && (
+                    <div className="flex items-baseline gap-1.5 px-2 py-0.5 bg-amber-50">
+                      <span className="text-[10px] tracking-[0.15em] text-amber-600 uppercase">Center</span>
+                      <span className="text-base font-light text-amber-700 tabular-nums leading-none">{fmtCenter}</span>
+                      {centerSoloCount > 0 && <span className="text-[10px] text-amber-500 leading-none">({centerSoloCount})</span>}
+                    </div>
+                  )}
+                </div>
+              )}
               {entries.map(({ k, label, value }, rowIdx) => {
                 const singleObj = (data?.singles || []).find((s) => s.id === k);
                 let title = (singleObj?.title ?? label ?? "").toString();
