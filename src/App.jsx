@@ -2397,11 +2397,24 @@ function SinglesPage({ data, setData, admin }) {
   });
 
   const openEdit = (s) => {
+    // Auto-generate next single prefix when adding a new single
+    const nextPrefix = (() => {
+      const maxN = (data.singles || []).reduce((max, sg) => {
+        const { prefix } = splitSingleTitle(sg.title);
+        const m = (prefix || "").match(/^(\d+)/);
+        return m ? Math.max(max, Number(m[1])) : max;
+      }, 0);
+      const n = maxN + 1;
+      const t = n % 100;
+      const sfx = t >= 11 && t <= 13 ? "th" : n % 10 === 1 ? "st" : n % 10 === 2 ? "nd" : n % 10 === 3 ? "rd" : "th";
+      return `${n}${sfx} Single · `;
+    })();
+
     const draft =
       s ??
       ({
         id: `s_${uid()}`,
-        title: "",
+        title: nextPrefix,
         release: "",
         cover: "",
         tags: [],
