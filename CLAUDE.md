@@ -85,11 +85,15 @@ Current section labels: TRACKLIST, INTRODUCTION, FORMATION, PROFILE, ELECTION, F
 - A面选拔: `border-emerald-200 bg-emerald-50 text-emerald-800`
 - B面: `border-sky-200 bg-sky-50 text-sky-800`
 - 落选: `border-[#E0E0E0] bg-[#F0F0F0] text-[#6B6B6B]`
-- 纪念单: `border-amber-200 bg-amber-50 text-amber-800`
+- 纪念单曲 (singleKind): `border-amber-200 bg-amber-50 text-amber-800`
 - CENTER: `border-amber-300 bg-amber-100 text-amber-900`
 - 福神: `border-rose-200 bg-rose-50 text-rose-700`
 - 加入前: `border-violet-200 bg-violet-50 text-violet-800`
-- 毕业单: `border-fuchsia-200 bg-fuchsia-50 text-fuchsia-800`
+- 护法: `border-indigo-200 bg-indigo-50 text-indigo-700` (distinct from 落选 gray)
+- 投票单曲: `border-sky-200 bg-sky-50 text-sky-800`
+- 总选单曲: `border-orange-200 bg-orange-50 text-orange-800`
+- 猜拳单曲: `border-violet-200 bg-violet-50 text-violet-800`
+- 企划单曲: `border-teal-200 bg-teal-50 text-teal-700`
 
 ### Generation Badge Colors
 | Generation | Background | Text |
@@ -215,6 +219,34 @@ data = {
 - `overflow-x: hidden` on a child of `position: fixed` does not reliably clip on iOS — constrain widths instead
 - `transform` CSS property: when overriding `translate-y`, also re-declare `translate-x` or they may conflict
 - `-webkit-overflow-scrolling` is implied by `overflow-y: auto` on modern iOS; no extra class needed
+
+## Admin Visibility
+- Settings button (and admin mode) only visible on localhost/127.0.0.1
+- `isLocalhost` is computed inside `TopBar` component (NOT in parent `XJP56App`) — must be in scope where it's used
+
+## singleKind Field
+Singles now have a `singleKind` string field (default `"常规单曲"`).
+Options: `SINGLE_KIND_OPTIONS = ["常规单曲", "投票单曲", "总选单曲", "猜拳单曲", "企划单曲", "纪念单曲"]`
+Helper: `singleKindBadge(kind)` returns `{ text, className }` or `null` for 常规单曲
+纪念单曲 is a **manual** singleKind choice — the old auto-computation from saveSingle has been removed
+
+## DISCOGRAPHY Section Rules
+- Active tags: 落选, 护法, 福神, CENTER, A面选拔, 加入前 only. B面 and 毕业单 are NOT shown as tags.
+- A面选拔 tag is suppressed when 福神 / CENTER / 护法 is already shown for that row
+- When `pickType === "加入前"`, show ONLY that tag — suppress all others (kind, role, etc.)
+- singleKind is shown as **plain text**, not a tag, between prefix and title
+
+### DISCOGRAPHY Row Layout (responsive)
+- Mobile (< md): two-line — line 1: `prefix · kind` (small gray/muted), line 2: `title` + tags
+- Desktop (md+): four-column single row — `w-20` prefix, `w-16` kind, `flex-1` title, tags right
+- Rule: 4-column flex rows on narrow mobile always get cramped — use 2-line responsive structure instead
+
+## Singles Page Filter + Animation
+- Kind filter pills only render when ≥ 2 distinct singleKind values exist in data
+- Filter pills order follows `SINGLE_KIND_OPTIONS` array, only showing kinds present in data
+- Grid uses `<AnimatePresence mode="popLayout">` with each card as `<motion.div layout>`
+  - Enter: `initial={{ opacity: 0, y: 20 }}` → `animate={{ opacity: 1, y: 0 }}`, stagger `delay: idx * 0.035`
+  - Exit: `exit={{ opacity: 0, scale: 0.92 }}`
 
 ## Git Remote
 

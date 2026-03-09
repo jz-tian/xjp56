@@ -904,7 +904,7 @@
       "romaji": "KAZU OHARA",
       "origin": "福冈 • 福冈市",
       "generation": "5期",
-      "avatar": "/uploads/1768985594388.jpg",
+      "avatar": "/uploads/1773083470514.jpg",
       "isActive": true,
       "profile": {
         "height": "164cm",
@@ -965,7 +965,17 @@
         "m_hina"
       ],
       "graduationSongTitle": "",
-      "favoriteSong": "in vain"
+      "favoriteSong": "in vain",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768985594388.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083470514.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_5gen_2_7259",
@@ -1028,7 +1038,7 @@
       "romaji": "NAOKI FUJIMATSU",
       "origin": "山形 • 山形市",
       "generation": "5期",
-      "avatar": "/uploads/1768985619382.jpg",
+      "avatar": "/uploads/1773083515844.jpg",
       "isActive": true,
       "profile": {
         "height": "156cm",
@@ -1089,7 +1099,17 @@
         "m_symj32y6"
       ],
       "graduationSongTitle": "",
-      "favoriteSong": "Break the Rules (5期生)"
+      "favoriteSong": "Break the Rules (5期生)",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768985619382.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083515844.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_5gen_4_8493",
@@ -1097,7 +1117,7 @@
       "romaji": "NANA KISUI",
       "origin": "福冈 • 福冈市",
       "generation": "5期",
-      "avatar": "/uploads/1768985628805.jpg",
+      "avatar": "/uploads/1773083574214.jpg",
       "isActive": true,
       "profile": {
         "height": "163cm",
@@ -1158,7 +1178,17 @@
         "m_mayu"
       ],
       "graduationSongTitle": "",
-      "favoriteSong": "Next to Me 3期生（小林凛凛花 center）"
+      "favoriteSong": "Next to Me 3期生（小林凛凛花 center）",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768985628805.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083574214.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_5gen_5_6677",
@@ -1166,7 +1196,7 @@
       "romaji": "HIME MAEDA",
       "origin": "福岛 • 郡山",
       "generation": "5期",
-      "avatar": "/uploads/1768985638454.jpg",
+      "avatar": "/uploads/1773083838282.jpg",
       "isActive": true,
       "profile": {
         "height": "155cm",
@@ -1228,7 +1258,17 @@
         "m_c16gtwds"
       ],
       "graduationSongTitle": "",
-      "favoriteSong": "Now We Hug (桥本美咲毕业曲)"
+      "favoriteSong": "Now We Hug (桥本美咲毕业曲)",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768985638454.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083838282.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_5gen_6_2454",
@@ -1291,7 +1331,7 @@
       "romaji": "YULIA KURANO",
       "origin": "爱知 • 名古屋",
       "generation": "5期",
-      "avatar": "/uploads/1768985659260.jpg",
+      "avatar": "/uploads/1773083865231.jpg",
       "isActive": true,
       "profile": {
         "height": "158cm",
@@ -1352,7 +1392,17 @@
         "m_mika"
       ],
       "graduationSongTitle": "",
-      "favoriteSong": "BE US (A-side)"
+      "favoriteSong": "BE US (A-side)",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768985659260.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083865231.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_umbw1ji3",
@@ -1468,7 +1518,7 @@
       "romaji": "RIRIKA KOBAYASHI",
       "origin": "滋贺 • 大津",
       "generation": "3期",
-      "avatar": "/uploads/1768593904736.jpg",
+      "avatar": "/uploads/1773083555565.jpg",
       "isActive": true,
       "profile": {
         "height": "152cm",
@@ -1525,7 +1575,17 @@
           "rank": "第3位"
         }
       ],
-      "favoriteSong": "Knock Knock(今日优center)"
+      "favoriteSong": "Knock Knock(今日优center)",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768593904736.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083555565.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_batr9qfj",
@@ -1533,7 +1593,7 @@
       "romaji": "NANA TAKIZAWA",
       "origin": "北海道 • 旭川",
       "generation": "3期",
-      "avatar": "/uploads/1768593846264.jpg",
+      "avatar": "/uploads/1773083890207.jpg",
       "isActive": true,
       "profile": {
         "height": "166cm",
@@ -1590,7 +1650,17 @@
           "rank": "第7位"
         }
       ],
-      "favoriteSong": "(not) Good Enough "
+      "favoriteSong": "(not) Good Enough ",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768593846264.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083890207.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_mdv7k6ml",
@@ -1690,7 +1760,7 @@
       "romaji": "YUME YAMAGAMI",
       "origin": "福岛 • 郡山",
       "generation": "2期",
-      "avatar": "/uploads/1768593641741.jpg",
+      "avatar": "/uploads/1773083646998.jpg",
       "isActive": true,
       "profile": {
         "height": "151cm",
@@ -1747,7 +1817,17 @@
           "rank": "第11位"
         }
       ],
-      "favoriteSong": "Emerald (A-side)"
+      "favoriteSong": "Emerald (A-side)",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768593641741.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083646998.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_l4k686go",
@@ -1755,7 +1835,7 @@
       "romaji": "MIMIKI HATA",
       "origin": "奈良 • 奈良市",
       "generation": "2期",
-      "avatar": "/uploads/1768593570026.jpg",
+      "avatar": "/uploads/1773085256163.jpg",
       "isActive": true,
       "profile": {
         "height": "155cm",
@@ -1812,7 +1892,17 @@
           "rank": "第13位"
         }
       ],
-      "favoriteSong": "already decided?! (A-side)"
+      "favoriteSong": "already decided?! (A-side)",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768593570026.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773085256163.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_ltlzffea",
@@ -1820,7 +1910,7 @@
       "romaji": "YU KONICHI",
       "origin": "加拿大 • 多伦多",
       "generation": "2期",
-      "avatar": "/uploads/1768593513971.jpg",
+      "avatar": "/uploads/1773083791504.jpg",
       "isActive": true,
       "profile": {
         "height": "170cm",
@@ -1877,7 +1967,17 @@
           "rank": "第17位"
         }
       ],
-      "favoriteSong": "BE US (A-side)"
+      "favoriteSong": "BE US (A-side)",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768593513971.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083791504.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_gbojk371",
@@ -1885,7 +1985,7 @@
       "romaji": "AMI MIYAJIMA",
       "origin": "冲绳 • 那霸",
       "generation": "2期",
-      "avatar": "/uploads/1768593433559.jpg",
+      "avatar": "/uploads/1773083808555.jpg",
       "isActive": true,
       "profile": {
         "height": "168cm",
@@ -1942,7 +2042,17 @@
           "rank": "第2位"
         }
       ],
-      "favoriteSong": "GIMME AMI"
+      "favoriteSong": "GIMME AMI",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768593433559.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083808555.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_jh2ureo3",
@@ -2133,7 +2243,7 @@
       "romaji": "MIHARU SAEKI",
       "origin": "广岛 • 广岛市",
       "generation": "1期",
-      "avatar": "/uploads/1768591628116.jpg",
+      "avatar": "/uploads/1773083909895.jpg",
       "isActive": true,
       "profile": {
         "height": "150cm",
@@ -2190,7 +2300,17 @@
           "rank": "第12位"
         }
       ],
-      "favoriteSong": "The Meaning of Unforgetable Things (A-side)"
+      "favoriteSong": "The Meaning of Unforgetable Things (A-side)",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768591628116.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083909895.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_7j6tcyhr",
@@ -2198,7 +2318,7 @@
       "romaji": "SEITSUKI TAKEUCHI",
       "origin": "韩国首尔 • 江南",
       "generation": "1期",
-      "avatar": "/uploads/1768591547894.jpg",
+      "avatar": "/uploads/1773083714129.jpg",
       "isActive": true,
       "profile": {
         "height": "169cm",
@@ -2255,7 +2375,17 @@
           "rank": "第14位"
         }
       ],
-      "favoriteSong": "Last Angel"
+      "favoriteSong": "Last Angel",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768591547894.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083714129.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_m8fltj0e",
@@ -2263,7 +2393,7 @@
       "romaji": "JURINA MATSUMURA",
       "origin": "静冈 • 静冈市",
       "generation": "1期",
-      "avatar": "/uploads/1768591398834.jpg",
+      "avatar": "/uploads/1773083624599.jpg",
       "isActive": true,
       "profile": {
         "height": "163cm",
@@ -2320,7 +2450,17 @@
           "rank": "第6位"
         }
       ],
-      "favoriteSong": "NO PRESSURE (A-side)"
+      "favoriteSong": "NO PRESSURE (A-side)",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768591398834.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083624599.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_ff4lppj9",
@@ -2483,7 +2623,7 @@
       "name": "三浦 丽莎",
       "origin": "美国加利福尼亚洛杉矶",
       "generation": "1期",
-      "avatar": "/uploads/1768582020112.jpg",
+      "avatar": "/uploads/1773085516740.jpg",
       "profile": {
         "height": "160cm",
         "birthday": "2004-03-12",
@@ -2541,7 +2681,17 @@
           "rank": "第5位"
         }
       ],
-      "favoriteSong": "Star with Moon（竹内星月 with 宫月）"
+      "favoriteSong": "Star with Moon（竹内星月 with 宫月）",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768582020112.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773085516740.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_yuna",
@@ -2715,7 +2865,7 @@
       "name": "橘 明日香",
       "origin": "札幌 · 中央",
       "generation": "1期",
-      "avatar": "/uploads/1768590044858.jpg",
+      "avatar": "/uploads/1773085497754.jpg",
       "profile": {
         "height": "165cm",
         "birthday": "2004-11-11",
@@ -2773,7 +2923,17 @@
           "rank": "圈外"
         }
       ],
-      "favoriteSong": "V.S. (坂口阳菜 x 中村樱)"
+      "favoriteSong": "V.S. (坂口阳菜 x 中村樱)",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768590044858.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773085497754.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_mayu",
@@ -2891,7 +3051,7 @@
       "name": "加藤 友良乃",
       "origin": "广岛 · 中区",
       "generation": "1期",
-      "avatar": "/uploads/1768590846634.jpg",
+      "avatar": "/uploads/1773083535807.jpg",
       "profile": {
         "height": "154cm",
         "birthday": "2007-02-14",
@@ -2949,7 +3109,17 @@
           "rank": "第4位"
         }
       ],
-      "favoriteSong": "J ONE (A-side)"
+      "favoriteSong": "J ONE (A-side)",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768590846634.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083535807.jpg",
+          "version": 2
+        }
+      ]
     },
     {
       "id": "m_reina",
@@ -3007,7 +3177,7 @@
       "name": "平井 葵",
       "origin": "仙台 · 青叶",
       "generation": "1期",
-      "avatar": "/uploads/1768591074779.jpg",
+      "avatar": "/uploads/1773083775909.jpg",
       "profile": {
         "height": "161cm",
         "birthday": "2006-09-30",
@@ -3065,7 +3235,17 @@
           "rank": "圈外"
         }
       ],
-      "favoriteSong": "Love Again（松村珠理奈）"
+      "favoriteSong": "Love Again（松村珠理奈）",
+      "officialPhotos": [
+        {
+          "url": "/uploads/1768591074779.jpg",
+          "version": 1
+        },
+        {
+          "url": "/uploads/1773083775909.jpg",
+          "version": 2
+        }
+      ]
     }
   ],
   "singles": [
