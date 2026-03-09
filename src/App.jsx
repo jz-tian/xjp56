@@ -1586,9 +1586,9 @@ function OfficialPhotosEditor({ photos, displayAvatar, onChangePhotos, onChangeA
   };
 
   const handleDelete = (version) => {
+    const deleted = safePhotos.find((p) => p.version === version);
     const next = safePhotos.filter((p) => p.version !== version);
     onChangePhotos(next);
-    const deleted = safePhotos.find((p) => p.version === version);
     if (deleted && deleted.url === displayAvatar) {
       onChangeAvatar(next.length > 0 ? next[next.length - 1].url : "");
     }
@@ -1700,7 +1700,7 @@ function AudioUploader({ label, value, onChange, hint }) {
 }
 
 
-function OfficialPhotosGalleryDialog({ open, onClose, photos, displayAvatar, memberName }) {
+function OfficialPhotosGalleryDialog({ open, onClose, photos, displayAvatar }) {
   const safePhotos = Array.isArray(photos) && photos.length > 0
     ? photos
     : displayAvatar ? [{ url: displayAvatar, version: 1 }] : [];
@@ -1710,7 +1710,7 @@ function OfficialPhotosGalleryDialog({ open, onClose, photos, displayAvatar, mem
   const gridClass = count === 1
     ? "flex justify-center"
     : count === 2
-    ? "flex flex-wrap justify-center gap-4 sm:gap-10"
+    ? "grid grid-cols-2 gap-4 sm:gap-8"
     : "grid gap-4 sm:gap-6 grid-cols-2 sm:grid-cols-3";
 
   return (
@@ -1780,10 +1780,10 @@ function ScrollDialogContent({ className = "", children, ...props }) {
 
 // ---- 成员详情内容（MembersPage 和 ElectionPage 共用）----
 function MemberDetailContent({ member, data }) {
-  const [galleryOpen, setGalleryOpen] = useState(false);
-  const officialPhotos = Array.isArray(member?.officialPhotos) ? member.officialPhotos : [];
-  const hasMultiplePhotos = officialPhotos.length > 1;
   if (!member) return null;
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const officialPhotos = Array.isArray(member.officialPhotos) ? member.officialPhotos : [];
+  const hasMultiplePhotos = officialPhotos.length > 1;
   return (
     <div className="grid gap-10">
 
@@ -1837,7 +1837,6 @@ function MemberDetailContent({ member, data }) {
         onClose={() => setGalleryOpen(false)}
         photos={officialPhotos}
         displayAvatar={member.avatar}
-        memberName={member.name}
       />
 
       {/* PROFILE */}
