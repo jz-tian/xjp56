@@ -1710,7 +1710,7 @@ function OfficialPhotosGalleryDialog({ open, onClose, photos, displayAvatar, mem
   const gridClass = count === 1
     ? "flex justify-center"
     : count === 2
-    ? "flex justify-center gap-6 sm:gap-10"
+    ? "flex flex-wrap justify-center gap-4 sm:gap-10"
     : "grid gap-4 sm:gap-6 grid-cols-2 sm:grid-cols-3";
 
   return (
