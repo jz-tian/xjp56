@@ -3755,19 +3755,17 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
                 key={m.id}
                 type="button"
                 onClick={() => assignMemberToSlot(m.id)}
-                className={"overflow-hidden border border-[#E0E0E0] bg-white hover:border-[#1C1C1C] transition-colors flex flex-col " + (used.has(m.id) ? "opacity-50" : "")}
+                className={"overflow-hidden ring-0 hover:ring-2 hover:ring-[#1C1C1C] transition-all flex flex-col " + (used.has(m.id) ? "opacity-40" : "")}
                 title={m.name}
               >
-                <div className="w-full overflow-hidden">
-                  <img
-                    src={resolveMediaUrl(m.avatar)}
-                    alt={m.name}
-                    className={"w-full h-auto block " + (!m.isActive ? "grayscale" : "")}
-                  />
-                </div>
-                <div className="px-2 py-2">
-                  <div className="text-xs font-medium text-[#1C1C1C]">{m.name}</div>
-                  <div className="text-[10px] text-[#6B6B6B]">{m.romaji || ""}</div>
+                <img
+                  src={resolveMediaUrl(m.avatar)}
+                  alt={m.name}
+                  className={"aspect-[3/4] w-full object-cover object-top " + (!m.isActive ? "grayscale" : "")}
+                />
+                <div className="px-2 py-1.5 bg-white w-full">
+                  <div className="text-xs font-medium text-[#1C1C1C] truncate">{m.name}</div>
+                  <div className="text-[10px] text-[#6B6B6B] truncate">{m.romaji || ""}</div>
                 </div>
               </button>
             ))}
