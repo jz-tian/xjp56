@@ -3758,11 +3758,11 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
                 className={"overflow-hidden border border-[#E0E0E0] bg-white hover:border-[#1C1C1C] transition-colors flex flex-col " + (used.has(m.id) ? "opacity-50" : "")}
                 title={m.name}
               >
-                <div className="w-full bg-[#F0F0F0] overflow-hidden">
+                <div className="w-full overflow-hidden">
                   <img
                     src={resolveMediaUrl(m.avatar)}
                     alt={m.name}
-                    className={"aspect-[3/4] w-full object-contain " + (!m.isActive ? "grayscale" : "")}
+                    className={"w-full h-auto block " + (!m.isActive ? "grayscale" : "")}
                   />
                 </div>
                 <div className="px-2 py-2">
