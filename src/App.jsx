@@ -3749,30 +3749,8 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
             ))}
           </div>
 
-          <div className="mb-3 flex flex-wrap items-center gap-2">
-            <div className="text-xs text-[#6B6B6B] mr-1">成员池：</div>
-            {[
-              { val: "active", label: "现役 / 当期" },
-              { val: "og", label: "OG（已毕业）" },
-            ].map(({ val, label }) => (
-              <button
-                key={val}
-                type="button"
-                className={
-                  "px-3 py-1 border text-xs tracking-wider " +
-                  (pickerPool === val
-                    ? "bg-[#1C1C1C] text-white border-[#1C1C1C]"
-                    : "bg-white text-[#1C1C1C] border-[#E0E0E0] hover:bg-[#F0F0F0]")
-                }
-                onClick={() => setPickerPool(val)}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-
           <div className="grid max-h-[70vh] grid-cols-2 gap-3 overflow-auto p-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {(pickerPool === "og" ? ogEligibleMembers : activeEligibleMembers).map((m) => (
+            {members.filter((m) => m.isActive).map((m) => (
               <button
                 key={m.id}
                 type="button"
