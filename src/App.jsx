@@ -1570,6 +1570,105 @@ function ImageUploader({ label, value, onChange, hint }) {
   );
 }
 
+function OfficialPhotosEditor({ photos, displayAvatar, onChangePhotos, onChangeAvatar }) {
+  const safePhotos = Array.isArray(photos) ? photos : [];
+
+  const handleUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = await uploadImage(file);
+    const nextVersion = safePhotos.length > 0 ? Math.max(...safePhotos.map((p) => p.version || 0)) + 1 : 1;
+    const newPhoto = { url, version: nextVersion };
+    const next = [...safePhotos, newPhoto];
+    onChangePhotos(next);
+    onChangeAvatar(url);
+    e.target.value = "";
+  };
+
+  const handleDelete = (version) => {
+    const next = safePhotos.filter((p) => p.version !== version);
+    onChangePhotos(next);
+    const deleted = safePhotos.find((p) => p.version === version);
+    if (deleted && deleted.url === displayAvatar) {
+      onChangeAvatar(next.length > 0 ? next[next.length - 1].url : "");
+    }
+  };
+
+  const handleSetDisplay = (url) => {
+    onChangeAvatar(url);
+  };
+
+  return (
+    <div className="grid gap-2">
+      <div className="flex items-center justify-between">
+        <div className="text-sm font-medium">公式照</div>
+        <div className="text-xs text-[#6B6B6B]">最新上传的默认展示</div>
+      </div>
+
+      {safePhotos.length > 0 && (
+        <div className="flex flex-wrap gap-3">
+          {safePhotos.map((photo) => {
+            const isDisplay = photo.url === displayAvatar || safePhotos.length === 1;
+            const versionLabel = `第${photo.version}版`;
+            return (
+              <div key={photo.version} className="flex flex-col items-center gap-1">
+                <div
+                  className={
+                    "relative overflow-hidden border bg-[#F0F0F0] " +
+                    (isDisplay ? "border-[#1C1C1C] ring-1 ring-[#1C1C1C]" : "border-[#E0E0E0]")
+                  }
+                  style={{ width: 80, height: 107 }}
+                >
+                  <img
+                    src={resolveMediaUrl(photo.url)}
+                    alt={versionLabel}
+                    className="h-full w-full object-cover object-top"
+                  />
+                  {isDisplay && (
+                    <div className="absolute bottom-0 left-0 right-0 bg-[#1C1C1C]/80 text-white text-[9px] tracking-wider text-center py-0.5">
+                      展示中
+                    </div>
+                  )}
+                </div>
+                <div className="text-[10px] tracking-[0.15em] text-[#6B6B6B]">{versionLabel}</div>
+                <div className="flex gap-1">
+                  {!isDisplay && (
+                    <button
+                      type="button"
+                      onClick={() => handleSetDisplay(photo.url)}
+                      className="text-[9px] px-1.5 py-0.5 border border-[#1C1C1C] text-[#1C1C1C] hover:bg-[#F0F0F0] tracking-wider"
+                    >
+                      展示
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(photo.version)}
+                    className="text-[9px] px-1.5 py-0.5 border border-[#E0E0E0] text-[#6B6B6B] hover:border-red-300 hover:text-red-600 tracking-wider"
+                  >
+                    删除
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      <div className="grid gap-2">
+        <Input
+          type="file"
+          accept="image/*"
+          onChange={handleUpload}
+        />
+        <div className="text-xs text-[#6B6B6B]">
+          上传后自动设为展示版（第{safePhotos.length + 1}版）。上传到后端并保存 URL。
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function AudioUploader({ label, value, onChange, hint }) {
   return (
     <div className="grid gap-2">
@@ -2221,11 +2320,11 @@ function MembersPage({ data, setData, admin }) {
                 ) : null}
               </div>
 
-              <ImageUploader
-                label="成员公式照"
-                value={editing.avatar}
-                onChange={(url) => setEditing((p) => ({ ...p, avatar: url }))}
-                hint="建议 1:1"
+              <OfficialPhotosEditor
+                photos={editing.officialPhotos || []}
+                displayAvatar={editing.avatar}
+                onChangePhotos={(photos) => setEditing((p) => ({ ...p, officialPhotos: photos }))}
+                onChangeAvatar={(url) => setEditing((p) => ({ ...p, avatar: url }))}
               />
 
               <div className="border border-[#E0E0E0] bg-white">
