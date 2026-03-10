@@ -2818,7 +2818,7 @@
         "s_pw9b7nha": "A面选拔（第3排）",
         "s_oey99lit": "A面选拔（第1排 center）"
       },
-      "isActive": true,
+      "isActive": false,
       "selectionCount": 4,
       "romaji": "RISA MIURA",
       "electionRanks": [
@@ -2849,7 +2849,9 @@
           "url": "/uploads/1773085516740.jpg",
           "version": 2
         }
-      ]
+      ],
+      "graduationDate": "2026-03-10",
+      "graduationSongTitle": "LISA"
     },
     {
       "id": "m_yuna",
@@ -4798,7 +4800,7 @@
           "no": 2,
           "title": "LISA (三浦丽莎 毕业曲)",
           "isAside": false,
-          "audio": ""
+          "audio": "/uploads/audio/1773129941433-z4ktu8.mp4"
         },
         {
           "no": 3,
