@@ -1295,7 +1295,7 @@ function Hero({ singles, members, activeMembersCount, totalMembersCount, singles
       </div>
 
       {/* Member scroll strip */}
-      <MemberMarquee members={members} />
+      <MemberMarquee members={members.filter((m) => m.isActive)} />
 
       {/* Stats bar */}
       <div className="border-b border-[#E0E0E0] py-4">
@@ -1798,7 +1798,7 @@ function MemberDetailContent({ member, data }) {
       {/* Name + romaji — centered */}
       <div className="text-center">
         <div className="text-2xl font-light text-[#1C1C1C] tracking-tight">
-          {member.name}{!member.isActive ? " 卒" : ""}
+          {member.name}{!member.isActive ? " 卒业" : ""}
         </div>
         {member.romaji ? (
           <div className="text-[11px] tracking-[0.2em] text-[#6B6B6B] mt-1">{member.romaji}</div>
@@ -2317,7 +2317,7 @@ function MembersPage({ data, setData, admin }) {
                 ) : null}
               </div>
               <div className="p-3">
-                <div className="text-sm font-medium text-[#1C1C1C] leading-tight">{m.name}{!m.isActive ? " 卒" : ""}</div>
+                <div className="text-sm font-medium text-[#1C1C1C] leading-tight">{m.name}{!m.isActive ? " 卒业" : ""}</div>
                 <div className="mt-0.5 text-[10px] text-[#6B6B6B] tracking-wide">{m.romaji || ""}</div>
               </div>
             </div>
@@ -3707,7 +3707,7 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
                     </div>
 
                     <div className="text-xs font-medium text-[#1C1C1C]">
-                      {m ? `${m.name}${!m.isActive ? "（卒）" : ""}` : ""}
+                      {m ? `${m.name}${!m.isActive ? "（卒业）" : ""}` : ""}
                     </div>
                   </div>
                 );
