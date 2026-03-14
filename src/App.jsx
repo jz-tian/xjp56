@@ -1443,6 +1443,11 @@ function MemberDetailContent({ member, data }) {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const officialPhotos = Array.isArray(member.officialPhotos) ? member.officialPhotos : [];
   const hasMultiplePhotos = officialPhotos.length > 1;
+  const generationNum = parseInt(String(member?.generation || "").match(/\d+/)?.[0], 10);
+  const shouldShowAdmireSenior = Number.isFinite(generationNum) && generationNum >= 2;
+  const favoriteSongs = Array.isArray(member?.favoriteSongs)
+    ? member.favoriteSongs.filter((x) => typeof x === "string" && x.trim())
+    : (member?.favoriteSong ? [member.favoriteSong] : []);
   return (
     <div className="grid gap-10">
 
@@ -1557,14 +1562,14 @@ function MemberDetailContent({ member, data }) {
       ) : null}
 
       {/* FAVORITES */}
-      {(member.generation && (String(member.generation).startsWith("5") || String(member.generation).startsWith("6") || String(member.generation).startsWith("7")) && Array.isArray(member.admireSenior) && member.admireSenior.length) || member.favoriteSong ? (
+      {(shouldShowAdmireSenior && Array.isArray(member.admireSenior) && member.admireSenior.length) || (Array.isArray(member.friends) && member.friends.length) || favoriteSongs.length ? (
         <div>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-5 h-px bg-[#1C1C1C]" />
             <div className="text-[10px] tracking-[0.25em] font-medium text-[#1C1C1C] uppercase">Favorites</div>
           </div>
           <div>
-            {member.generation && (String(member.generation).startsWith("5") || String(member.generation).startsWith("6") || String(member.generation).startsWith("7")) && Array.isArray(member.admireSenior) && member.admireSenior.length ? (
+            {shouldShowAdmireSenior && Array.isArray(member.admireSenior) && member.admireSenior.length ? (
               <div className="flex items-baseline gap-6 py-2.5 border-b border-[#E0E0E0] last:border-b-0">
                 <span className="text-[10px] tracking-[0.12em] text-[#6B6B6B] uppercase w-14 shrink-0">前辈</span>
                 <div className="flex flex-wrap gap-x-3 gap-y-1">
@@ -1575,23 +1580,59 @@ function MemberDetailContent({ member, data }) {
                 </div>
               </div>
             ) : null}
-            {member.favoriteSong ? (() => {
-              const song = member.favoriteSong;
-              const single = (data.singles || []).find((sg) =>
-                (sg.tracks || []).some((t) => (typeof t === "string" ? t : t?.title) === song)
-              );
-              const sp = single ? splitSingleTitle(single.title) : null;
-              const singleName = sp?.prefix ? `${sp.prefix} · ${sp.name}` : single?.title;
-              return (
-                <div className="flex items-baseline gap-6 py-2.5 border-b border-[#E0E0E0] last:border-b-0">
-                  <span className="text-[10px] tracking-[0.12em] text-[#6B6B6B] uppercase w-14 shrink-0">歌曲</span>
-                  <div className="min-w-0 flex-1">
-                    <div className="text-[13px] text-[#1C1C1C] tracking-[0.04em] break-words">{song}</div>
-                    {singleName ? <div className="text-xs text-[#6B6B6B] mt-0.5 tracking-[0.04em] break-words">收录于 {singleName}</div> : null}
-                  </div>
+            
+            {Array.isArray(member.friends) && member.friends.length ? (
+              <div className="flex items-baseline gap-6 py-2.5 border-b border-[#E0E0E0] last:border-b-0">
+                <span className="text-[10px] tracking-[0.12em] text-[#6B6B6B] uppercase w-14 shrink-0">亲友</span>
+                <div className="flex flex-wrap gap-x-3 gap-y-1">
+                  {member.friends.map((id) => {
+                    const mm = (data.members || []).find((x) => x.id === id);
+                    return mm ? (
+                      <span key={id} className="text-[13px] text-[#1C1C1C] tracking-[0.04em]">{mm.name}</span>
+                    ) : null;
+                  })}
                 </div>
-              );
-            })() : null}
+              </div>
+            ) : null}
+
+            {favoriteSongs.length ? (
+              <div className="flex items-baseline gap-6 py-2.5 border-b border-[#E0E0E0] last:border-b-0">
+                <span className="text-[10px] tracking-[0.12em] text-[#6B6B6B] uppercase w-14 shrink-0">歌曲</span>
+                <div className="min-w-0 flex-1 grid gap-2">
+                  {favoriteSongs.slice(0, 3).map((song, idx) => {
+                    const single = (data.singles || []).find((sg) =>
+                      (sg.tracks || []).some((t) => (typeof t === "string" ? t : t?.title) === song)
+                    );
+                    const sp = single ? splitSingleTitle(single.title) : null;
+                    const singleName = sp?.prefix ? `${sp.prefix} · ${sp.name}` : single?.title;
+                    return (
+                      <div
+                        key={`${song}-${idx}`}
+                        className="min-w-0 pt-3 border-t border-[#E5E5E5] first:border-t-0 first:pt-0"
+                      >
+                        <div className="flex items-start gap-2.5">
+                          <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F7F7F7] text-[#6B6B6B]">
+                            <Music className="h-3.5 w-3.5" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="text-[13px] text-[#1C1C1C] tracking-[0.04em] break-words leading-6">
+                              {song}
+                            </div>
+                            {singleName ? (
+                              <div className="mt-1">
+                                <Badge className="rounded-full border-[#E5E5E5] bg-[#F7F7F7] px-2 py-0.5 text-[10px] font-normal tracking-[0.04em] text-[#6B6B6B] hover:bg-[#F7F7F7]">
+                                  收录于 {singleName}
+                                </Badge>
+                              </div>
+                            ) : null}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       ) : null}
