@@ -81,6 +81,7 @@ function getElectionBadge(raw, edition) {
   const v = (raw ?? "").toString().trim();
   if (!v) return { text: "—", className: "bg-[#F0F0F0] text-[#6B6B6B] border-[#E0E0E0]" };
   if (v === "加入前") return { text: "加入前", className: "bg-[#F0F0F0] text-[#6B6B6B] border-[#E0E0E0]" };
+  if (v === "未参选") return { text: "未参选", className: "bg-[#F5F5F5] text-[#7A7A7A] border-[#E5E5E5]" };
   if (v === "圈外") return { text: "圈外", className: "bg-[#F0F0F0] text-[#6B6B6B] border-[#E0E0E0]" };
 
   // 允许输入：14位 / 14 / 十四位 / 十四
@@ -117,7 +118,7 @@ function getElectionBadge(raw, edition) {
 
 function parseRankNum(raw) {
   const v = (raw ?? "").toString().trim();
-  if (!v || v === "加入前") return Infinity;
+  if (!v || v === "加入前" || v === "未参选") return Infinity;
   if (v === "圈外") return 9999;
   const m = v.match(/\d+/);
   if (m) return Number(m[0]);
@@ -137,6 +138,7 @@ const ELECTION_SUBTITLES = {
   "第2届": "被选择的幸福",
   "第3届": "搅动风云",
   "第4届": "百家争鸣之战",
+  "第5届": "Make XP Great Again!",
 };
 
 const SINGLE_KIND_OPTIONS = ["常规单曲", "投票单曲", "总选单曲", "猜拳单曲", "企划单曲", "纪念单曲"];
@@ -159,6 +161,17 @@ const splitSingleTitle = (fullTitle) => {
   if (parts.length <= 1) return { prefix: "", name: t };
   return { prefix: parts[0], name: parts.slice(1).join(" · ") };
 };
+
+
+function ensureTrackShape(track, no, isAside) {
+  const t = track && typeof track === "object" ? track : {};
+  return {
+    no,
+    title: typeof t.title === "string" ? t.title : isAside ? "(A-side)" : "",
+    isAside,
+    audio: isAside && typeof t.audio === "string" ? t.audio : "",
+  };
+}
 
 /**
  * 根据单曲标题前缀（如 "27th Single"）判断是否属于"新版公式照"语境（第27单起）
