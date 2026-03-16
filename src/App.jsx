@@ -1033,11 +1033,11 @@ function PlaylistBuilder({ singles, initialPlaylist, onSave, onClose }) {
 }
 
 // PlaylistCard is at module scope (not inside PlaylistPage) to avoid React remounting on every render
-function PlaylistCard({ pl, isLocal, singles, admin, onPlay, onShuffle, onEdit, onDelete }) {
+function PlaylistCard({ pl, isLocal, singles, admin, onPlay, onShuffle, onView, onEdit, onDelete }) {
   const trackCount = pl.tracks?.length ?? 0;
   const hasPlayable = resolvePlaylistTracks(pl, singles).length > 0;
   return (
-    <div className="group relative">
+    <div className="group relative cursor-pointer" onClick={() => onView(pl)}>
       {/* Cover */}
       <div className="relative aspect-square overflow-hidden bg-[#F7F7F7]">
         {pl.cover ? (
@@ -1054,14 +1054,14 @@ function PlaylistCard({ pl, isLocal, singles, admin, onPlay, onShuffle, onEdit, 
         {/* Play overlay: shuffle (left) + play in order (right) */}
         <div className="absolute inset-0 flex items-end justify-between p-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
-            onClick={() => onShuffle(pl)}
+            onClick={(e) => { e.stopPropagation(); onShuffle(pl); }}
             disabled={!hasPlayable}
             className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${hasPlayable ? "bg-white/90 text-[#1C1C1C] hover:bg-white" : "bg-[#E0E0E0] text-[#AAAAAA] cursor-not-allowed"}`}
           >
             <Shuffle className="w-3.5 h-3.5" />
           </button>
           <button
-            onClick={() => onPlay(pl)}
+            onClick={(e) => { e.stopPropagation(); onPlay(pl); }}
             disabled={!hasPlayable}
             className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${hasPlayable ? "bg-[#1C1C1C] text-white hover:bg-[#333]" : "bg-[#E0E0E0] text-[#AAAAAA] cursor-not-allowed"}`}
           >
@@ -1072,13 +1072,13 @@ function PlaylistCard({ pl, isLocal, singles, admin, onPlay, onShuffle, onEdit, 
         {(admin || isLocal) && (
           <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
             <button
-              onClick={() => onEdit(pl, isLocal)}
+              onClick={(e) => { e.stopPropagation(); onEdit(pl, isLocal); }}
               className="w-6 h-6 bg-white/90 flex items-center justify-center hover:bg-white transition-colors"
             >
               <Pencil className="w-3 h-3 text-[#1C1C1C]" />
             </button>
             <button
-              onClick={() => onDelete(pl.id, isLocal)}
+              onClick={(e) => { e.stopPropagation(); onDelete(pl.id, isLocal); }}
               className="w-6 h-6 bg-white/90 flex items-center justify-center hover:bg-white transition-colors"
             >
               <Trash2 className="w-3 h-3 text-red-500" />
@@ -1095,7 +1095,7 @@ function PlaylistCard({ pl, isLocal, singles, admin, onPlay, onShuffle, onEdit, 
   );
 }
 
-function PlaylistPage({ data, setData, admin, playQueue }) {
+function PlaylistPage({ data, setData, admin, playQueue, audioQueue, audioIndex, isPlaying, togglePlayPause }) {
   const permanentPlaylists = data?.playlists ?? [];
 
   const [localPlaylists, setLocalPlaylists] = useState(() => {
@@ -1170,6 +1170,9 @@ function PlaylistPage({ data, setData, admin, playQueue }) {
     if (items.length) playQueue(shuffleArray(items), 0);
   };
 
+  const [viewingPlaylist, setViewingPlaylist] = useState(null);
+  const handleView = (pl) => setViewingPlaylist(pl);
+
   const hasContent = permanentPlaylists.length > 0 || localPlaylists.length > 0;
 
   return (
@@ -1196,7 +1199,7 @@ function PlaylistPage({ data, setData, admin, playQueue }) {
       {permanentPlaylists.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-8 mb-12">
           {permanentPlaylists.map((pl) => (
-            <PlaylistCard key={pl.id} pl={pl} isLocal={false} singles={data?.singles} admin={admin} onPlay={handlePlay} onShuffle={handleShuffle} onEdit={openEdit} onDelete={handleDelete} />
+            <PlaylistCard key={pl.id} pl={pl} isLocal={false} singles={data?.singles} admin={admin} onPlay={handlePlay} onShuffle={handleShuffle} onView={handleView} onEdit={openEdit} onDelete={handleDelete} />
           ))}
         </div>
       )}
@@ -1211,11 +1214,92 @@ function PlaylistPage({ data, setData, admin, playQueue }) {
           )}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-8">
             {localPlaylists.map((pl) => (
-              <PlaylistCard key={pl.id} pl={pl} isLocal={true} singles={data?.singles} admin={admin} onPlay={handlePlay} onShuffle={handleShuffle} onEdit={openEdit} onDelete={handleDelete} />
+              <PlaylistCard key={pl.id} pl={pl} isLocal={true} singles={data?.singles} admin={admin} onPlay={handlePlay} onShuffle={handleShuffle} onView={handleView} onEdit={openEdit} onDelete={handleDelete} />
             ))}
           </div>
         </div>
       )}
+
+      {/* Playlist detail modal */}
+      <Dialog open={!!viewingPlaylist} onOpenChange={(open) => { if (!open) setViewingPlaylist(null); }}>
+        {viewingPlaylist && (() => {
+          const resolvedTracks = resolvePlaylistTracks(viewingPlaylist, data?.singles);
+          return (
+            <ScrollDialogContent className="max-w-2xl">
+              {/* Header */}
+              <div className="flex gap-5 mb-6">
+                <div className="w-20 h-20 shrink-0 bg-[#F7F7F7] overflow-hidden">
+                  {viewingPlaylist.cover ? (
+                    <img src={resolveMediaUrl(viewingPlaylist.cover)} alt={viewingPlaylist.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <ListMusic className="w-7 h-7 text-[#CCCCCC]" />
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0 flex flex-col justify-between">
+                  <div>
+                    <h2 className="text-lg font-light text-[#1C1C1C] leading-snug break-words">{viewingPlaylist.title}</h2>
+                    <div className="text-[10px] text-[#AAAAAA] tracking-[0.08em] mt-1">{resolvedTracks.length} 首</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => { handlePlay(viewingPlaylist); setViewingPlaylist(null); }}
+                      disabled={resolvedTracks.length === 0}
+                      className={`text-xs tracking-widest px-4 py-2 flex items-center gap-1.5 transition-colors ${resolvedTracks.length > 0 ? "bg-[#1C1C1C] text-white hover:bg-[#333]" : "bg-[#E0E0E0] text-[#AAAAAA] cursor-not-allowed"}`}
+                    >
+                      <Play className="w-3 h-3" /> 顺序播放
+                    </button>
+                    <button
+                      onClick={() => { handleShuffle(viewingPlaylist); setViewingPlaylist(null); }}
+                      disabled={resolvedTracks.length === 0}
+                      className={`text-xs tracking-widest px-4 py-2 flex items-center gap-1.5 transition-colors ${resolvedTracks.length > 0 ? "border border-[#1C1C1C] text-[#1C1C1C] hover:bg-[#F0F0F0]" : "border border-[#E0E0E0] text-[#AAAAAA] cursor-not-allowed"}`}
+                    >
+                      <Shuffle className="w-3 h-3" /> 随机播放
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Track list */}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-5 h-px bg-[#1C1C1C]" />
+                <div className="text-[10px] tracking-[0.25em] font-medium text-[#1C1C1C] uppercase">Tracklist</div>
+              </div>
+              {resolvedTracks.length === 0 ? (
+                <div className="text-sm text-[#AAAAAA] py-4">暂无可播放曲目</div>
+              ) : (
+                <div>
+                  {resolvedTracks.map((item, idx) => {
+                    const isActive = audioQueue[audioIndex]?.singleId === item.singleId && audioQueue[audioIndex]?.trackNo === item.trackNo;
+                    return (
+                      <div key={`${item.singleId}-${item.trackNo}`} className={`flex items-center gap-3 py-2.5 border-b border-[#E0E0E0] last:border-b-0 ${isActive ? "bg-[#F7F7F7]" : "hover:bg-[#FAFAFA]"}`}>
+                        <span className="text-[10px] text-[#AAAAAA] w-6 shrink-0 text-right">{idx + 1}</span>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[10px] text-[#AAAAAA] tracking-[0.08em]">{splitSingleTitle(item.singleTitle).prefix} · </span>
+                          <span className={`text-[13px] tracking-[0.04em] ${isActive ? "text-[#1C1C1C] font-medium" : "text-[#1C1C1C]"}`}>{item.title}</span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            if (isActive) {
+                              togglePlayPause();
+                            } else {
+                              playQueue(resolvedTracks, idx);
+                            }
+                          }}
+                          className="shrink-0 w-6 h-6 rounded-full border border-[#1C1C1C] flex items-center justify-center hover:bg-[#1C1C1C] hover:text-white transition-colors text-[#1C1C1C]"
+                        >
+                          {isActive && isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </ScrollDialogContent>
+          );
+        })()}
+      </Dialog>
 
       {/* PlaylistBuilder modal */}
       <Dialog open={builderOpen} onOpenChange={(open) => { if (!open) setBuilderOpen(false); }}>
@@ -4711,6 +4795,10 @@ export default function XJP56App() {
               setData={setData}
               admin={admin}
               playQueue={playQueue}
+              audioQueue={audioQueue}
+              audioIndex={audioIndex}
+              isPlaying={isPlaying}
+              togglePlayPause={togglePlayPause}
             />
           </motion.div>
         ) : null}
