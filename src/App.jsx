@@ -825,7 +825,7 @@ function PlaylistBuilder({ singles, initialPlaylist, onSave, onClose }) {
     if (!file) return;
     try {
       setUploading(true);
-      const compressed = await compressImage(file);
+      const compressed = await compressImage(file, 600, 120_000);
       const url = await uploadImage(compressed);
       setCover(url);
       setCoverPreview(resolveMediaUrl(url));
