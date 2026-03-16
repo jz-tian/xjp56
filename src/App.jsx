@@ -52,6 +52,13 @@ import {
   ChevronRight,
   ChevronUp,
   ChevronDown,
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Square,
+  ListMusic,
+  GripVertical,
 } from "lucide-react";
 
 // ---------- Utils ----------
@@ -3797,6 +3804,98 @@ export default function XJP56App() {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState("");
 
+  // ---- Global audio engine ----
+  const audioRef = useRef(null);
+  const [audioQueue, setAudioQueue] = useState([]);   // { singleId, trackNo, title, singleTitle, coverUrl, audioUrl }[]
+  const [audioIndex, setAudioIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  // Resolve a playlist track ref { singleId, trackNo } into a full QueueItem using current data
+  const resolveTrackRef = (ref) => {
+    const single = data?.singles?.find((s) => s.id === ref.singleId);
+    if (!single) return null;
+    const track = single.tracks?.find((t) => t.no === ref.trackNo);
+    if (!track?.audio) return null;
+    return {
+      singleId: single.id,
+      trackNo: track.no,
+      title: track.title,
+      singleTitle: single.title,
+      coverUrl: resolveMediaUrl(single.cover),
+      audioUrl: resolveMediaUrl(track.audio),
+    };
+  };
+
+  // Play an array of QueueItems (already resolved) starting at startIndex
+  const playQueue = (items, startIndex = 0) => {
+    const valid = items.filter(Boolean);
+    if (!valid.length) return;
+    setAudioQueue(valid);
+    setAudioIndex(startIndex);
+    setCurrentTime(0);
+    setDuration(0);
+    // Trigger load+play via effect that watches audioIndex+audioQueue
+  };
+
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = "";
+    }
+    setAudioQueue([]);
+    setAudioIndex(0);
+    setIsPlaying(false);
+    setCurrentTime(0);
+    setDuration(0);
+  };
+
+  const togglePlayPause = () => {
+    const el = audioRef.current;
+    if (!el) return;
+    if (isPlaying) {
+      el.pause();
+    } else {
+      el.play().catch(() => {});
+    }
+  };
+
+  const seekToIndex = (idx) => {
+    if (idx < 0 || idx >= audioQueue.length) return;
+    setAudioIndex(idx);
+    setCurrentTime(0);
+  };
+
+  const handleTrackEnd = () => {
+    if (audioIndex < audioQueue.length - 1) {
+      seekToIndex(audioIndex + 1);
+    } else {
+      // Last track ended — stay in queue but pause
+      setIsPlaying(false);
+    }
+  };
+
+  const handleTrackError = () => {
+    // Skip broken track silently
+    if (audioIndex < audioQueue.length - 1) {
+      seekToIndex(audioIndex + 1);
+    } else {
+      setIsPlaying(false);
+    }
+  };
+
+  // When audioIndex or audioQueue changes, update audio src and play
+  useEffect(() => {
+    const el = audioRef.current;
+    if (!el || !audioQueue.length) return;
+    const item = audioQueue[audioIndex];
+    if (!item?.audioUrl) return;
+    el.src = item.audioUrl;
+    el.load();
+    el.play().catch(() => {});
+  }, [audioIndex, audioQueue]);
+
   useEffect(() => {
     let cancelled = false;
     apiGetData()
@@ -3951,6 +4050,17 @@ export default function XJP56App() {
           </motion.div>
         ) : null}
       </AnimatePresence>
+      {/* Global audio engine */}
+      <audio
+        ref={audioRef}
+        onEnded={handleTrackEnd}
+        onError={handleTrackError}
+        onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime ?? 0)}
+        onDurationChange={() => setDuration(audioRef.current?.duration ?? 0)}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        style={{ display: "none" }}
+      />
     </AppShell>
   );
 }
