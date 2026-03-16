@@ -2692,7 +2692,7 @@ function Info({ label, value }) {
   );
 }
 
-function SinglesPage({ data, setData, admin }) {
+function SinglesPage({ data, setData, admin, playQueue, audioQueue, audioIndex, isPlaying, togglePlayPause }) {
   const membersById = useMemo(() => {
     const m = new Map();
     data.members.forEach((x) => m.set(x.id, x));
@@ -2949,7 +2949,18 @@ function SinglesPage({ data, setData, admin }) {
         <ScrollDialogContent className="max-w-5xl">
           {selected ? (
             <ErrorBoundary>
-              <SingleDetail single={selected} membersById={membersById} admin={admin} cumulativeCounts={cumulativeCounts} noFrame />
+              <SingleDetail
+                single={selected}
+                membersById={membersById}
+                admin={admin}
+                cumulativeCounts={cumulativeCounts}
+                noFrame
+                playQueue={playQueue}
+                audioQueue={audioQueue}
+                audioIndex={audioIndex}
+                isPlaying={isPlaying}
+                togglePlayPause={togglePlayPause}
+              />
             </ErrorBoundary>
           ) : null}
         </ScrollDialogContent>
@@ -3179,11 +3190,9 @@ function SinglesPage({ data, setData, admin }) {
   );
 }
 
-function SingleDetail({single, membersById, admin, cumulativeCounts, noFrame}) {
+function SingleDetail({single, membersById, admin, cumulativeCounts, noFrame, playQueue, audioQueue, audioIndex, isPlaying, togglePlayPause}) {
   const [coverZoom, setCoverZoom] = useState(false);
   const useNewPhoto = isSingleNewContext(single);
-  const audioRef = useRef(null);
-  const [currentTrack, setCurrentTrack] = useState(null); // { no, title, audio }
 
   const rows = single.asideLineup?.rows || [];
   const slots = single.asideLineup?.slots || [];
@@ -3214,21 +3223,6 @@ function SingleDetail({single, membersById, admin, cumulativeCounts, noFrame}) {
 
   const tracks = Array.isArray(single.tracks) ? single.tracks : [];
   const hasAnyAudio = tracks.some((t) => !!t?.audio);
-  useEffect(() => {
-    setCurrentTrack(null);
-  }, [single?.id]);
-
-  // 当切换到某个音源时，自动播放
-  useEffect(() => {
-    if (!currentTrack?.audio) return;
-    const el = audioRef.current;
-    if (!el) return;
-    // 让浏览器有机会先更新 src
-    const t = setTimeout(() => {
-      try { el.load(); } catch (e) {}
-    }, 0);
-    return () => clearTimeout(t);
-  }, [currentTrack?.audio]);
 
   return (
     <div className={noFrame ? "" : "border border-[#E0E0E0] bg-white"}>
@@ -3286,27 +3280,6 @@ function SingleDetail({single, membersById, admin, cumulativeCounts, noFrame}) {
             <div className="text-[10px] tracking-[0.25em] font-medium text-[#1C1C1C] uppercase">Tracklist</div>
           </div>
 
-          {/* Audio player — appears above list when a track is selected */}
-          {currentTrack?.audio ? (
-            <div className="mb-4 bg-[#F7F7F7] px-4 py-3">
-              <div className="mb-2 flex items-center justify-between gap-2">
-                <div className="text-xs text-[#1C1C1C]">
-                  {currentTrack.no}.&nbsp;&nbsp;{currentTrack.title}
-                </div>
-                <span className="text-[10px] tracking-wider text-[#6B6B6B]">
-                  {tracks.find((t) => t.no === currentTrack.no)?.isAside ? "A-side" : "B-side"}
-                </span>
-              </div>
-              <audio
-                ref={audioRef}
-                src={resolveMediaUrl(currentTrack.audio)}
-                controls
-                preload="none"
-                className="w-full"
-              />
-            </div>
-          ) : null}
-
           {/* Track rows */}
           <div>
             {tracks.map((t) => (
@@ -3315,22 +3288,34 @@ function SingleDetail({single, membersById, admin, cumulativeCounts, noFrame}) {
                 className="flex items-center gap-4 py-3 border-b border-[#E0E0E0] last:border-b-0"
               >
                 {/* Play button or track number */}
-                {t.audio ? (
-                  <button
-                    className="w-6 h-6 rounded-full border border-[#1C1C1C] flex items-center justify-center shrink-0 hover:bg-[#1C1C1C] hover:text-white transition-colors text-[#1C1C1C]"
-                    onClick={() => {
-                      setCurrentTrack({ no: t.no, title: t.title, audio: t.audio });
-                      if (currentTrack?.no === t.no) {
-                        audioRef.current?.play().catch(() => {});
-                      }
-                    }}
-                    title="播放"
-                  >
-                    <Music className="h-2.5 w-2.5" />
-                  </button>
-                ) : (
-                  <span className="w-6 text-center text-sm text-[#AAAAAA] shrink-0">{t.no}.</span>
-                )}
+                {(() => {
+                    const isActiveTrack = audioQueue?.[audioIndex]?.singleId === single.id && audioQueue?.[audioIndex]?.trackNo === t.no;
+                    const isThisPlaying = isActiveTrack && isPlaying;
+                    return t.audio ? (
+                      <button
+                        className="w-6 h-6 rounded-full border border-[#1C1C1C] flex items-center justify-center shrink-0 hover:bg-[#1C1C1C] hover:text-white transition-colors text-[#1C1C1C]"
+                        onClick={() => {
+                          if (isActiveTrack) {
+                            togglePlayPause?.();
+                          } else {
+                            playQueue?.([{
+                              singleId: single.id,
+                              trackNo: t.no,
+                              title: t.title,
+                              singleTitle: single.title,
+                              coverUrl: resolveMediaUrl(single.cover),
+                              audioUrl: resolveMediaUrl(t.audio),
+                            }], 0);
+                          }
+                        }}
+                        title={isThisPlaying ? "暂停" : "播放"}
+                      >
+                        {isThisPlaying ? <Pause className="h-2.5 w-2.5" /> : <Play className="h-2.5 w-2.5" />}
+                      </button>
+                    ) : (
+                      <span className="w-6 text-center text-sm text-[#AAAAAA] shrink-0">{t.no}.</span>
+                    );
+                  })()}
 
                 {/* Title */}
                 <span className={`text-sm flex-1 min-w-0 ${t.audio ? "text-[#1C1C1C]" : "text-[#6B6B6B]"}`}>
@@ -4022,7 +4007,16 @@ export default function XJP56App() {
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.25 }}
           >
-            <SinglesPage data={data} setData={setData} admin={admin} />
+            <SinglesPage
+              data={data}
+              setData={setData}
+              admin={admin}
+              playQueue={playQueue}
+              audioQueue={audioQueue}
+              audioIndex={audioIndex}
+              isPlaying={isPlaying}
+              togglePlayPause={togglePlayPause}
+            />
           </motion.div>
         ) : null}
 
