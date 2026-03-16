@@ -58,10 +58,19 @@ import {
   SkipForward,
   ListMusic,
   GripVertical,
+  Shuffle,
 } from "lucide-react";
 
 // ---------- Utils ----------
 const uid = () => Math.random().toString(36).slice(2, 10);
+const shuffleArray = (arr) => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
 
 
 // --- 总选举顺位展示：把"十四位/14位/14/圈外/加入前"等统一格式化 ---
@@ -1024,7 +1033,7 @@ function PlaylistBuilder({ singles, initialPlaylist, onSave, onClose }) {
 }
 
 // PlaylistCard is at module scope (not inside PlaylistPage) to avoid React remounting on every render
-function PlaylistCard({ pl, isLocal, singles, admin, onPlay, onEdit, onDelete }) {
+function PlaylistCard({ pl, isLocal, singles, admin, onPlay, onShuffle, onEdit, onDelete }) {
   const trackCount = pl.tracks?.length ?? 0;
   const hasPlayable = resolvePlaylistTracks(pl, singles).length > 0;
   return (
@@ -1042,8 +1051,15 @@ function PlaylistCard({ pl, isLocal, singles, admin, onPlay, onEdit, onDelete })
             <ListMusic className="w-8 h-8 text-[#CCCCCC]" />
           </div>
         )}
-        {/* Play overlay */}
-        <div className="absolute inset-0 flex items-end justify-end p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        {/* Play overlay: shuffle (left) + play in order (right) */}
+        <div className="absolute inset-0 flex items-end justify-between p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button
+            onClick={() => onShuffle(pl)}
+            disabled={!hasPlayable}
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${hasPlayable ? "bg-white/90 text-[#1C1C1C] hover:bg-white" : "bg-[#E0E0E0] text-[#AAAAAA] cursor-not-allowed"}`}
+          >
+            <Shuffle className="w-3.5 h-3.5" />
+          </button>
           <button
             onClick={() => onPlay(pl)}
             disabled={!hasPlayable}
@@ -1149,6 +1165,11 @@ function PlaylistPage({ data, setData, admin, playQueue }) {
     if (items.length) playQueue(items, 0);
   };
 
+  const handleShuffle = (pl) => {
+    const items = resolvePlaylistTracks(pl, data?.singles);
+    if (items.length) playQueue(shuffleArray(items), 0);
+  };
+
   const hasContent = permanentPlaylists.length > 0 || localPlaylists.length > 0;
 
   return (
@@ -1175,7 +1196,7 @@ function PlaylistPage({ data, setData, admin, playQueue }) {
       {permanentPlaylists.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-8 mb-12">
           {permanentPlaylists.map((pl) => (
-            <PlaylistCard key={pl.id} pl={pl} isLocal={false} singles={data?.singles} admin={admin} onPlay={handlePlay} onEdit={openEdit} onDelete={handleDelete} />
+            <PlaylistCard key={pl.id} pl={pl} isLocal={false} singles={data?.singles} admin={admin} onPlay={handlePlay} onShuffle={handleShuffle} onEdit={openEdit} onDelete={handleDelete} />
           ))}
         </div>
       )}
@@ -1190,7 +1211,7 @@ function PlaylistPage({ data, setData, admin, playQueue }) {
           )}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-8">
             {localPlaylists.map((pl) => (
-              <PlaylistCard key={pl.id} pl={pl} isLocal={true} singles={data?.singles} admin={admin} onPlay={handlePlay} onEdit={openEdit} onDelete={handleDelete} />
+              <PlaylistCard key={pl.id} pl={pl} isLocal={true} singles={data?.singles} admin={admin} onPlay={handlePlay} onShuffle={handleShuffle} onEdit={openEdit} onDelete={handleDelete} />
             ))}
           </div>
         </div>
