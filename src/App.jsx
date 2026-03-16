@@ -343,6 +343,7 @@ function normalizeAppDataShape(raw) {
     members: Array.isArray(raw?.members) ? raw.members : [],
     singles: Array.isArray(raw?.singles) ? raw.singles : [],
     gallery: Array.isArray(raw?.gallery) ? raw.gallery : [],
+    playlists: Array.isArray(raw?.playlists) ? raw.playlists : [],
   };
 }
 
@@ -420,6 +421,13 @@ function sanitizeDbPayload(db) {
       p && typeof p === "object" && typeof p.url === "string"
         ? { ...p, url: toRelativeUploadsUrl(p.url) }
         : p
+    );
+  }
+  if (Array.isArray(out.playlists)) {
+    out.playlists = out.playlists.map((pl) =>
+      pl && typeof pl === "object" && typeof pl.cover === "string"
+        ? { ...pl, cover: toRelativeUploadsUrl(pl.cover) }
+        : pl
     );
   }
   return out;
@@ -3803,7 +3811,7 @@ export default function XJP56App() {
       .catch((e) => {
         if (cancelled) return;
         setError(String(e?.message || e || "Failed to load data"));
-        setData(withRecomputedSelections({ members: [], singles: [] }));
+        setData(withRecomputedSelections({ members: [], singles: [], gallery: [], playlists: [] }));
         setLoaded(true);
       });
     return () => {
@@ -3821,7 +3829,7 @@ export default function XJP56App() {
   }, [data, loaded]);
 
   const onReset = () => {
-    const empty = withRecomputedSelections({ members: [], singles: [], gallery: [] });
+    const empty = withRecomputedSelections({ members: [], singles: [], gallery: [], playlists: [] });
     setData(empty);
     setPage("home");
     apiSaveData(empty).catch(() => {});
