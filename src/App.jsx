@@ -782,7 +782,7 @@ function PlaylistBuilder({ singles, initialPlaylist, onSave, onClose }) {
     e.currentTarget.setPointerCapture(e.pointerId);
   };
 
-  const handleDragPointerMove = (e, idx) => {
+  const handleDragPointerMove = (e) => {
     if (dragIndex === null) return;
     // Find drop index based on pointer Y vs row midpoints
     let newDrop = selectedTracks.length;
@@ -965,7 +965,7 @@ function PlaylistBuilder({ singles, initialPlaylist, onSave, onClose }) {
                           className="shrink-0 cursor-grab text-[#CCCCCC] hover:text-[#888]"
                           style={{ touchAction: "none" }}
                           onPointerDown={(e) => handleDragPointerDown(e, idx)}
-                          onPointerMove={(e) => handleDragPointerMove(e, idx)}
+                          onPointerMove={handleDragPointerMove}
                           onPointerUp={handleDragPointerUp}
                         >
                           <GripVertical className="w-4 h-4" />
