@@ -3782,6 +3782,143 @@ function LineupEditor({ singleDraft, setSingleDraft, members }) {
     </div>
   );
 }
+
+function FloatingPlayer({ audioQueue, audioIndex, isPlaying, currentTime, duration, onTogglePlayPause, onSeekToIndex, onStop }) {
+  const [expanded, setExpanded] = useState(false);
+  const item = audioQueue[audioIndex] ?? null;
+  if (!item) return null;
+
+  const progress = duration > 0 ? currentTime / duration : 0;
+  // SVG arc constants
+  const R = 22; // radius of progress circle
+  const C = 2 * Math.PI * R; // circumference
+
+  const canPrev = audioIndex > 0;
+  const canNext = audioIndex < audioQueue.length - 1;
+
+  return (
+    <div className="fixed bottom-6 right-4 z-50">
+      <AnimatePresence mode="wait">
+        {expanded ? (
+          <motion.div
+            key="expanded"
+            initial={{ opacity: 0, scale: 0.9, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 8 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            className="bg-white border border-[#E0E0E0] shadow-lg w-[calc(100vw-2rem)] sm:w-72"
+          >
+            {/* Top row: cover + track info + collapse */}
+            <div className="flex items-start gap-3 p-3 border-b border-[#E0E0E0]">
+              <div className="w-10 h-10 shrink-0 bg-[#F7F7F7] overflow-hidden">
+                {item.coverUrl ? (
+                  <img src={item.coverUrl} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Music className="w-4 h-4 text-[#AAAAAA]" />
+                  </div>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[13px] font-medium text-[#1C1C1C] truncate">{item.title}</div>
+                <div className="text-[10px] text-[#6B6B6B] tracking-[0.08em] truncate mt-0.5">{item.singleTitle}</div>
+              </div>
+              <button
+                onClick={() => setExpanded(false)}
+                className="shrink-0 text-[#AAAAAA] hover:text-[#1C1C1C] transition-colors p-0.5"
+              >
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </div>
+            {/* Progress bar */}
+            <div className="h-[2px] bg-[#E0E0E0]">
+              <div
+                className="h-full bg-[#1C1C1C] transition-none"
+                style={{ width: `${progress * 100}%` }}
+              />
+            </div>
+            {/* Controls */}
+            <div className="flex items-center justify-center gap-6 py-3">
+              <button
+                onClick={() => onSeekToIndex(audioIndex - 1)}
+                disabled={!canPrev}
+                className={`transition-opacity ${canPrev ? "text-[#1C1C1C] hover:text-[#444]" : "text-[#CCCCCC]"}`}
+              >
+                <SkipBack className="w-5 h-5" />
+              </button>
+              <button
+                onClick={onTogglePlayPause}
+                className="w-9 h-9 border border-[#1C1C1C] flex items-center justify-center hover:bg-[#1C1C1C] hover:text-white transition-colors text-[#1C1C1C]"
+              >
+                {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              </button>
+              <button
+                onClick={() => onSeekToIndex(audioIndex + 1)}
+                disabled={!canNext}
+                className={`transition-opacity ${canNext ? "text-[#1C1C1C] hover:text-[#444]" : "text-[#CCCCCC]"}`}
+              >
+                <SkipForward className="w-5 h-5" />
+              </button>
+            </div>
+            {/* Bottom row: counter + stop */}
+            <div className="flex items-center justify-between px-3 pb-3">
+              <span className="text-[10px] tracking-[0.15em] text-[#AAAAAA]">
+                {audioIndex + 1} / {audioQueue.length}
+              </span>
+              <button
+                onClick={onStop}
+                className="text-[10px] tracking-[0.15em] text-[#AAAAAA] uppercase hover:text-[#1C1C1C] transition-colors"
+              >
+                停止
+              </button>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.button
+            key="collapsed"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            onClick={() => setExpanded(true)}
+            className="w-12 h-12 rounded-full bg-white border border-[#E0E0E0] hover:shadow-md transition-shadow flex items-center justify-center relative overflow-visible"
+          >
+            {/* SVG progress arc */}
+            <svg
+              className="absolute inset-0 w-full h-full -rotate-90"
+              viewBox="0 0 48 48"
+              style={{ pointerEvents: "none" }}
+            >
+              {/* Background circle */}
+              <circle cx="24" cy="24" r={R} fill="none" stroke="#E0E0E0" strokeWidth="2" />
+              {/* Progress arc */}
+              <circle
+                cx="24" cy="24" r={R}
+                fill="none"
+                stroke="#1C1C1C"
+                strokeWidth="2"
+                strokeDasharray={C}
+                strokeDashoffset={C - progress * C}
+                strokeLinecap="butt"
+              />
+            </svg>
+            {/* Cover thumbnail */}
+            <div className="w-8 h-8 overflow-hidden bg-[#F7F7F7] z-10">
+              {item.coverUrl ? (
+                <img src={item.coverUrl} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Music className="w-3.5 h-3.5 text-[#AAAAAA]" />
+                </div>
+              )}
+            </div>
+          </motion.button>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function XJP56App() {
   const [page, setPage] = useState("home");
   const [admin, setAdmin] = useState(false);
@@ -4055,6 +4192,19 @@ export default function XJP56App() {
         onPause={() => setIsPlaying(false)}
         style={{ display: "none" }}
       />
+      {/* Floating Player */}
+      {audioQueue.length > 0 && (
+        <FloatingPlayer
+          audioQueue={audioQueue}
+          audioIndex={audioIndex}
+          isPlaying={isPlaying}
+          currentTime={currentTime}
+          duration={duration}
+          onTogglePlayPause={togglePlayPause}
+          onSeekToIndex={seekToIndex}
+          onStop={stopAudio}
+        />
+      )}
     </AppShell>
   );
 }
