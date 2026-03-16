@@ -62,6 +62,7 @@ function sanitizeDbPayload(db) {
     members: Array.isArray(db.members) ? JSON.parse(JSON.stringify(db.members)) : [],
     singles: Array.isArray(db.singles) ? JSON.parse(JSON.stringify(db.singles)) : [],
     gallery: Array.isArray(db.gallery) ? JSON.parse(JSON.stringify(db.gallery)) : [],
+    playlists: Array.isArray(db.playlists) ? JSON.parse(JSON.stringify(db.playlists)) : [],
   };
 
   if (Array.isArray(out.members)) {
@@ -92,6 +93,14 @@ function sanitizeDbPayload(db) {
       p && typeof p === "object" && typeof p.url === "string"
         ? { ...p, url: toRelativeUploadsUrl(p.url) }
         : p
+    );
+  }
+
+  if (Array.isArray(out.playlists)) {
+    out.playlists = out.playlists.map((pl) =>
+      pl && typeof pl === "object" && typeof pl.cover === "string"
+        ? { ...pl, cover: toRelativeUploadsUrl(pl.cover) }
+        : pl
     );
   }
 
