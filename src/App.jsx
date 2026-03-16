@@ -1466,6 +1466,7 @@ function TopBar({ page, setPage, admin, setAdmin, onReset }) {
     { key: "singles", cn: "单曲", en: "SINGLES" },
     { key: "election", cn: "总选举", en: "ELECTION" },
     { key: "gallery", cn: "相册", en: "GALLERY" },
+    { key: "playlist", cn: "歌单", en: "PLAYLIST" },
   ];
   const isActive = (key) => page === key || (page === "member-detail" && key === "members");
 
@@ -4691,6 +4692,22 @@ export default function XJP56App() {
             transition={{ duration: 0.25 }}
           >
             <GalleryPage data={data} setData={setData} admin={admin} />
+          </motion.div>
+        ) : null}
+        {page === "playlist" ? (
+          <motion.div
+            key="playlist"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.25 }}
+          >
+            <PlaylistPage
+              data={data}
+              setData={setData}
+              admin={admin}
+              playQueue={playQueue}
+            />
           </motion.div>
         ) : null}
       </AnimatePresence>
