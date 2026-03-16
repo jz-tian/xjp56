@@ -1189,9 +1189,6 @@ function PlaylistPage({ data, setData, admin, playQueue }) {
               <div className="text-[10px] tracking-[0.25em] text-[#AAAAAA] uppercase mb-4">本地歌单</div>
             </div>
           )}
-          {permanentPlaylists.length === 0 && (
-            <div className="text-[10px] tracking-[0.25em] text-[#AAAAAA] uppercase mb-4">本地歌单</div>
-          )}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-8">
             {localPlaylists.map((pl) => (
               <PlaylistCard key={pl.id} pl={pl} isLocal={true} singles={data?.singles} admin={admin} onPlay={handlePlay} onEdit={openEdit} onDelete={handleDelete} />
