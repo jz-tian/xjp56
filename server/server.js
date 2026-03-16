@@ -61,6 +61,7 @@ function sanitizeDbPayload(db) {
   const out = {
     members: Array.isArray(db.members) ? JSON.parse(JSON.stringify(db.members)) : [],
     singles: Array.isArray(db.singles) ? JSON.parse(JSON.stringify(db.singles)) : [],
+    gallery: Array.isArray(db.gallery) ? JSON.parse(JSON.stringify(db.gallery)) : [],
   };
 
   if (Array.isArray(out.members)) {
@@ -84,6 +85,14 @@ function sanitizeDbPayload(db) {
         }
       }
     }
+  }
+
+  if (Array.isArray(out.gallery)) {
+    out.gallery = out.gallery.map((p) =>
+      p && typeof p === "object" && typeof p.url === "string"
+        ? { ...p, url: toRelativeUploadsUrl(p.url) }
+        : p
+    );
   }
 
   return out;
