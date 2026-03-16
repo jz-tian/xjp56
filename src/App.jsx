@@ -56,7 +56,6 @@ import {
   Pause,
   SkipBack,
   SkipForward,
-  Square,
   ListMusic,
   GripVertical,
 } from "lucide-react";
@@ -4447,22 +4446,6 @@ export default function XJP56App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-
-  // Resolve a playlist track ref { singleId, trackNo } into a full QueueItem using current data
-  const resolveTrackRef = (ref) => {
-    const single = data?.singles?.find((s) => s.id === ref.singleId);
-    if (!single) return null;
-    const track = single.tracks?.find((t) => t.no === ref.trackNo);
-    if (!track?.audio) return null;
-    return {
-      singleId: single.id,
-      trackNo: track.no,
-      title: track.title,
-      singleTitle: single.title,
-      coverUrl: resolveMediaUrl(single.cover),
-      audioUrl: resolveMediaUrl(track.audio),
-    };
-  };
 
   // Play an array of QueueItems (already resolved) starting at startIndex
   const playQueue = (items, startIndex = 0) => {
