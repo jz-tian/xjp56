@@ -1078,7 +1078,7 @@
       "romaji": "MIHARU SATO",
       "origin": "长野 • 松本",
       "generation": "6期",
-      "isActive": true,
+      "isActive": false,
       "profile": {
         "height": "151cm",
         "birthday": "2009-01-11",
@@ -1167,7 +1167,9 @@
       ],
       "friends": [
         "m_7gen_3_5910"
-      ]
+      ],
+      "graduationDate": "2026-03-17",
+      "graduationSongTitle": "无"
     },
     {
       "id": "m_6gen_6_5098",
@@ -5831,7 +5833,7 @@
           "no": 2,
           "title": "Open, Bang! (新井心扉菜 center)",
           "isAside": false,
-          "audio": ""
+          "audio": "/uploads/audio/1773743311185-oaj5tt.mp4"
         }
       ],
       "asideLineup": {
@@ -6149,6 +6151,10 @@
         },
         {
           "singleId": "s_15hm6il2",
+          "trackNo": 1
+        },
+        {
+          "singleId": "s_6k83o27r",
           "trackNo": 1
         }
       ],
