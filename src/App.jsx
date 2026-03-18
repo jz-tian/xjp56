@@ -4627,7 +4627,7 @@ function FloatingPlayer({ audioQueue, audioIndex, isPlaying, currentTime, durati
           className="absolute inset-0 pointer-events-auto"
         />
       ) : null}
-      <div className="absolute bottom-6 right-4 pointer-events-auto">
+      <div className="absolute bottom-6 right-4 pointer-events-auto max-sm:inset-x-4 max-sm:top-4 max-sm:bottom-4">
       <AnimatePresence mode="wait">
         {playerMode === "detail" ? (
           <motion.div
@@ -4636,9 +4636,12 @@ function FloatingPlayer({ audioQueue, audioIndex, isPlaying, currentTime, durati
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 8 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="relative overflow-hidden border border-[#E7E7E7] bg-white shadow-[0_28px_90px_rgba(0,0,0,0.18)] w-[calc(100vw-2rem)] sm:w-[420px]"
+            className="relative overflow-hidden border border-[#E7E7E7] bg-white shadow-[0_28px_90px_rgba(0,0,0,0.18)] w-full sm:w-[420px] max-sm:h-full max-sm:max-h-full sm:w-[420px]"
           >
-            <div className="relative">
+            <div
+              className="relative max-sm:h-full max-sm:overflow-y-auto"
+              style={{ WebkitOverflowScrolling: "touch", overscrollBehavior: "contain" }}
+            >
               <button
                 type="button"
                 onClick={() => setPlayerMode("compact")}
